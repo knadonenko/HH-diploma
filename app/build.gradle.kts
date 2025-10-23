@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.ui.material)
     implementation(libs.ui.constraintLayout)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui.tooling.preview.android)
 
     // Network
     implementation(libs.glide)
@@ -88,4 +89,6 @@ dependencies {
     // kotlin
     implementation(libs.koin.android)
     implementation(libs.kotlinx.coroutines.android)
+
+    annotationProcessor(libs.compiler)
 }

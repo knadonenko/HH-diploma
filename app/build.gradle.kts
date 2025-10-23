@@ -26,6 +26,12 @@ android {
         }
 
         buildConfigField(type = "String", name = "API_ACCESS_TOKEN", value = "\"${developProperties.apiAccessToken}\"")
+        buildConfigField(
+            type = "String",
+            name = "BASE_URL",
+            value = "\"https://practicum-diploma-8bc38133faba.herokuapp.com\""
+        )
+        buildConfigField(type = "String", name = "DATABASE_NAME", value = "\"database_db\"")
     }
 
     buildTypes {

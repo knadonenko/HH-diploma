@@ -10,7 +10,6 @@ import ru.practicum.android.diploma.data.entity.VacancyEntity
     entities = [VacancyEntity::class],
     exportSchema = true
 )
-
 abstract class AppDatabase : RoomDatabase() {
     abstract fun vacancyDao(): VacancyDao
 }

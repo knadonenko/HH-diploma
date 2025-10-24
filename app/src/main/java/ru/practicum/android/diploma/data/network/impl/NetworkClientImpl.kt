@@ -20,9 +20,9 @@ class NetworkClientImpl(private val apiService: APIService) : NetworkClient {
         return withContext(Dispatchers.IO) {
             try {
                 sendRequest(dto)
-            } catch (e: IOException) {
+            } catch (_: IOException) {
                 createErrorResponse(NO_INTERNET_CONNECTION)
-            } catch (e: Throwable) {
+            } catch (_: Throwable) {
                 createErrorResponse(INTERNAL_SERVER_ERROR)
             }
         }

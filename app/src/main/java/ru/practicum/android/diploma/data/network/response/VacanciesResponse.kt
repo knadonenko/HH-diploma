@@ -1,5 +1,5 @@
 package ru.practicum.android.diploma.data.network.response
 
-import ru.practicum.android.diploma.data.dto.VacancyDetailDto
+import ru.practicum.android.diploma.data.dto.VacanciesDto
 
-data class VacanciesResponse(val found: Int, val pages: Int, val page: Int, val vacancies: List<VacancyDetailDto>): Response()
+data class VacanciesResponse(val result: VacanciesDto) : Response()

@@ -15,45 +15,65 @@ import ru.practicum.android.diploma.data.network.response.Response
 import java.io.IOException
 
 class NetworkClientImpl(private val apiService: APIService) : NetworkClient {
+
     override suspend fun doRequest(dto: Request): Response {
         return withContext(Dispatchers.IO) {
             try {
-                val retrofitResponse = when (dto) {
-                    is Request.AreasRequest -> apiService.getAreas()
-                    is Request.IndustriesRequest -> apiService.getIndustries()
-                    is Request.VacanciesRequest -> apiService.getVacancies(dto.options)
-                    is Request.VacancyRequest -> apiService.getVacancy(dto.vacancyId)
-                }
-
-                val body = retrofitResponse.body()
-                val code = retrofitResponse.code()
-
-                when {
-                    retrofitResponse.isSuccessful && body != null -> {
-                        body.apply { resultCode = SUCCESS }
-                    }
-
-                    code == 401 -> {
-                        Response().apply { resultCode = UNAUTHORIZED }
-                    }
-
-                    code == 404 -> {
-                        Response().apply { resultCode = NOT_FOUND }
-                    }
-
-                    code in 500..599 -> {
-                        Response().apply { resultCode = INTERNAL_SERVER_ERROR }
-                    }
-
-                    else -> {
-                        Response().apply { resultCode = BAD_REQUEST }
-                    }
-                }
-            } catch (_: IOException) {
-                Response().apply { resultCode = NO_INTERNET_CONNECTION }
-            } catch (_: Throwable) {
-                Response().apply { resultCode = INTERNAL_SERVER_ERROR }
+                sendRequest(dto)
+            } catch (e: IOException) {
+                createErrorResponse(NO_INTERNET_CONNECTION)
+            } catch (e: Throwable) {
+                createErrorResponse(INTERNAL_SERVER_ERROR)
             }
+        }
+    }
+
+    private suspend fun sendRequest(dto: Request): Response {
+        val response = when (dto) {
+            is Request.AreasRequest -> apiService.getAreas()
+            is Request.IndustriesRequest -> apiService.getIndustries()
+            is Request.VacanciesRequest -> apiService.getVacancies(dto.options)
+            is Request.VacancyRequest -> apiService.getVacancy(dto.vacancyId)
+        }
+
+        return handleResponse(response)
+    }
+
+    private fun handleResponse(retrofitResponse: retrofit2.Response<out Response>): Response {
+        return when {
+            isSuccessfulResponse(retrofitResponse) -> createSuccessResponse(retrofitResponse.body())
+            isUnauthorizedResponse(retrofitResponse) -> createErrorResponse(UNAUTHORIZED)
+            isNotFoundResponse(retrofitResponse) -> createErrorResponse(NOT_FOUND)
+            isServerErrorResponse(retrofitResponse) -> createErrorResponse(INTERNAL_SERVER_ERROR)
+            else -> createErrorResponse(BAD_REQUEST)
+        }
+    }
+
+    private fun isSuccessfulResponse(response: retrofit2.Response<out Response>): Boolean {
+        return response.isSuccessful && response.body() != null
+    }
+
+    private fun isUnauthorizedResponse(response: retrofit2.Response<out Response>): Boolean {
+        return response.code() == UNAUTHORIZED
+    }
+
+    private fun isNotFoundResponse(response: retrofit2.Response<out Response>): Boolean {
+        return response.code() == NOT_FOUND
+    }
+
+    private fun isServerErrorResponse(response: retrofit2.Response<out Response>): Boolean {
+        return response.code() == INTERNAL_SERVER_ERROR
+    }
+
+    private fun createSuccessResponse(body: Any?): Response {
+        return (body as? Response)?.apply {
+            resultCode = SUCCESS
+        } ?: createErrorResponse(BAD_REQUEST)
+    }
+
+    private fun createErrorResponse(errorCode: Int): Response {
+        return Response().apply {
+            resultCode = errorCode
         }
     }
 }

@@ -1,0 +1,34 @@
+package ru.practicum.android.diploma.ui.screen
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.ui.components.topbars.CommonTopBar
+
+@Composable
+fun TeamScreen() {
+    Scaffold(
+        topBar = {
+            CommonTopBar(stringResource(R.string.top_bar_label_team))
+        }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            /* body */
+        }
+    }
+}

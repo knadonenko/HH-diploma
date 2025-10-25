@@ -15,6 +15,8 @@ import ru.practicum.android.diploma.data.network.api.NetworkClient
 import ru.practicum.android.diploma.data.network.impl.NetworkClientImpl
 import ru.practicum.android.diploma.data.network.interceptor.AuthInterceptor
 
+private const val DATABASE_NAME = "database_db"
+
 val dataModule = module {
 
     factory {
@@ -45,7 +47,7 @@ val dataModule = module {
     }
 
     single {
-        Room.databaseBuilder(androidApplication(), AppDatabase::class.java, BuildConfig.DATABASE_NAME)
+        Room.databaseBuilder(androidApplication(), AppDatabase::class.java, DATABASE_NAME)
             .build()
     }
 

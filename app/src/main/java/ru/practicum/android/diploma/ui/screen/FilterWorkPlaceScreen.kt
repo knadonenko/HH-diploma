@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.dp
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
 
-private const val minTest: Int = 1
-private const val maxTest: Int = 100
+private const val MIN_TEST: Int = 1
+private const val MAX_TEST: Int = 100
 
 @Composable
 fun FilterWorkPlaceScreen(
@@ -48,13 +48,13 @@ fun FilterWorkPlaceScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Button({ toFilterRegion((minTest..maxTest).random()) }) {
+            Button({ toFilterRegion((MIN_TEST..MAX_TEST).random()) }) {
                 Text(stringResource(R.string.filter_area_label))
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Button( onBackClick ) {
+            Button(onBackClick) {
                 Text(stringResource(R.string.filter_choose_label))
             }
 

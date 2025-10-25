@@ -42,7 +42,7 @@ fun FilterAreaScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Button( onBackClick ) {
+            Button(onBackClick) {
                 Text(stringResource(R.string.filter_choose_label))
             }
         }

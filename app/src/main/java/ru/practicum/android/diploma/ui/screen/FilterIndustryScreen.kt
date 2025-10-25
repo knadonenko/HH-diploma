@@ -33,7 +33,7 @@ fun FilterIndustryScreen(onBackClick: () -> Unit) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button( onBackClick ) {
+            Button(onBackClick) {
                 Text(stringResource(R.string.filter_choose_label))
             }
         }

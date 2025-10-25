@@ -91,7 +91,8 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier) {
                     type = NavType.StringType
                     nullable = true
                 }
-            )) { backStackEntry ->
+            )
+        ) { backStackEntry ->
             val countryIdString = backStackEntry.arguments?.getString("countryId")
             val countryId: Int? = countryIdString?.toIntOrNull()
 

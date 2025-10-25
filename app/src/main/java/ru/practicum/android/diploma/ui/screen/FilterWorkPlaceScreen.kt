@@ -17,16 +17,19 @@ import androidx.compose.ui.unit.dp
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
 
+private const val minTest: Int = 1
+private const val maxTest: Int = 100
+
 @Composable
-fun FilterSettingsScreen(
+fun FilterWorkPlaceScreen(
     onBackClick: () -> Unit,
-    toFilterWorkPlace: () -> Unit,
-    toFilterIndustry: () -> Unit
+    toFilterCountry: () -> Unit,
+    toFilterRegion: (Int?) -> Unit
 ) {
     Scaffold(
         topBar = {
             FilterTopBar(
-                stringResource(id = R.string.top_bar_label_filter_settings),
+                stringResource(id = R.string.top_bar_label_filter_work_place),
                 onBackClick
             )
         }
@@ -39,21 +42,22 @@ fun FilterSettingsScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(toFilterWorkPlace) {
-                Text(stringResource(R.string.filter_work_place_label))
+            Button(toFilterCountry) {
+                Text(stringResource(R.string.filter_country_label))
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Button(toFilterIndustry) {
-                Text(stringResource(R.string.filter_industry_label))
+            Button({ toFilterRegion((minTest..maxTest).random()) }) {
+                Text(stringResource(R.string.filter_area_label))
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Button(onBackClick) {
-                Text(stringResource(R.string.filter_apply_label))
+            Button( onBackClick ) {
+                Text(stringResource(R.string.filter_choose_label))
             }
+
         }
     }
 }

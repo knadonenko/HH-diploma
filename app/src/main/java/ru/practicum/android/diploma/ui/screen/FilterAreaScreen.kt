@@ -18,15 +18,14 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
 
 @Composable
-fun FilterSettingsScreen(
-    onBackClick: () -> Unit,
-    toFilterWorkPlace: () -> Unit,
-    toFilterIndustry: () -> Unit
+fun FilterAreaScreen(
+    countryId: Int? = null,
+    onBackClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
             FilterTopBar(
-                stringResource(id = R.string.top_bar_label_filter_settings),
+                stringResource(id = R.string.top_bar_label_filter_area),
                 onBackClick
             )
         }
@@ -39,20 +38,12 @@ fun FilterSettingsScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(toFilterWorkPlace) {
-                Text(stringResource(R.string.filter_work_place_label))
-            }
+            Text(text = countryId?.toString() ?: stringResource(id = R.string.test))
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Button(toFilterIndustry) {
-                Text(stringResource(R.string.filter_industry_label))
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Button(onBackClick) {
-                Text(stringResource(R.string.filter_apply_label))
+            Button( onBackClick ) {
+                Text(stringResource(R.string.filter_choose_label))
             }
         }
     }

@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Practicum-Android-Diploma</string>
+
+    <!--AppNavigationBottomBar-->
+    <string name="navigation_bottom_bar_label_main">Главная</string>
+    <string name="navigation_bottom_bar_label_favourites">Избранное</string>
+    <string name="navigation_bottom_bar_label_team">Команда</string>
+
+    <!--AppTopBar-->
+    <string name="top_bar_label_main">Поиск вакансий</string>
+    <string name="top_bar_label_favourites">Избранное</string>
+    <string name="top_bar_label_team">Команда</string>
+    <string name="top_bar_label_filter_settings">Настройки фильтрации</string>
+    <string name="top_bar_arrow_back_description">Назад</string>
+    <string name="top_bar_filter_settings_description">Фильтр</string>
 </resources>

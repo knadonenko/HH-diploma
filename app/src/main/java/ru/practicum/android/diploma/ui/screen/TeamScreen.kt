@@ -28,7 +28,7 @@ fun TeamScreen() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
+            /* body */
         }
     }
 }

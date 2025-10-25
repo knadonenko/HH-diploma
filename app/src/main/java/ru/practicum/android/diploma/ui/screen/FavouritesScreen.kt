@@ -28,7 +28,7 @@ fun FavouritesScreen() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
+            /* body */
         }
     }
 }

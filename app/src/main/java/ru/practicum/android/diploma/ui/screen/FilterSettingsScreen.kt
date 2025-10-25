@@ -26,7 +26,7 @@ fun FilterSettingsScreen(onBackClick: () -> Unit) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
+            /* body */
         }
     }
 }

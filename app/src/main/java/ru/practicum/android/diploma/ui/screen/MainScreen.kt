@@ -26,7 +26,7 @@ fun MainScreen(onFilterClick: () -> Unit) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
+            /* body */
         }
     }
 }

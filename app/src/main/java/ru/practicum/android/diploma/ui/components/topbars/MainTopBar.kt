@@ -42,23 +42,19 @@ fun ToggleActionIcon(
 ) {
     var isChecked by remember { mutableStateOf(false) }
 
-    IconButton(onClick = onClick, modifier = modifier)
-    {
+    IconButton(onClick = onClick, modifier = modifier) {
         if (isChecked) {
             Icon(
                 painter = painterResource(id = checkedIconId),
                 contentDescription = stringResource(R.string.top_bar_filter_settings_description),
                 tint = Color.Unspecified
             )
-        } else
+        } else {
             Icon(
                 painter = painterResource(id = uncheckedIconId),
                 contentDescription = stringResource(R.string.top_bar_filter_settings_description),
                 tint = MaterialTheme.colorScheme.onPrimary
             )
-
+        }
     }
 }
-
-
-

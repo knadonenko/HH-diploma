@@ -16,14 +16,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
+import ru.practicum.android.diploma.ui.theme.paddingBase
 
 @Composable
 fun FilterSettingsScreen(
+    modifier: Modifier,
     onBackClick: () -> Unit,
     toFilterWorkPlace: () -> Unit,
     toFilterIndustry: () -> Unit
 ) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             FilterTopBar(
                 stringResource(id = R.string.top_bar_label_filter_settings),
@@ -32,10 +35,10 @@ fun FilterSettingsScreen(
         }
     ) { padding ->
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .padding(padding)
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(horizontal = paddingBase),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

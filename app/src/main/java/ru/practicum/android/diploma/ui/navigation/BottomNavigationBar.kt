@@ -1,9 +1,9 @@
 package ru.practicum.android.diploma.ui.navigation
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -12,18 +12,27 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.ui.theme.LocalTypography
+import ru.practicum.android.diploma.ui.theme.blue
+import ru.practicum.android.diploma.ui.theme.bottomBarDividerThickness
+import ru.practicum.android.diploma.ui.theme.bottomBarHeight
+import ru.practicum.android.diploma.ui.theme.emptyDimen
+import ru.practicum.android.diploma.ui.theme.grey200
+import ru.practicum.android.diploma.ui.theme.grey500
 
 @Composable
 fun BottomNavigationBar(
+    modifier: Modifier,
     navController: NavController,
     currentDestination: NavDestination?
 ) {
@@ -46,23 +55,26 @@ fun BottomNavigationBar(
     )
 
     Column(
-        modifier = Modifier
-            .wrapContentHeight()
-            .fillMaxWidth()
+        modifier = modifier
     ) {
         HorizontalDivider(
-            thickness = 1.dp,
-            color = MaterialTheme.colorScheme.outlineVariant
+            thickness = bottomBarDividerThickness,
+            color = grey200
         )
 
-        NavigationBar(modifier = Modifier.background(MaterialTheme.colorScheme.secondary)) {
-            barItems.forEach { batItem ->
-                val isSelected = currentDestination?.route == batItem.route
+        NavigationBar(
+            modifier = modifier
+                .navigationBarsPadding()
+                .height(bottomBarHeight),
+            containerColor = MaterialTheme.colorScheme.background
+        ) {
+            barItems.forEach { barItem ->
+                val isSelected = currentDestination?.route == barItem.route
 
                 NavigationBarItem(
                     selected = isSelected,
                     onClick = {
-                        navController.navigate(batItem.route) {
+                        navController.navigate(barItem.route) {
                             popUpTo(navController.graph.findStartDestination().id) {
                                 saveState = true
                             }
@@ -71,17 +83,24 @@ fun BottomNavigationBar(
                         }
                     },
                     icon = {
-                        Icon(
-                            imageVector = batItem.icon,
-                            contentDescription = batItem.title
-                        )
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(emptyDimen),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                imageVector = barItem.icon,
+                                contentDescription = barItem.title
+                            )
+                            Text(
+                                text = barItem.title,
+                                style = LocalTypography.current.body12Regular
+                            )
+                        }
                     },
-                    label = { Text(batItem.title) },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MaterialTheme.colorScheme.onSecondary,
-                        selectedTextColor = MaterialTheme.colorScheme.onSecondary,
-                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        selectedIconColor = blue,
+                        unselectedIconColor = grey500,
+                        indicatorColor = Color.Transparent
                     )
                 )
             }

@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.root
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -12,7 +13,7 @@ import ru.practicum.android.diploma.ui.navigation.NavigationGraph
 import ru.practicum.android.diploma.ui.navigation.Routes
 
 @Composable
-fun RootApp() {
+fun RootApp(modifier: Modifier) {
     val navController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStackEntry?.destination
@@ -24,9 +25,11 @@ fun RootApp() {
     )
 
     Scaffold(
+        modifier = modifier,
         bottomBar = {
             if (isBottomBarVisible) {
                 BottomNavigationBar(
+                    modifier = Modifier,
                     navController = navController,
                     currentDestination = currentDestination
                 )
@@ -35,7 +38,9 @@ fun RootApp() {
     ) { padding ->
         NavigationGraph(
             navController = navController,
-            modifier = Modifier.padding(padding)
+            modifier = modifier
+                .fillMaxSize()
+                .padding()
         )
     }
 }

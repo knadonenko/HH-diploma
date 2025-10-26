@@ -18,14 +18,15 @@ import ru.practicum.android.diploma.ui.screen.TeamScreen
 import ru.practicum.android.diploma.ui.screen.VacancyScreen
 
 @Composable
-fun NavigationGraph(navController: NavHostController, modifier: Modifier) {
+fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
     NavHost(
+        modifier = Modifier,
         navController = navController,
-        modifier = modifier,
         startDestination = Routes.MAIN
     ) {
         composable(Routes.MAIN) {
             MainScreen(
+                modifier,
                 onFilterClick = {
                     navController.navigate(Routes.FILTER_SETTINGS)
                 }
@@ -33,11 +34,12 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier) {
         }
 
         composable(Routes.FAVOURITES) {
-            FavouritesScreen()
+            FavouritesScreen(modifier)
         }
 
         composable(Routes.VACANCY) {
             VacancyScreen(
+                modifier,
                 onBackClick = {
                     navController.popBackStack()
                 }
@@ -45,11 +47,12 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier) {
         }
 
         composable(Routes.TEAM) {
-            TeamScreen()
+            TeamScreen(modifier)
         }
 
         composable(Routes.FILTER_SETTINGS) {
             FilterSettingsScreen(
+                modifier,
                 onBackClick = {
                     navController.popBackStack()
                 },
@@ -64,6 +67,7 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier) {
 
         composable(Routes.FILTER_WORK_PLACE) {
             FilterWorkPlaceScreen(
+                modifier,
                 onBackClick = {
                     navController.popBackStack()
                 },
@@ -78,6 +82,7 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier) {
 
         composable(Routes.FILTER_COUNTRY) {
             FilterCountryScreen(
+                modifier,
                 onBackClick = {
                     navController.popBackStack()
                 }
@@ -97,6 +102,7 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier) {
             val countryId: Int? = countryIdString?.toIntOrNull()
 
             FilterAreaScreen(
+                modifier,
                 countryId,
                 onBackClick = {
                     navController.popBackStack()
@@ -106,6 +112,7 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier) {
 
         composable(Routes.FILTER_INDUSTRY) {
             FilterIndustryScreen(
+                modifier,
                 onBackClick = {
                     navController.popBackStack()
                 }

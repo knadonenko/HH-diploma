@@ -8,21 +8,24 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import ru.practicum.android.diploma.ui.components.topbars.MainTopBar
+import ru.practicum.android.diploma.ui.theme.emptyDimen
+import ru.practicum.android.diploma.ui.theme.paddingBase
 
 @Composable
-fun MainScreen(onFilterClick: () -> Unit) {
+fun MainScreen(modifier: Modifier, onFilterClick: () -> Unit) {
     Scaffold(
+        modifier = Modifier,
         topBar = {
             MainTopBar(onFilterClick)
         }
     ) { padding ->
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .padding(padding)
+                .padding(vertical = emptyDimen)
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(horizontal = paddingBase),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

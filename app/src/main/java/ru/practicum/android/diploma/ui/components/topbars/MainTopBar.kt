@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.ui.theme.paddingActionEnd
 
 @Composable
 fun MainTopBar(
@@ -26,8 +26,7 @@ fun MainTopBar(
             ToggleActionIcon(
                 checkedIconId = R.drawable.ic_filter_on,
                 uncheckedIconId = R.drawable.ic_filter_off,
-                onClick = onFilterIconClick,
-                modifier = Modifier.padding(end = 12.dp)
+                onClick = onFilterIconClick
             )
         }
     )
@@ -37,12 +36,11 @@ fun MainTopBar(
 fun ToggleActionIcon(
     checkedIconId: Int,
     uncheckedIconId: Int,
-    onClick: () -> Unit,
-    modifier: Modifier
+    onClick: () -> Unit
 ) {
     var isChecked by remember { mutableStateOf(false) }
 
-    IconButton(onClick = onClick, modifier = modifier) {
+    IconButton(onClick = onClick, modifier = Modifier.padding(end = paddingActionEnd)) {
         if (isChecked) {
             Icon(
                 painter = painterResource(id = checkedIconId),
@@ -53,7 +51,7 @@ fun ToggleActionIcon(
             Icon(
                 painter = painterResource(id = uncheckedIconId),
                 contentDescription = stringResource(R.string.top_bar_filter_settings_description),
-                tint = MaterialTheme.colorScheme.onPrimary
+                tint = MaterialTheme.colorScheme.onBackground
             )
         }
     }

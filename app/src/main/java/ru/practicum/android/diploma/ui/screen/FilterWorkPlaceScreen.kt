@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.ui.screen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -16,17 +15,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
+import ru.practicum.android.diploma.ui.theme.paddingBase
 
 private const val MIN_TEST: Int = 1
 private const val MAX_TEST: Int = 100
 
 @Composable
 fun FilterWorkPlaceScreen(
+    modifier: Modifier,
     onBackClick: () -> Unit,
     toFilterCountry: () -> Unit,
     toFilterRegion: (Int?) -> Unit
 ) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             FilterTopBar(
                 stringResource(id = R.string.top_bar_label_filter_work_place),
@@ -35,10 +37,9 @@ fun FilterWorkPlaceScreen(
         }
     ) { padding ->
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .padding(padding)
-                .fillMaxSize()
-                .padding(16.dp),
+                .padding(horizontal = paddingBase),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

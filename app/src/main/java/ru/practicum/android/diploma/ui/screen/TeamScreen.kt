@@ -9,22 +9,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.components.topbars.CommonTopBar
+import ru.practicum.android.diploma.ui.theme.paddingBase
 
 @Composable
-fun TeamScreen() {
+fun TeamScreen(modifier: Modifier) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             CommonTopBar(stringResource(R.string.top_bar_label_team))
         }
     ) { padding ->
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .padding(padding)
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(horizontal = paddingBase),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

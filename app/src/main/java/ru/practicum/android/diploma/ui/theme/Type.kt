@@ -35,7 +35,7 @@ val Typography = DiplomaTypography(
     ),
     body12Regular = TextStyle(
         fontFamily = ypFontFamily,
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.W400,
         fontSize = 12.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.sp

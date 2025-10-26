@@ -1,6 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-parcelize")
@@ -12,6 +13,10 @@ android {
     namespace = "ru.practicum.android.diploma"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
+
     defaultConfig {
         applicationId = "ru.practicum.android.diploma"
         minSdk = libs.versions.minSdk.get().toInt()
@@ -21,17 +26,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
-        }
 
-        buildConfigField(type = "String", name = "API_ACCESS_TOKEN", value = "\"${developProperties.apiAccessToken}\"")
-        buildConfigField(
-            type = "String",
-            name = "BASE_URL",
-            value = "\"https://practicum-diploma-8bc38133faba.herokuapp.com\""
-        )
-        buildConfigField(type = "String", name = "DATABASE_NAME", value = "\"database_db\"")
+        buildConfigField("String", "API_ACCESS_TOKEN", "\"${developProperties.apiAccessToken}\"")
+        buildConfigField("String", "BASE_URL", "\"https://practicum-diploma-8bc38133faba.herokuapp.com\"")
     }
 
     buildTypes {
@@ -65,6 +62,7 @@ dependencies {
     implementation(libs.ui.constraintLayout)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.tooling.preview.android)
+    implementation(libs.androidx.runtime)
 
     // Network
     implementation(libs.glide)
@@ -79,9 +77,7 @@ dependencies {
     implementation(libs.androidx.room.runtime.android)
 
     // navigation
-    implementation(libs.androidx.navigation.fragment)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.navigation.compose)
 
     // region Unit tests
     testImplementation(libs.unitTests.junit)

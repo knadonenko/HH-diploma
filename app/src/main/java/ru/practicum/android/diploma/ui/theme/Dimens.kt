@@ -13,5 +13,3 @@ val bottomBarDividerThickness = 1.dp
 // TopBar
 val topBarHeight = 64.dp
 val paddingActionEnd = 4.dp
-
-

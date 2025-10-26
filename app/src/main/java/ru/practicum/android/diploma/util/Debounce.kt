@@ -13,10 +13,8 @@ fun <T> debounce(
 ): (T) -> Unit {
     var debounceJob: Job? = null
     return { param: T ->
-        if (useLastParam) {
-            debounceJob?.cancel()
-        }
         if (debounceJob?.isCompleted != false || useLastParam) {
+            debounceJob?.cancel()
             debounceJob = coroutineScope.launch {
                 delay(delayMillis)
                 action(param)

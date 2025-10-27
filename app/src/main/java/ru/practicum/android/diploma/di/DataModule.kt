@@ -9,6 +9,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.AppDatabase
+import ru.practicum.android.diploma.data.converter.VacancyConverter
 import ru.practicum.android.diploma.data.dao.VacancyDao
 import ru.practicum.android.diploma.data.network.api.APIService
 import ru.practicum.android.diploma.data.network.api.NetworkClient
@@ -53,5 +54,9 @@ val dataModule = module {
 
     single<VacancyDao> {
         get<AppDatabase>().vacancyDao()
+    }
+
+    single<VacancyConverter> {
+        VacancyConverter()
     }
 }

@@ -63,6 +63,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.tooling.preview.android)
     implementation(libs.androidx.runtime)
+    debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.coil.compose)
 
     // Network
     implementation(libs.glide)

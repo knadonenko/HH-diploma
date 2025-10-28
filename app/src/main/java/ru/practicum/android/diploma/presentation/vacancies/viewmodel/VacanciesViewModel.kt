@@ -91,8 +91,8 @@ class VacanciesViewModel(
             is VacanciesResponseState.InternalServerError ->
                 _screenState.update { VacanciesScreenState.InternalServerError }
 
-            is VacanciesResponseState.NoInternetConnection
-                -> _screenState.update { VacanciesScreenState.NoInternetConnection }
+            is VacanciesResponseState.NoInternetConnection ->
+                _screenState.update { VacanciesScreenState.NoInternetConnection }
 
             is VacanciesResponseState.Found -> handleSearchFoundResult(responseState.result)
         }

@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.presentation.vacancies.view_model
+package ru.practicum.android.diploma.presentation.vacancies.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,7 +24,7 @@ class VacanciesViewModel(
     private val _screenState = MutableStateFlow<VacanciesScreenState>(VacanciesScreenState.Default)
     val screenState = _screenState.asStateFlow()
 
-    private var _isLastPage: Boolean = false;
+    private var _isLastPage: Boolean = false
     private var _currentPage: Int = 0
     private var _filterSettings: FilterSettings? = null
     private var _currentSearchText = MutableStateFlow("")
@@ -34,8 +34,9 @@ class VacanciesViewModel(
     private var _vacancies = mutableListOf<VacanciesInfo>()
 
     fun onSearchTextChange(newSearchText: String?) {
-        if (_currentSearchText.value == newSearchText)
+        if (_currentSearchText.value == newSearchText) {
             return
+        }
 
         _currentSearchText.update { newSearchText ?: "" }
 
@@ -66,8 +67,9 @@ class VacanciesViewModel(
     }
 
     private fun loadNextPage() {
-        if (_isLastPage)
+        if (_isLastPage) {
             return
+        }
 
         _currentPage++
 
@@ -86,9 +88,12 @@ class VacanciesViewModel(
     private fun handleSearchResult(responseState: VacanciesResponseState) {
         when (responseState) {
             is VacanciesResponseState.BadRequest,
-            is VacanciesResponseState.InternalServerError -> _screenState.update { VacanciesScreenState.InternalServerError }
+            is VacanciesResponseState.InternalServerError ->
+                _screenState.update { VacanciesScreenState.InternalServerError }
 
-            is VacanciesResponseState.NoInternetConnection -> _screenState.update { VacanciesScreenState.NoInternetConnection }
+            is VacanciesResponseState.NoInternetConnection
+                -> _screenState.update { VacanciesScreenState.NoInternetConnection }
+
             is VacanciesResponseState.Found -> handleSearchFoundResult(responseState.result)
         }
     }
@@ -96,9 +101,9 @@ class VacanciesViewModel(
     private fun handleSearchFoundResult(vacanciesPage: VacanciesPage) {
         _isLastPage = vacanciesPage.page == vacanciesPage.pages
 
-        if (vacanciesPage.vacancies.isEmpty())
+        if (vacanciesPage.vacancies.isEmpty()) {
             _screenState.update { VacanciesScreenState.NotFound }
-        else
+        } else {
             _screenState.update {
                 VacanciesScreenState.Found(
                     vacanciesPage.vacancies,
@@ -106,6 +111,7 @@ class VacanciesViewModel(
                     vacanciesPage.found
                 )
             }
+        }
     }
 
     fun onClearSearchText() {

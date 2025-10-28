@@ -12,9 +12,9 @@ import ru.practicum.android.diploma.data.network.consts.ResponseStates.SUCCESS
 import ru.practicum.android.diploma.data.network.consts.ResponseStates.UNAUTHORIZED
 import ru.practicum.android.diploma.data.network.request.Request
 import ru.practicum.android.diploma.data.network.response.VacanciesResponse
+import ru.practicum.android.diploma.domain.filtersettings.models.FilterSettings
 import ru.practicum.android.diploma.domain.vacanceis.api.repository.VacanciesRepository
 import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesResponseState
-import ru.practicum.android.diploma.domain.filtersettings.models.FilterSettings
 
 class VacanciesRepositoryImpl(
     private val networkClient: NetworkClient,

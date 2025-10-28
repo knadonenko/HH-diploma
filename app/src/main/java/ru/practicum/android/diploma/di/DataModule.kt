@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.di
 
+import android.content.Context.MODE_PRIVATE
 import androidx.room.Room
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
@@ -17,6 +18,7 @@ import ru.practicum.android.diploma.data.network.impl.NetworkClientImpl
 import ru.practicum.android.diploma.data.network.interceptor.AuthInterceptor
 
 private const val DATABASE_NAME = "database_db"
+private const val FILTER_SETTINGS_SHARED_PREFERENCES = "filter_settings_shared_preferences"
 
 val dataModule = module {
 
@@ -58,5 +60,12 @@ val dataModule = module {
 
     single<VacancyConverter> {
         VacancyConverter()
+    }
+
+    single {
+        androidApplication().getSharedPreferences(
+            FILTER_SETTINGS_SHARED_PREFERENCES,
+            MODE_PRIVATE
+        )
     }
 }

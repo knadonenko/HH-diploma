@@ -14,7 +14,7 @@ import ru.practicum.android.diploma.data.network.request.Request
 import ru.practicum.android.diploma.data.network.response.VacanciesResponse
 import ru.practicum.android.diploma.domain.vacanceis.api.repository.VacanciesRepository
 import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesResponseState
-import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesSearchSettings
+import ru.practicum.android.diploma.domain.filtersettings.models.FilterSettings
 
 class VacanciesRepositoryImpl(
     private val networkClient: NetworkClient,
@@ -23,7 +23,7 @@ class VacanciesRepositoryImpl(
     override fun searchVacancies(
         text: String,
         page: Int,
-        filterSettings: VacanciesSearchSettings
+        filterSettings: FilterSettings?
     ): Flow<VacanciesResponseState> = flow {
         val response = networkClient.doRequest(
             Request.VacanciesRequest(convertSettings(text, page, filterSettings))
@@ -51,14 +51,14 @@ class VacanciesRepositoryImpl(
         }
     }
 
-    private fun convertSettings(text: String, page: Int, settings: VacanciesSearchSettings): HashMap<String, String> {
+    private fun convertSettings(text: String, page: Int, settings: FilterSettings?): HashMap<String, String> {
         return HashMap<String, String>().apply {
             put(KEY_TEXT, text)
             put(KEY_PAGE, page.toString())
-            settings.area?.let { put(KEY_AREA, it.toString()) }
-            settings.industry?.let { put(KEY_INDUSTRY, it.toString()) }
-            settings.salary?.let { put(KEY_SALARY, it.toString()) }
-            settings.onlyWithSalary?.let { put(KEY_ONLY_WITH_SALARY, it.toString()) }
+            settings?.area?.let { put(KEY_AREA, it.toString()) }
+            settings?.industry?.let { put(KEY_INDUSTRY, it.toString()) }
+            settings?.salary?.let { put(KEY_SALARY, it.toString()) }
+            settings?.onlyWithSalary?.let { put(KEY_ONLY_WITH_SALARY, it.toString()) }
         }
     }
 

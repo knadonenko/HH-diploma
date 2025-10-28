@@ -1,6 +1,6 @@
-package ru.practicum.android.diploma.domain.vacanceis.models
+package ru.practicum.android.diploma.domain.filtersettings.models
 
-data class VacanciesSearchSettings(
+data class FilterSettings(
     val area: Int? = null,
     val industry: Int? = null,
     val salary: Int? = null,

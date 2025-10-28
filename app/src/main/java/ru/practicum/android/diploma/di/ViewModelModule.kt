@@ -10,6 +10,6 @@ import ru.practicum.android.diploma.presentation.vacancies.view_model.VacanciesV
 val viewModelModule = module {
 
     viewModel {
-        VacanciesViewModel()
+        VacanciesViewModel(get(), get())
     }
 }

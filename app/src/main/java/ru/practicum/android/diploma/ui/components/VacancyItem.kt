@@ -27,13 +27,15 @@ import ru.practicum.android.diploma.ui.theme.Typography
 
 @Composable
 fun VacancyItem(vacancy: Vacancy, onClick: (Vacancy) -> Unit = {}) {
+    val iconWeight = 0.2f
+    val descriptionWeight = 0.8f
     Row(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp, vertical = 9.dp)
             .clickable(onClick = { onClick.invoke(vacancy) })
     ) {
-        Column(modifier = Modifier.weight(0.2f)) {
+        Column(modifier = Modifier.weight(iconWeight)) {
             val iconModifier = Modifier
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(12.dp))
@@ -60,7 +62,7 @@ fun VacancyItem(vacancy: Vacancy, onClick: (Vacancy) -> Unit = {}) {
         }
         Column(
             modifier = Modifier
-                .weight(0.8f)
+                .weight(descriptionWeight)
                 .padding(start = 8.dp)
         ) {
             Text(
@@ -100,7 +102,9 @@ private fun getSalaryText(vacancy: Vacancy): String {
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showSystemUi = true)
 @Composable
 private fun VacancyItemPreviewNight() {
-    VacancyItem(Vacancy(null, "Vacancy Name", "City", "Company", 228, 1000, "₽"))
+    val exampleSalaryFrom = 228
+    val exampleSalaryTo = 1000
+    VacancyItem(Vacancy(null, "Vacancy Name", "City", "Company", exampleSalaryFrom, exampleSalaryTo, "₽"))
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showSystemUi = true)

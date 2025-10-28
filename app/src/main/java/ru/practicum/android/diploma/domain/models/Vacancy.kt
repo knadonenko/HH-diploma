@@ -2,7 +2,6 @@ package ru.practicum.android.diploma.domain.models
 
 import androidx.compose.runtime.Immutable
 
-
 // todo замените на domain модель из задачи #25
 @Immutable
 data class Vacancy(

@@ -24,6 +24,9 @@ import coil.compose.AsyncImage
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.models.Vacancy
 import ru.practicum.android.diploma.ui.theme.Typography
+import ru.practicum.android.diploma.ui.theme.iconRounding
+import ru.practicum.android.diploma.ui.theme.paddingBase
+import ru.practicum.android.diploma.ui.theme.paddingHalfBase
 
 private const val ICON_WEIGHT = 0.2f
 private const val DESCRIPTION_WEIGHT = 0.8f
@@ -33,17 +36,17 @@ fun VacancyItem(vacancy: Vacancy, onClick: (Vacancy) -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 9.dp)
+            .padding(horizontal = paddingBase, vertical = paddingHalfBase)
             .clickable(onClick = { onClick.invoke(vacancy) })
     ) {
         Column(modifier = Modifier.weight(ICON_WEIGHT)) {
             val iconModifier = Modifier
                 .aspectRatio(1f)
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(iconRounding))
                 .border(
                     width = 1.dp,
                     color = colorResource(R.color.stroke),
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(iconRounding)
                 )
             if (vacancy.image == null) {
                 Image(
@@ -64,7 +67,7 @@ fun VacancyItem(vacancy: Vacancy, onClick: (Vacancy) -> Unit = {}) {
         Column(
             modifier = Modifier
                 .weight(DESCRIPTION_WEIGHT)
-                .padding(start = 8.dp)
+                .padding(start = paddingHalfBase)
         ) {
             Text(
                 text = "${vacancy.vacancyName}, ${vacancy.cityName}",

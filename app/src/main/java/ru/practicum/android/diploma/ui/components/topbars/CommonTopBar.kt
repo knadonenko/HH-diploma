@@ -2,7 +2,6 @@ package ru.practicum.android.diploma.ui.components.topbars
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -16,9 +15,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.theme.LocalTypography
-import ru.practicum.android.diploma.ui.theme.topBarHeight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,9 +27,6 @@ fun CommonTopBar(
     actions: @Composable RowScope.() -> Unit = {}
 ) {
     TopAppBar(
-        modifier = Modifier
-            .height(topBarHeight)
-            .wrapContentHeight(),
         title = {
             Text(
                 text = title,
@@ -41,6 +37,7 @@ fun CommonTopBar(
             onBackClick?.let {
                 IconButton(onClick = onBackClick) {
                     Icon(
+                        modifier = Modifier.height(64.dp),
                         imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_back),
                         contentDescription = stringResource(R.string.top_bar_arrow_back_description)
                     )

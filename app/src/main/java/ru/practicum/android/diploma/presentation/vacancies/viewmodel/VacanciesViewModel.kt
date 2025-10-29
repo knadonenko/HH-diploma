@@ -41,7 +41,7 @@ class VacanciesViewModel(
         _currentSearchText.update { newSearchText ?: "" }
 
         if (_currentSearchText.value.isEmpty()) {
-            _searchJob?.cancel()
+            cancelPreviousSearch()
             _vacancies.clear()
             return
         }
@@ -50,7 +50,7 @@ class VacanciesViewModel(
     }
 
     private fun searchDebounce() {
-        _searchJob?.cancel()
+        cancelPreviousSearch()
 
         _searchJob = viewModelScope.launch {
             delay(SEARCH_DEBOUNCE_DELAY)
@@ -115,11 +115,16 @@ class VacanciesViewModel(
     }
 
     fun onClearSearchText() {
-        _searchJob?.cancel()
+        cancelPreviousSearch()
         _currentSearchText.update { "" }
         _vacancies.clear()
 
         _screenState.update { VacanciesScreenState.Default }
+    }
+
+    private fun cancelPreviousSearch() {
+        _searchJob?.cancel()
+        _searchJob = null
     }
 
     companion object {

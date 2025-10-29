@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Practicum-Android-Diploma</string>
 
     <!--AppNavigationBottomBar-->
@@ -30,6 +30,17 @@
 
     <!--SearchLabels-->
     <string name="enter_request">Введите запрос</string>
+    <string name="no_internet">Нет интернета</string>
+    <string name="bad_request">Не удалось получить список вакансий</string>
+    <string name="no_vacancies">Таких вакансий нет</string>
+
+    <!--Vacancy plurals-->
+    <plurals name="vacancy_plurals" tools:ignore="MissingQuantity">">
+        <item quantity="one">Найдена %1$d вакансия</item>
+        <item quantity="few">Найдено %1$d вакансии</item>
+        <item quantity="many">Найдено %1$d вакансий</item>
+        <item quantity="other">Найдено %1$d вакансий</item>
+    </plurals>
 
     <!--Test-->
     <string name="test">Тест</string>

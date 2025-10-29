@@ -40,11 +40,31 @@ fun TeamScreen(modifier: Modifier) {
         val typography = LocalTypography.current
         val uriHandler = LocalUriHandler.current
         val team = listOf(
-            Teammate(stringResource(R.string.team_konstantin), stringResource(R.string.team_konstantin_link)),
-            Teammate(stringResource(R.string.team_dmitriy_r), stringResource(R.string.team_dmitriy_r_link)),
-            Teammate(stringResource(R.string.team_dmitriy_g), stringResource(R.string.team_dmitriy_g_link)),
-            Teammate(stringResource(R.string.team_victor), stringResource(R.string.team_victor_link)),
-            Teammate(stringResource(R.string.team_dmitriy_s), stringResource(R.string.team_dmitriy_s_link))
+            Teammate(
+                stringResource(R.string.team_konstantin),
+                stringResource(R.string.team_konstantin_link),
+                stringResource(R.string.team_konstantin_emoji)
+            ),
+            Teammate(
+                stringResource(R.string.team_dmitriy_r),
+                stringResource(R.string.team_dmitriy_r_link),
+                stringResource(R.string.team_dmitriy_r_emoji)
+            ),
+            Teammate(
+                stringResource(R.string.team_dmitriy_g),
+                stringResource(R.string.team_dmitriy_g_link),
+                stringResource(R.string.team_dmitriy_g_emoji)
+            ),
+            Teammate(
+                stringResource(R.string.team_victor),
+                stringResource(R.string.team_victor_link),
+                stringResource(R.string.team_victor_emoji)
+            ),
+            Teammate(
+                stringResource(R.string.team_dmitriy_s),
+                stringResource(R.string.team_dmitriy_s_link),
+                stringResource(R.string.team_dmitriy_s_emoji)
+            )
         )
 
         LazyColumn(
@@ -75,7 +95,7 @@ fun TeamScreen(modifier: Modifier) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = teammate.name,
+                        text = "${teammate.emoji} ${teammate.name}",
                         style = typography.body16Medium
                     )
                     Icon(
@@ -94,5 +114,6 @@ fun TeamScreen(modifier: Modifier) {
 
 data class Teammate(
     val name: String,
-    val link: String
+    val link: String,
+    val emoji: String
 )

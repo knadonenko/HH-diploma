@@ -30,4 +30,17 @@
 
     <!--Test-->
     <string name="test">Тест</string>
+
+    <!--Team-->
+    <string name="team_about">Над приложением работали</string>
+    <string name="team_konstantin">Константин</string>
+    <string name="team_konstantin_link">https://github.com/knadonenko</string>
+    <string name="team_dmitriy_r">Дмитрий Росинский</string>
+    <string name="team_dmitriy_r_link">https://github.com/Dezrio</string>
+    <string name="team_dmitriy_g">Дмитрий Гуманюк</string>
+    <string name="team_dmitriy_g_link">https://github.com/twistofthemyth</string>
+    <string name="team_victor">Виктор Винокуров</string>
+    <string name="team_victor_link">https://github.com/i-Mondzy</string>
+    <string name="team_dmitriy_s">Дмитрий Широков</string>
+    <string name="team_dmitriy_s_link">https://github.com/Hastur</string>
 </resources>

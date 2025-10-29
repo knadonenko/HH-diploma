@@ -5,6 +5,7 @@ import androidx.compose.ui.unit.dp
 // Base
 val emptyDimen = 0.dp
 val paddingBase = 16.dp
+val paddingHalfBase = 8.dp
 
 // BottomBar
 val bottomBarHeight = 56.dp
@@ -32,3 +33,6 @@ val chipHeight = 28.dp
 val chipCornerRadius = 12.dp
 
 val progressBarSize = 48.dp
+
+// Icons/Images
+val iconRounding = 12.dp

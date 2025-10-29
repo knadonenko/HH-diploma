@@ -26,7 +26,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-
         buildConfigField("String", "API_ACCESS_TOKEN", "\"${developProperties.apiAccessToken}\"")
         buildConfigField("String", "BASE_URL", "\"https://practicum-diploma-8bc38133faba.herokuapp.com\"")
     }
@@ -63,6 +62,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.tooling.preview.android)
     implementation(libs.androidx.runtime)
+    debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.coil.compose)
 
     // Network
     implementation(libs.glide)

@@ -28,7 +28,7 @@ val padding4 = 4.dp
 val padding12 = 12.dp
 val padding64 = 64.dp
 
-//chip
+// chip
 val chipHeight = 28.dp
 val chipCornerRadius = 12.dp
 

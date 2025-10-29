@@ -28,6 +28,10 @@
     <string name="filter_apply_label">Применить</string>
     <string name="filter_reset_label">Сбросить</string>
 
+    <string name="from">до</string>
+    <string name="to">от</string>
+    <string name="no_salary">Зарплата не указана</string>
+
     <!--Test-->
     <string name="test">Тест</string>
 </resources>

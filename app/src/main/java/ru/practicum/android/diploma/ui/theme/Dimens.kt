@@ -15,5 +15,6 @@ val bottomBarDividerThickness = 1.dp
 val topBarHeight = 64.dp
 val paddingActionEnd = 4.dp
 
-// Icon
+// Icons/Images
+val iconRounding = 12.dp
 val smallIconSize = 16.dp

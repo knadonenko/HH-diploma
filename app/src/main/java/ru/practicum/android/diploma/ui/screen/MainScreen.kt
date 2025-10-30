@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -23,8 +24,12 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.data.dto.VacanciesDto
+import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
+import ru.practicum.android.diploma.presentation.vacancies.models.VacanciesScreenState
+import ru.practicum.android.diploma.presentation.vacancies.viewmodel.VacanciesViewModel
 import ru.practicum.android.diploma.ui.components.LoadingComponent
 import ru.practicum.android.diploma.ui.components.SearchField
 import ru.practicum.android.diploma.ui.components.topbars.MainTopBar
@@ -41,7 +46,11 @@ import ru.practicum.android.diploma.ui.theme.placeholderWidth
 import ru.practicum.android.diploma.ui.theme.white
 
 @Composable
-fun MainScreen(modifier: Modifier, onFilterClick: () -> Unit) {
+fun MainScreen(
+    modifier: Modifier, onFilterClick: () -> Unit,
+    viewModel: VacanciesViewModel = koinViewModel<VacanciesViewModel>()
+) {
+    var query = viewModel.currentSearchText.collectAsStateWithLifecycle().value
     Scaffold(
         modifier = Modifier,
         topBar = {
@@ -55,29 +64,33 @@ fun MainScreen(modifier: Modifier, onFilterClick: () -> Unit) {
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            SearchField(stringResource(R.string.enter_request))
-            MainContent()
+            SearchField(
+                searchQuery = query,
+                onQueryChange = {
+                    viewModel.onSearchTextChange(it)
+                },
+                placeHolder = stringResource(R.string.enter_request),
+                onSearchClear = { viewModel.onClearSearchText() }
+            )
+            MainContent(viewModel)
         }
     }
 }
 
 @Composable
-fun MainContent() {
-    var state = 0
-    var vacancyList: List<VacanciesDto> = mutableListOf()
+fun MainContent(viewModel: VacanciesViewModel) {
+    var state = viewModel.screenState.collectAsState().value
 
     when (state) {
-        0 -> Placeholder(R.drawable.main_placeholder)
-        1 -> {
-            LoadingComponent()
-        }
+        is VacanciesScreenState.Default -> Placeholder(R.drawable.main_placeholder)
+        is VacanciesScreenState.Loading -> LoadingComponent()
 
-        2 -> Placeholder(
+        is VacanciesScreenState.NoInternetConnection -> Placeholder(
             R.drawable.error_placeholder,
             stringResource(R.string.no_internet)
         )
 
-        3 -> {
+        is VacanciesScreenState.NotFound -> {
             Chip(stringResource(R.string.no_vacancies))
             Placeholder(
                 R.drawable.no_vacancy_placeholder,
@@ -85,10 +98,12 @@ fun MainContent() {
             )
         }
 
-        4 -> {
+        is VacanciesScreenState.Found -> {
             Chip(pluralStringResource(R.plurals.vacancy_plurals, 100, 100))
-            VacanciesList(vacancyList)
+            VacanciesList(state.data)
         }
+
+        is VacanciesScreenState.InternalServerError -> {}
     }
 
 }
@@ -133,7 +148,7 @@ fun Placeholder(@DrawableRes imageResId: Int, text: String? = null) {
 }
 
 @Composable
-fun VacanciesList(vacancyList: List<VacanciesDto>) {
+fun VacanciesList(vacancyList: List<VacanciesInfo>) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()

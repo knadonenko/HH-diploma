@@ -13,10 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.SolidColor
@@ -29,19 +26,22 @@ import ru.practicum.android.diploma.ui.theme.blue
 import ru.practicum.android.diploma.ui.theme.searchFieldCorner
 
 @Composable
-fun SearchField(placeHolder: String) {
-    var searchQuery by remember { mutableStateOf("") }
-
+fun SearchField(
+    searchQuery: String,
+    onQueryChange: (String) -> Unit,
+    placeHolder: String,
+    onSearchClear: () -> Unit
+) {
     Row {
         BasicTextField(
             value = searchQuery,
-            onValueChange = { text -> searchQuery = text },
+            onValueChange = onQueryChange,
             modifier = Modifier.fillMaxWidth(),
             textStyle = LocalTypography.current.body16Medium,
             cursorBrush = SolidColor(blue),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(
-                onDone = { }
+                onDone = {}
             ),
             decorationBox = { innerTextField ->
                 TextFieldDefaults.DecorationBox(
@@ -69,7 +69,7 @@ fun SearchField(placeHolder: String) {
 
                             false -> Icon(
                                 modifier = Modifier
-                                    .clickable(onClick = {  }),
+                                    .clickable(onClick = onSearchClear),
                                 painter = painterResource(id = R.drawable.ic_cross),
                                 contentDescription = "",
                                 tint = MaterialTheme.colorScheme.onBackground
@@ -86,5 +86,4 @@ fun SearchField(placeHolder: String) {
             }
         )
     }
-
 }

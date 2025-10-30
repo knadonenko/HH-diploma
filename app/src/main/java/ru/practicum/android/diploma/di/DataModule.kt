@@ -4,6 +4,7 @@ import android.content.Context.MODE_PRIVATE
 import androidx.room.Room
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -31,8 +32,11 @@ val dataModule = module {
     }
 
     single {
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         OkHttpClient.Builder()
             .addInterceptor(get<AuthInterceptor>())
+            .addNetworkInterceptor(interceptor)
             .build()
     }
 

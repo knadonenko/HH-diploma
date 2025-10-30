@@ -71,6 +71,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit2.converter.gson)
     debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.logging.interceptor)
 
     // room
     ksp(libs.androidx.room.compiler)

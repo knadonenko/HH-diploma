@@ -17,4 +17,4 @@ val paddingActionEnd = 4.dp
 
 // Icons/Images
 val iconRounding = 12.dp
-val smallIconSize = 16.dp
+val iconSmall = 16.dp

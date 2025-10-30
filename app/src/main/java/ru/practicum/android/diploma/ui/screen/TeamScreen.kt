@@ -24,9 +24,9 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.components.topbars.CommonTopBar
 import ru.practicum.android.diploma.ui.theme.LocalTypography
 import ru.practicum.android.diploma.ui.theme.grey500
+import ru.practicum.android.diploma.ui.theme.iconSmall
 import ru.practicum.android.diploma.ui.theme.paddingBase
 import ru.practicum.android.diploma.ui.theme.paddingHalfBase
-import ru.practicum.android.diploma.ui.theme.smallIconSize
 
 @Composable
 fun TeamScreen(modifier: Modifier) {
@@ -104,7 +104,7 @@ fun TeamScreen(modifier: Modifier) {
                         tint = grey500,
                         modifier = Modifier
                             .padding(horizontal = paddingHalfBase)
-                            .size(smallIconSize)
+                            .size(iconSmall)
                     )
                 }
             }

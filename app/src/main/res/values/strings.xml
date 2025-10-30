@@ -37,7 +37,7 @@
 
     <!--Team-->
     <string name="team_about">Над приложением работали</string>
-    <string name="team_konstantin">Константин</string>
+    <string name="team_konstantin">Константин Надоненко</string>
     <string name="team_konstantin_link">https://github.com/knadonenko</string>
     <string name="team_konstantin_emoji">🧐</string>
     <string name="team_dmitriy_r">Дмитрий Росинский</string>

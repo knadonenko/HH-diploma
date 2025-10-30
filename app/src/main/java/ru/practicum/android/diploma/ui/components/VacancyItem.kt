@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.models.Vacancy
+import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
 import ru.practicum.android.diploma.ui.theme.Typography
 import ru.practicum.android.diploma.ui.theme.iconRounding
 import ru.practicum.android.diploma.ui.theme.paddingBase
@@ -32,7 +33,7 @@ private const val ICON_WEIGHT = 0.2f
 private const val DESCRIPTION_WEIGHT = 0.8f
 
 @Composable
-fun VacancyItem(vacancy: Vacancy, onClick: (Vacancy) -> Unit = {}) {
+fun VacancyItem(vacancy: VacanciesInfo, onClick: (VacanciesInfo) -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxSize()
@@ -48,7 +49,7 @@ fun VacancyItem(vacancy: Vacancy, onClick: (Vacancy) -> Unit = {}) {
                     color = colorResource(R.color.stroke),
                     shape = RoundedCornerShape(iconRounding)
                 )
-            if (vacancy.image == null) {
+            if (vacancy.employerLogo == null) {
                 Image(
                     modifier = iconModifier,
                     painter = painterResource(R.drawable.ic_vacancy_placeholder),
@@ -58,7 +59,7 @@ fun VacancyItem(vacancy: Vacancy, onClick: (Vacancy) -> Unit = {}) {
             } else {
                 AsyncImage(
                     modifier = iconModifier,
-                    model = vacancy.image,
+                    model = vacancy.employerLogo,
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                 )
@@ -70,17 +71,18 @@ fun VacancyItem(vacancy: Vacancy, onClick: (Vacancy) -> Unit = {}) {
                 .padding(start = paddingHalfBase)
         ) {
             Text(
-                text = "${vacancy.vacancyName}, ${vacancy.cityName}",
+                text = "${vacancy.name}, ${vacancy.city}",
                 style = Typography.body22Medium,
                 color = colorResource(R.color.text)
             )
             Text(
-                text = vacancy.companyName,
+                text = vacancy.employerName,
                 style = Typography.body16Regular,
                 color = colorResource(R.color.text)
             )
+            val salary = vacancy.salaryRow ?: stringResource(R.string.no_salary)
             Text(
-                text = getSalaryText(vacancy),
+                text = salary,
                 style = Typography.body16Regular,
                 color = colorResource(R.color.text)
             )
@@ -103,15 +105,15 @@ private fun getSalaryText(vacancy: Vacancy): String {
     }
 }
 
-@Suppress("MagicNumber")
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showSystemUi = true)
-@Composable
-private fun VacancyItemPreviewNight() {
-    VacancyItem(Vacancy(null, "Vacancy Name", "City", "Company", 228, 1000, "₽"))
-}
-
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showSystemUi = true)
-@Composable
-private fun VacancyItemPreviewDay() {
-    VacancyItem(Vacancy(null, "Vacancy Name", "City", "Company", null, null, "₽"))
-}
+//@Suppress("MagicNumber")
+//@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showSystemUi = true)
+//@Composable
+//private fun VacancyItemPreviewNight() {
+//    VacancyItem(Vacancy(null, "Vacancy Name", "City", "Company", 228, 1000, "₽"))
+//}
+//
+//@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showSystemUi = true)
+//@Composable
+//private fun VacancyItemPreviewDay() {
+//    VacancyItem(Vacancy(null, "Vacancy Name", "City", "Company", null, null, "₽"))
+//}

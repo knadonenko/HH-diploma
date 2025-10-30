@@ -5,6 +5,6 @@ data class VacanciesInfo(
     val name: String,
     val city: String?,
     val employerName: String,
-    val employerLogo: String,
+    val employerLogo: String?,
     val salaryRow: String?
 )

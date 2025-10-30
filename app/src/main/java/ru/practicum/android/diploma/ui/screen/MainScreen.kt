@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -32,6 +33,7 @@ import ru.practicum.android.diploma.presentation.vacancies.models.VacanciesScree
 import ru.practicum.android.diploma.presentation.vacancies.viewmodel.VacanciesViewModel
 import ru.practicum.android.diploma.ui.components.LoadingComponent
 import ru.practicum.android.diploma.ui.components.SearchField
+import ru.practicum.android.diploma.ui.components.VacancyItem
 import ru.practicum.android.diploma.ui.components.topbars.MainTopBar
 import ru.practicum.android.diploma.ui.theme.LocalTypography
 import ru.practicum.android.diploma.ui.theme.blue
@@ -154,6 +156,12 @@ fun VacanciesList(vacancyList: List<VacanciesInfo>) {
             .fillMaxWidth()
             .padding(top = 24.dp)
     ) {
+        items(vacancyList) { vacancy ->
+            VacancyItem(
+                vacancy = vacancy,
+                onClick = {}
+            )
+        }
 
     }
 }

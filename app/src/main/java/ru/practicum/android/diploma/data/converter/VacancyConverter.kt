@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.data.converter
 
 import ru.practicum.android.diploma.data.dto.VacanciesDto
-import ru.practicum.android.diploma.data.dto.VacancyDetailDto
 import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
 import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesPage
 
@@ -18,20 +17,12 @@ class VacancyConverter {
                     city = vacancyDto.address?.city,
                     employerName = vacancyDto.employer.name,
                     employerLogo = vacancyDto.employer.logo,
-                    salaryRow = convertSalaryToRow(vacancyDto.salary)
+                    salaryFrom = vacancyDto.salary?.from,
+                    salaryTo = vacancyDto.salary?.to,
+                    salaryCurrencySymbol = vacancyDto.salary?.currency?.let { convert(it) }
                 )
             }
         )
-    }
-
-    private fun convertSalaryToRow(salary: VacancyDetailDto.SalaryDto?): String? {
-        return salary?.let { s ->
-            listOfNotNull(
-                s.from?.let { "от $it" },
-                s.to?.let { "до $it" },
-                s.currency?.let { convert(it) }
-            ).joinToString(" ").trim().takeIf { it.isNotEmpty() }
-        }
     }
 
     private fun convert(currency: String): String {

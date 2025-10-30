@@ -7,7 +7,7 @@ import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.data.network.response.AreasResponse
 import ru.practicum.android.diploma.data.network.response.IndustriesResponse
 import ru.practicum.android.diploma.data.network.response.VacanciesResponse
-import ru.practicum.android.diploma.data.network.response.VacancyResponse
+import ru.practicum.android.diploma.data.network.response.VacancyDetailsResponse
 
 interface APIService {
     @GET("/areas")
@@ -20,5 +20,5 @@ interface APIService {
     suspend fun getVacancies(@QueryMap options: Map<String, String>): Response<VacanciesResponse>
 
     @GET("vacancies/{id}")
-    suspend fun getVacancy(@Path("id") vacancyId: String): Response<VacancyResponse>
+    suspend fun getVacancy(@Path("id") vacancyId: String): Response<VacancyDetailsResponse>
 }

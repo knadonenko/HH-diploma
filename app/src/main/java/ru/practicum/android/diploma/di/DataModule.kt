@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidApplication
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -16,6 +17,7 @@ import ru.practicum.android.diploma.data.network.api.APIService
 import ru.practicum.android.diploma.data.network.api.NetworkClient
 import ru.practicum.android.diploma.data.network.impl.NetworkClientImpl
 import ru.practicum.android.diploma.data.network.interceptor.AuthInterceptor
+import ru.practicum.android.diploma.util.NetworkProvider
 
 private const val DATABASE_NAME = "database_db"
 private const val FILTER_SETTINGS_SHARED_PREFERENCES = "filter_settings_shared_preferences"
@@ -43,6 +45,12 @@ val dataModule = module {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(APIService::class.java)
+    }
+
+    single {
+        NetworkProvider(
+            androidContext()
+        )
     }
 
     single<NetworkClient> {

@@ -1,10 +1,15 @@
 package ru.practicum.android.diploma.domain.vacanceis.models
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class VacanciesInfo(
     val id: String,
     val name: String,
     val city: String?,
-    val employerName: String,
-    val employerLogo: String,
-    val salaryRow: String?
+    val employerName: String?,
+    val employerLogo: String?,
+    val salaryFrom: Int?,
+    val salaryTo: Int?,
+    val salaryCurrencySymbol: String?
 )

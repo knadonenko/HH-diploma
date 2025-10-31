@@ -14,11 +14,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
 import ru.practicum.android.diploma.ui.theme.Typography
@@ -45,7 +47,11 @@ fun VacancyItem(vacancy: VacanciesInfo, onClick: (VacanciesInfo) -> Unit = {}) {
                 )
             AsyncImage(
                 modifier = iconModifier,
-                model = vacancy.employerLogo ?: R.drawable.ic_vacancy_placeholder,
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(vacancy.employerLogo)
+                    .addHeader("User-Agent", "Chrome/138.0.0.0")
+                    .crossfade(true)
+                    .build(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(R.drawable.ic_vacancy_placeholder),

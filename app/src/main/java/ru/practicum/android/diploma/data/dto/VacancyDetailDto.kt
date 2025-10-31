@@ -64,13 +64,6 @@ data class VacancyDetailDto(
         val logo: String
     )
 
-//    data class FilterAreaDto(
-//        val id: String,
-//        val parentId: String,
-//        val name: String,
-//        val areas: List<FilterAreaDto>?,
-//    )
-
     data class FilterIndustryDto(
         val id: String,
         val name: String

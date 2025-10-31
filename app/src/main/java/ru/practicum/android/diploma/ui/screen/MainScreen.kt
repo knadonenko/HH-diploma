@@ -169,7 +169,6 @@ fun VacanciesList(
     onItemClick: (VacanciesInfo) -> Unit,
     onLoadNextPage: () -> Unit,
 ) {
-
     val listState = rememberLazyListState()
     val shouldLoadNext = remember {
         derivedStateOf {

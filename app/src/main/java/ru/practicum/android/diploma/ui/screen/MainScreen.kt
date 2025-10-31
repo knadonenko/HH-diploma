@@ -13,18 +13,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import ru.practicum.android.diploma.R
@@ -49,7 +52,8 @@ import ru.practicum.android.diploma.ui.theme.white
 
 @Composable
 fun MainScreen(
-    modifier: Modifier, onFilterClick: () -> Unit,
+    modifier: Modifier,
+    onFilterClick: () -> Unit,
     viewModel: VacanciesViewModel = koinViewModel<VacanciesViewModel>()
 ) {
     var query = viewModel.currentSearchText.collectAsStateWithLifecycle().value
@@ -101,8 +105,18 @@ fun MainContent(viewModel: VacanciesViewModel) {
         }
 
         is VacanciesScreenState.Found -> {
-            Chip(pluralStringResource(R.plurals.vacancy_plurals, 100, 100))
-            VacanciesList(state.data)
+            Chip(
+                pluralStringResource(
+                    R.plurals.vacancy_plurals,
+                    state.totalCount,
+                    state.totalCount
+                )
+            )
+            VacanciesList(
+                state.data,
+                onItemClick = {},
+                onLoadNextPage = { viewModel.loadNextPage() }
+            )
         }
 
         is VacanciesScreenState.InternalServerError -> {}
@@ -150,20 +164,41 @@ fun Placeholder(@DrawableRes imageResId: Int, text: String? = null) {
 }
 
 @Composable
-fun VacanciesList(vacancyList: List<VacanciesInfo>) {
+fun VacanciesList(
+    vacancyList: List<VacanciesInfo>,
+    onItemClick: (VacanciesInfo) -> Unit,
+    onLoadNextPage: () -> Unit,
+) {
+
+    val listState = rememberLazyListState()
+    val shouldLoadNext = remember {
+        derivedStateOf {
+            val lastVisibleItemIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+            val totalItemsCount = listState.layoutInfo.totalItemsCount
+
+            lastVisibleItemIndex != null && lastVisibleItemIndex >= totalItemsCount - 1
+        }
+    }
+
+    LaunchedEffect(shouldLoadNext.value) {
+        if (shouldLoadNext.value) {
+            onLoadNextPage()
+        }
+    }
+
     LazyColumn(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 24.dp)
+            .fillMaxWidth(),
+        state = listState
     ) {
         items(vacancyList) { vacancy ->
             VacancyItem(
                 vacancy = vacancy,
-                onClick = {}
+                onClick = onItemClick
             )
         }
-
+        item {
+            LoadingComponent()
+        }
     }
 }
-
-

@@ -32,7 +32,7 @@ class VacanciesRepositoryImpl(
         when (response.resultCode) {
             SUCCESS -> {
                 with(response as VacanciesResponse) {
-                    val vacancyPage = vacancyConverter.map(response.result)
+                    val vacancyPage = vacancyConverter.map(response)
                     emit(VacanciesResponseState.Found(vacancyPage))
                 }
             }

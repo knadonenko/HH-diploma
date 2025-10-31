@@ -35,7 +35,6 @@ class NetworkClientImpl(private val apiService: APIService) : NetworkClient {
             is Request.VacanciesRequest -> apiService.getVacancies(dto.options)
             is Request.VacancyRequest -> apiService.getVacancy(dto.vacancyId)
         }
-
         return handleResponse(response)
     }
 

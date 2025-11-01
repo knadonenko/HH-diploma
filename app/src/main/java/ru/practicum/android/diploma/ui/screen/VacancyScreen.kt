@@ -50,6 +50,7 @@ fun VacancyScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // добавить в сигнатуру VacancyDetails, onPhoneClick, onEmailClick и вызвать VacancyBody
         }
     }
 }
@@ -60,7 +61,7 @@ private fun VacancyBody(
     onPhoneClick: (phone: String) -> Unit = {},
     onEmailClick: (email: String) -> Unit = {}
 ) {
-    Column(modifier = Modifier.padding(all = paddingBase)) {
+    Column {
         VacancyHeader(vacancy)
         EmployerDescription(vacancy)
         RequiredExperience(vacancy)

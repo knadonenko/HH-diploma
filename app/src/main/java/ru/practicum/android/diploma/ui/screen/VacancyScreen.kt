@@ -93,7 +93,7 @@ private fun EmployerDescription(vacancy: VacancyDetails) {
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = colorResource(R.color.stroke),
+                color = colorResource(R.color.highlighted_block),
                 shape = RoundedCornerShape(searchFieldCorner)
             )
     ) {
@@ -109,12 +109,12 @@ private fun EmployerDescription(vacancy: VacancyDetails) {
                 Text(
                     text = vacancy.employerName,
                     style = Typography.body22Medium,
-                    color = colorResource(R.color.text)
+                    color = colorResource(R.color.highlighted_block_text)
                 )
                 Text(
                     text = vacancy.address ?: vacancy.areaName,
                     style = Typography.body16Regular,
-                    color = colorResource(R.color.text)
+                    color = colorResource(R.color.highlighted_block_text)
                 )
             }
         }

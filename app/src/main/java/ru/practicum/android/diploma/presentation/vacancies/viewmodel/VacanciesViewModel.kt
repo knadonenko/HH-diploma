@@ -66,7 +66,7 @@ class VacanciesViewModel(
         loadNextPage()
     }
 
-    private fun loadNextPage() {
+    fun loadNextPage() {
         if (_isLastPage) {
             return
         }
@@ -104,11 +104,12 @@ class VacanciesViewModel(
         if (vacanciesPage.vacancies.isEmpty()) {
             _screenState.update { VacanciesScreenState.NotFound }
         } else {
+            _vacancies.addAll(vacanciesPage.vacancies)
             _screenState.update {
                 VacanciesScreenState.Found(
-                    vacanciesPage.vacancies,
+                    _vacancies,
                     _isLastPage,
-                    vacanciesPage.found
+                    vacanciesPage.found,
                 )
             }
         }

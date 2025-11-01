@@ -28,9 +28,11 @@
     <string name="filter_apply_label">Применить</string>
     <string name="filter_reset_label">Сбросить</string>
 
-    <string name="from">до</string>
-    <string name="to">от</string>
+    <string name="from">от</string>
+    <string name="to">до</string>
     <string name="no_salary">Зарплата не указана</string>
+    <string name="exp_title">Требуемый опыт</string>
+    <string name="no_exp">не требуется</string>
 
     <!--SearchLabels-->
     <string name="enter_request">Введите запрос</string>

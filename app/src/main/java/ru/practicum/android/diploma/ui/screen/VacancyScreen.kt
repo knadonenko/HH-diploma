@@ -203,7 +203,7 @@ private fun EmployerContacts(
         )
         Spacer(modifier = Modifier.padding(top = paddingBase))
         if (vacancy.employerPhone.isNotEmpty()) {
-            vacancy.employerPhone.forEach { it -> EmployerPhone(it, onPhoneClick) }
+            vacancy.employerPhone.forEach { EmployerPhone(it, onPhoneClick) }
         }
         Text(
             text = stringResource(R.string.email_subtitle),

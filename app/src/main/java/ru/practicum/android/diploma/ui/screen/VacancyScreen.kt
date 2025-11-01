@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.ui.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,7 +30,10 @@ import ru.practicum.android.diploma.ui.theme.paddingHalfBase
 import ru.practicum.android.diploma.ui.theme.searchFieldCorner
 
 @Composable
-fun VacancyScreen(modifier: Modifier, onBackClick: () -> Unit) {
+fun VacancyScreen(
+    modifier: Modifier,
+    onBackClick: () -> Unit
+) {
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -51,19 +55,18 @@ fun VacancyScreen(modifier: Modifier, onBackClick: () -> Unit) {
 }
 
 @Composable
-private fun VacancyBody(vacancy: VacancyDetails) {
+private fun VacancyBody(
+    vacancy: VacancyDetails,
+    onPhoneClick: (phone: String) -> Unit = {},
+    onEmailClick: (email: String) -> Unit = {}
+) {
     Column(modifier = Modifier.padding(all = paddingBase)) {
         VacancyHeader(vacancy)
-        Spacer(modifier = Modifier.padding(top = paddingBase))
         EmployerDescription(vacancy)
-        Spacer(modifier = Modifier.padding(top = paddingBase))
         RequiredExperience(vacancy)
-        Spacer(modifier = Modifier.padding(top = paddingDouble))
         VacancyDescription(vacancy)
-        Spacer(modifier = Modifier.padding(top = paddingDouble))
         VacancySkills(vacancy)
-        Spacer(modifier = Modifier.padding(top = paddingDouble))
-        EmployerContacts(vacancy)
+        EmployerContacts(vacancy, onPhoneClick, onEmailClick)
     }
 }
 
@@ -80,6 +83,7 @@ private fun VacancyHeader(vacancy: VacancyDetails) {
         symbol = vacancy.salaryCurrencySymbol,
         style = Typography.body22Medium
     )
+    Spacer(modifier = Modifier.padding(top = paddingBase))
 }
 
 @Composable
@@ -92,9 +96,11 @@ private fun EmployerDescription(vacancy: VacancyDetails) {
                 shape = RoundedCornerShape(searchFieldCorner)
             )
     ) {
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .padding(all = paddingBase)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(all = paddingBase)
+        ) {
             VacancyLogo()
             Column(
                 modifier = Modifier.padding(start = paddingHalfBase)
@@ -112,6 +118,7 @@ private fun EmployerDescription(vacancy: VacancyDetails) {
             }
         }
     }
+    Spacer(modifier = Modifier.padding(top = paddingBase))
 }
 
 @Composable
@@ -128,16 +135,17 @@ private fun RequiredExperience(vacancy: VacancyDetails) {
     )
     Spacer(modifier = Modifier.padding(top = paddingHalfBase))
     Text(
-        text = vacancy.schedule ?: "Тип занятости не указан",
+        text = vacancy.schedule ?: stringResource(R.string.no_schedule),
         style = Typography.body16Regular,
         color = colorResource(R.color.text)
     )
+    Spacer(modifier = Modifier.padding(top = paddingDouble))
 }
 
 @Composable
 private fun VacancyDescription(vacancyDetails: VacancyDetails) {
     Text(
-        text = "Описание вакансии",
+        text = stringResource(R.string.description_title),
         style = Typography.body22Medium,
         color = colorResource(R.color.text)
     )
@@ -147,73 +155,88 @@ private fun VacancyDescription(vacancyDetails: VacancyDetails) {
         style = Typography.body16Regular,
         color = colorResource(R.color.text)
     )
+    Spacer(modifier = Modifier.padding(top = paddingDouble))
 }
 
 @Composable
 private fun VacancySkills(vacancy: VacancyDetails) {
-    Text(
-        text = "Ключевые навыки",
-        style = Typography.body22Medium,
-        color = colorResource(R.color.text)
-    )
-    Spacer(modifier = Modifier.padding(top = paddingBase))
-    Text(
-        text = vacancy.skills.joinToString("\n"),
-        style = Typography.body16Regular,
-        color = colorResource(R.color.text)
-    )
+    if (vacancy.skills.isNotEmpty()) {
+        Text(
+            text = stringResource(R.string.skills_title),
+            style = Typography.body22Medium,
+            color = colorResource(R.color.text)
+        )
+        Spacer(modifier = Modifier.padding(top = paddingBase))
+        vacancy.skills.forEach { VacancySkill(it) }
+        Spacer(modifier = Modifier.padding(top = paddingDouble))
+    }
 }
 
 @Composable
-private fun EmployerContacts(vacancy: VacancyDetails) {
+private fun VacancySkill(skill: String) {
+    Row {
+        Text(
+            modifier = Modifier.padding(horizontal = paddingHalfBase),
+            style = Typography.body16Medium,
+            text = stringResource(R.string.skill_prefix)
+        )
+        Text(
+            text = skill,
+            style = Typography.body16Regular,
+            color = colorResource(R.color.text)
+        )
+    }
+}
+
+@Composable
+private fun EmployerContacts(
+    vacancy: VacancyDetails,
+    onPhoneClick: (phone: String) -> Unit,
+    onEmailClick: (email: String) -> Unit
+) {
     if (vacancy.employerEmail != null && vacancy.employerPhone.isNotEmpty()) {
         Text(
-            text = "Контакты",
+            text = stringResource(R.string.contacts_title),
             style = Typography.body22Medium,
             color = colorResource(R.color.text)
         )
         Spacer(modifier = Modifier.padding(top = paddingBase))
         if (vacancy.employerPhone.isNotEmpty()) {
-            Text(
-                text = "Номер телефона",
-                style = Typography.body16Medium,
-                color = colorResource(R.color.text)
-            )
-            vacancy.employerPhone.forEach { it -> EmployerPhone(it) }
-            Spacer(modifier = Modifier.padding(top = paddingBase))
+            vacancy.employerPhone.forEach { it -> EmployerPhone(it, onPhoneClick) }
         }
-        if (vacancy.employerEmail != null) {
-            Text(
-                text = "Электронная почта",
-                style = Typography.body16Medium,
-                color = colorResource(R.color.text)
-            )
-            Text(
-                text = vacancy.employerEmail,
-                style = Typography.body16Regular,
-                color = colorResource(R.color.text)
-            )
-        }
+        Text(
+            text = stringResource(R.string.email_subtitle),
+            style = Typography.body16Medium,
+            color = colorResource(R.color.text)
+        )
+        Text(
+            modifier = Modifier.clickable(onClick = { onEmailClick.invoke(vacancy.employerEmail) }),
+            text = vacancy.employerEmail,
+            style = Typography.body16Regular,
+            color = colorResource(R.color.text)
+        )
     }
 }
 
 @Composable
-private fun EmployerPhone(phone: VacancyDetails.EmployerPhone) {
-    Row {
+private fun EmployerPhone(
+    phone: VacancyDetails.EmployerPhone,
+    onPhoneClick: (phone: String) -> Unit
+) {
+    Text(
+        modifier = Modifier.clickable(onClick = { onPhoneClick.invoke(phone.phone) }),
+        text = phone.phone,
+        style = Typography.body16Medium,
+        color = colorResource(R.color.text)
+    )
+    if (phone.comment != null) {
         Text(
-            text = phone.phone,
+            text = phone.comment,
             style = Typography.body16Regular,
             color = colorResource(R.color.text)
         )
-        if (phone.comment != null) {
-            Text(
-                modifier = Modifier.padding(start = paddingBase),
-                text = phone.comment,
-                style = Typography.body16Regular,
-                color = colorResource(R.color.text)
-            )
-        }
     }
+    Spacer(modifier = Modifier.padding(top = paddingHalfBase))
 }
 
 @Preview(showSystemUi = true)
@@ -229,7 +252,7 @@ private fun VacancyBodyPreview() {
         salaryCurrencySymbol = "$",
         employerName = "Московский зоопарк",
         employerPhone = listOf(
-            VacancyDetails.EmployerPhone("+7 (495) 775-33-70", "основной"),
+            VacancyDetails.EmployerPhone("+7 (495) 775-33-70", "основной способ связи"),
             VacancyDetails.EmployerPhone("+7 (495) 775-33-70")
         ),
         employerEmail = "zoopark@culture.mos.ru",

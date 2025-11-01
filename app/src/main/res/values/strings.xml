@@ -32,7 +32,13 @@
     <string name="to">до</string>
     <string name="no_salary">Зарплата не указана</string>
     <string name="exp_title">Требуемый опыт</string>
-    <string name="no_exp">не требуется</string>
+    <string name="no_exp">Не требуется</string>
+    <string name="no_schedule">Тип занятости не указан</string>
+    <string name="description_title">Описание вакансии</string>
+    <string name="skills_title">Ключевые навыки</string>
+    <string name="contacts_title">Контакты</string>
+    <string name="email_subtitle">Электронная почта</string>
+    <string name="skill_prefix">·</string>
 
     <!--SearchLabels-->
     <string name="enter_request">Введите запрос</string>

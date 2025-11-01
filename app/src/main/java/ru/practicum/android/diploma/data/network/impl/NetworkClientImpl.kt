@@ -43,7 +43,6 @@ class NetworkClientImpl(
             is Request.VacanciesRequest -> apiService.getVacancies(dto.options)
             is Request.VacancyDetailsRequest -> apiService.getVacancy(dto.vacancyId)
         }
-
         return handleResponse(response)
     }
 

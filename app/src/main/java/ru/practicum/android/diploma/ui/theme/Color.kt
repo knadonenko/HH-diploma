@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 const val BLACK_HEX = 0xFF1A1B22
 const val WHITE_HEX = 0xFFFDFDFD
-const val RED_HEX = 0xFF3772E7
+const val RED_HEX = 0xFFF56B6C
 const val BLUE_HEX = 0xFF3772E7
 const val GREY_200_HEX = 0xFFE6E8EB
 const val GREY_500_HEX = 0xFFAEAFB4

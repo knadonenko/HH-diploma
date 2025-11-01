@@ -1,25 +1,25 @@
 package ru.practicum.android.diploma.data.converter
 
-import ru.practicum.android.diploma.data.dto.VacanciesDto
+import ru.practicum.android.diploma.data.network.response.VacanciesResponse
 import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
 import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesPage
 
 class VacancyConverter {
-    fun map(vacanciesResponse: VacanciesDto): VacanciesPage {
+    fun map(vacanciesResponse: VacanciesResponse): VacanciesPage {
         return VacanciesPage(
             found = vacanciesResponse.found,
             pages = vacanciesResponse.pages,
             page = vacanciesResponse.page,
-            vacancies = vacanciesResponse.vacancies.map { vacancyDto ->
+            vacancies = vacanciesResponse.items.map { vacancyDto ->
                 VacanciesInfo(
                     id = vacancyDto.id,
                     name = vacancyDto.name,
                     city = vacancyDto.address?.city,
                     employerName = vacancyDto.employer.name,
                     employerLogo = vacancyDto.employer.logo,
-                    salaryFrom = vacancyDto.salary?.from,
-                    salaryTo = vacancyDto.salary?.to,
-                    salaryCurrencySymbol = vacancyDto.salary?.currency?.let { convert(it) }
+                    salaryFrom = vacancyDto.salary.from,
+                    salaryTo = vacancyDto.salary.to,
+                    salaryCurrencySymbol = vacancyDto.salary.currency
                 )
             }
         )

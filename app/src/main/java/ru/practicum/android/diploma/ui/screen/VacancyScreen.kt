@@ -249,7 +249,7 @@ private fun VacancyBodyPreview() {
         vacancyName = "Переворчиватель пингвинов",
         address = "Большая Грузинская, д.1с99, Москва",
         salaryFrom = 1000,
-        salaryTo = 100000,
+        salaryTo = 100_000,
         salaryCurrencySymbol = "$",
         employerName = "Московский зоопарк",
         employerPhone = listOf(

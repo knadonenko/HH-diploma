@@ -7,7 +7,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import ru.practicum.android.diploma.R
 
-
 @Composable
 fun SalaryText(from: Int?, to: Int?, symbol: String?, style: TextStyle) {
     Text(

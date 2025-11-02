@@ -5,6 +5,7 @@ import androidx.compose.ui.unit.dp
 // Base
 val emptyDimen = 0.dp
 val paddingBase = 16.dp
+val paddingDouble = 32.dp
 val paddingHalfBase = 8.dp
 
 // BottomBar

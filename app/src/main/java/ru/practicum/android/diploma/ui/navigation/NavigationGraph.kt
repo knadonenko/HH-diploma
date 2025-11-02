@@ -7,6 +7,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
+import ru.practicum.android.diploma.presentation.vacancydetails.viewmodel.VacancyDetailsViewModel
 import ru.practicum.android.diploma.ui.screen.FavouritesScreen
 import ru.practicum.android.diploma.ui.screen.FilterAreaScreen
 import ru.practicum.android.diploma.ui.screen.FilterCountryScreen
@@ -56,7 +59,8 @@ fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
                 vacancyId,
                 onBackClick = {
                     navController.popBackStack()
-                }
+                },
+                viewModel = koinViewModel<VacancyDetailsViewModel>(parameters = { parametersOf(vacancyId) })
             )
         }
 

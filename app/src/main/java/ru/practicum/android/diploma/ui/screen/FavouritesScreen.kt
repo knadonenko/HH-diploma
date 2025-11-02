@@ -50,7 +50,6 @@ fun MainContent(viewModel: FavoritesViewModel) {
     var state = viewModel.screenState.collectAsState().value
 
     when (state) {
-
         is FavoritesScreenState.Default -> Placeholder(
             R.drawable.empty_placeholder,
             stringResource(R.string.empty_favorites)

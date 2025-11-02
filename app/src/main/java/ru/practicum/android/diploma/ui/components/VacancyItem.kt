@@ -24,8 +24,9 @@ import coil.request.ImageRequest
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
 import ru.practicum.android.diploma.ui.theme.Typography
-import ru.practicum.android.diploma.ui.theme.iconRounding
+import ru.practicum.android.diploma.ui.theme.cornerRadius
 import ru.practicum.android.diploma.ui.theme.paddingHalfBase
+import ru.practicum.android.diploma.ui.theme.size48
 
 @Composable
 fun VacancyItem(vacancy: VacanciesInfo, onClick: (VacanciesInfo) -> Unit = {}) {
@@ -37,13 +38,13 @@ fun VacancyItem(vacancy: VacanciesInfo, onClick: (VacanciesInfo) -> Unit = {}) {
     ) {
         Column {
             val iconModifier = Modifier
-                .size(48.dp)
+                .size(size48)
                 .aspectRatio(1f)
-                .clip(RoundedCornerShape(iconRounding))
+                .clip(RoundedCornerShape(cornerRadius))
                 .border(
                     width = 1.dp,
                     color = colorResource(R.color.stroke),
-                    shape = RoundedCornerShape(iconRounding)
+                    shape = RoundedCornerShape(cornerRadius)
                 )
             AsyncImage(
                 modifier = iconModifier,

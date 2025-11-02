@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import ru.practicum.android.diploma.ui.theme.blue
-import ru.practicum.android.diploma.ui.theme.progressBarSize
+import ru.practicum.android.diploma.ui.theme.size48
 
 @Composable
 fun LoadingComponent() {
@@ -19,7 +19,7 @@ fun LoadingComponent() {
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             CircularProgressIndicator(
-                modifier = Modifier.size(progressBarSize),
+                modifier = Modifier.size(size48),
                 color = blue
             )
         }

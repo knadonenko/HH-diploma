@@ -8,9 +8,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
-import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
+import ru.practicum.android.diploma.ui.theme.LocalCustomColors
 import ru.practicum.android.diploma.ui.theme.Typography
 import ru.practicum.android.diploma.ui.theme.paddingHalfBase
 
@@ -30,34 +29,14 @@ fun VacancyItem(vacancy: VacanciesInfo, onClick: (String) -> Unit) {
             Text(
                 text = "${vacancy.name}, ${vacancy.city}",
                 style = Typography.body22Medium,
-                color = colorResource(R.color.text)
+                color = LocalCustomColors.current.text.primaryTextColors.textColor
             )
             Text(
                 text = vacancy.employerName,
                 style = Typography.body16Regular,
-                color = colorResource(R.color.text)
+                color = LocalCustomColors.current.text.primaryTextColors.textColor
             )
             SalaryText(vacancy.salaryFrom, vacancy.salaryTo, vacancy.salaryCurrencySymbol, Typography.body16Regular)
         }
-    }
-}
-
-@Composable
-private fun getSalaryText(vacancy: VacanciesInfo): String {
-    val fromText = stringResource(R.string.from)
-    val toText = stringResource(R.string.to)
-    val noSalaryText = stringResource(R.string.no_salary)
-
-    return when {
-        vacancy.salaryFrom != null && vacancy.salaryTo != null ->
-            "$fromText ${vacancy.salaryFrom} $toText ${vacancy.salaryTo} ${vacancy.salaryCurrencySymbol}"
-
-        vacancy.salaryFrom != null ->
-            "$fromText ${vacancy.salaryFrom} ${vacancy.salaryCurrencySymbol}"
-
-        vacancy.salaryTo != null ->
-            "$toText ${vacancy.salaryTo} ${vacancy.salaryCurrencySymbol}"
-
-        else -> noSalaryText
     }
 }

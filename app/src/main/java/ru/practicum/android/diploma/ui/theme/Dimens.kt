@@ -31,6 +31,7 @@ val padding64 = 64.dp
 // chip
 val chipHeight = 28.dp
 
+val size1 = 1.dp
 val size48 = 48.dp
 
 // Icons/Images

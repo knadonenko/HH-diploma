@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
@@ -42,8 +43,40 @@ private val LightColorScheme = lightColorScheme(
     surfaceTint = blue,
 )
 
+val LightCustomColors = CustomColors(
+    text = TextColors(
+        primaryTextColors = TextStateColors(
+            textColor = blackUniversal,
+        )
+    )
+)
+
+val DarkCustomColors = CustomColors(
+    text = TextColors(
+        primaryTextColors = TextStateColors(
+            textColor = white,
+        ),
+    )
+)
+
+data class CustomColors(
+    val text: TextColors
+)
+
+data class TextColors(
+    val primaryTextColors: TextStateColors,
+)
+
+data class TextStateColors(
+    val textColor: Color
+)
+
 val LocalTypography = staticCompositionLocalOf<DiplomaTypography> {
     error("No CustomTypography provided")
+}
+
+val LocalCustomColors = staticCompositionLocalOf<CustomColors> {
+    error("No CustomColors provided")
 }
 
 @Composable
@@ -56,9 +89,16 @@ fun DiplomaAppTheme(
         else -> LightColorScheme
     }
 
+    val customColors = if (darkTheme) {
+        DarkCustomColors
+    } else {
+        LightCustomColors
+    }
+
     ThemedSystemBars(isDarkTheme = darkTheme)
 
     CompositionLocalProvider(
+        LocalCustomColors provides customColors,
         LocalTypography provides Typography
     ) {
         MaterialTheme(

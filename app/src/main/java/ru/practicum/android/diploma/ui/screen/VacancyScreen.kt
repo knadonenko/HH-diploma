@@ -32,7 +32,7 @@ import ru.practicum.android.diploma.ui.theme.searchFieldCorner
 @Composable
 fun VacancyScreen(
     modifier: Modifier,
-    onBackClick: () -> Unit
+   vacancyId: String, onBackClick: () -> Unit
 ) {
     Scaffold(
         modifier = modifier,

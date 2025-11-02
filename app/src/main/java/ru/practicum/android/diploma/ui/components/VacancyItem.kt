@@ -15,12 +15,12 @@ import ru.practicum.android.diploma.ui.theme.Typography
 import ru.practicum.android.diploma.ui.theme.paddingHalfBase
 
 @Composable
-fun VacancyItem(vacancy: VacanciesInfo, onClick: (VacanciesInfo) -> Unit = {}) {
+fun VacancyItem(vacancy: VacanciesInfo, onClick: (String) -> Unit) {
     Row(
         modifier = Modifier
+            .clickable(onClick = { onClick(vacancy.id) })
             .fillMaxSize()
             .padding(vertical = paddingHalfBase)
-            .clickable(onClick = { onClick.invoke(vacancy) })
     ) {
         VacancyLogo(logo = vacancy.employerLogo)
         Column(
@@ -39,5 +39,25 @@ fun VacancyItem(vacancy: VacanciesInfo, onClick: (VacanciesInfo) -> Unit = {}) {
             )
             SalaryText(vacancy.salaryFrom, vacancy.salaryTo, vacancy.salaryCurrencySymbol, Typography.body16Regular)
         }
+    }
+}
+
+@Composable
+private fun getSalaryText(vacancy: VacanciesInfo): String {
+    val fromText = stringResource(R.string.from)
+    val toText = stringResource(R.string.to)
+    val noSalaryText = stringResource(R.string.no_salary)
+
+    return when {
+        vacancy.salaryFrom != null && vacancy.salaryTo != null ->
+            "$fromText ${vacancy.salaryFrom} $toText ${vacancy.salaryTo} ${vacancy.salaryCurrencySymbol}"
+
+        vacancy.salaryFrom != null ->
+            "$fromText ${vacancy.salaryFrom} ${vacancy.salaryCurrencySymbol}"
+
+        vacancy.salaryTo != null ->
+            "$toText ${vacancy.salaryTo} ${vacancy.salaryCurrencySymbol}"
+
+        else -> noSalaryText
     }
 }

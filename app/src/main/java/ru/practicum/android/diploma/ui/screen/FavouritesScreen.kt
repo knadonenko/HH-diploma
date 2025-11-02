@@ -67,8 +67,10 @@ fun MainContent(viewModel: FavoritesViewModel) {
 }
 
 @Composable
-fun FavoritesList(vacancyList: List<VacanciesInfo>,
-                  onItemClick: (VacanciesInfo) -> Unit,) {
+fun FavoritesList(
+    vacancyList: List<VacanciesInfo>,
+    onItemClick: (VacanciesInfo) -> Unit,
+) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth(),
@@ -76,7 +78,7 @@ fun FavoritesList(vacancyList: List<VacanciesInfo>,
         items(vacancyList) { vacancy ->
             VacancyItem(
                 vacancy = vacancy,
-                onClick = {onItemClick}
+                onClick = { onItemClick }
             )
         }
     }

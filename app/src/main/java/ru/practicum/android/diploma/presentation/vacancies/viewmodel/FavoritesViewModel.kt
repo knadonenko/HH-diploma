@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import ru.practicum.android.diploma.presentation.vacancies.models.FavoritesScreenState
 
-class FavoritesViewModel() : ViewModel() {
+class FavoritesViewModel : ViewModel() {
     private val _screenState = MutableStateFlow<FavoritesScreenState>(FavoritesScreenState.Default)
     val screenState = _screenState.asStateFlow()
 }

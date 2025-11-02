@@ -11,7 +11,10 @@ import ru.practicum.android.diploma.data.network.consts.ResponseStates.NO_INTERN
 import ru.practicum.android.diploma.data.network.consts.ResponseStates.SUCCESS
 import ru.practicum.android.diploma.data.network.consts.ResponseStates.UNAUTHORIZED
 import ru.practicum.android.diploma.data.network.request.Request
+import ru.practicum.android.diploma.data.network.response.VacancyDetailsResponse
 import ru.practicum.android.diploma.domain.vacancydetails.api.repository.VacancyDetailsRepository
+import ru.practicum.android.diploma.domain.vacancydetails.models.MarkFavouriteResponseState
+import ru.practicum.android.diploma.domain.vacancydetails.models.Vacancy
 import ru.practicum.android.diploma.domain.vacancydetails.models.VacancyDetailsResponseState
 
 class VacancyDetailsRepositoryImpl(
@@ -25,9 +28,9 @@ class VacancyDetailsRepositoryImpl(
 
         when (response.resultCode) {
             SUCCESS -> {
-                with(response as VacancyDetailsResponseState) {
-                    val vacancy = vacancyConverter.map(response.result)
-                    emit(VacancyDetailsResponseState.Found(vacancyPage))
+                with(response as VacancyDetailsResponse) {
+                    val vacancy = vacancyConverter.map(response)
+                    emit(VacancyDetailsResponseState.Found(vacancy))
                 }
             }
 
@@ -43,5 +46,9 @@ class VacancyDetailsRepositoryImpl(
                 emit(VacancyDetailsResponseState.NoInternetConnection)
             }
         }
+    }
+
+    override fun markFavourite(vacancy: Vacancy): Flow<MarkFavouriteResponseState> {
+        TODO("Not yet implemented")
     }
 }

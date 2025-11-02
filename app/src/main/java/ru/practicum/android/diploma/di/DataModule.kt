@@ -58,7 +58,7 @@ val dataModule = module {
     }
 
     single<NetworkClient> {
-        NetworkClientImpl(get())
+        NetworkClientImpl(get(), get())
     }
 
     single {

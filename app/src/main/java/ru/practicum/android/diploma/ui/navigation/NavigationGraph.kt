@@ -37,9 +37,20 @@ fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
             FavouritesScreen(modifier)
         }
 
-        composable(Routes.VACANCY) {
+        composable(
+            "${Routes.VACANCY}/{$VACANCY_ID}",
+            arguments = listOf(
+                navArgument(VACANCY_ID) {
+                    type = NavType.StringType
+                    nullable = false
+                }
+            )
+        ) {backStackEntry ->
+            val vacancyId = backStackEntry.arguments?.getString(VACANCY_ID)!!
+
             VacancyScreen(
                 modifier,
+                vacancyId,
                 onBackClick = {
                     navController.popBackStack()
                 }
@@ -90,15 +101,15 @@ fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
         }
 
         composable(
-            "${Routes.FILTER_AREA}/{countryId}",
+            "${Routes.FILTER_AREA}/{$COUNTRY_ID}",
             arguments = listOf(
-                navArgument("countryId") {
+                navArgument(COUNTRY_ID) {
                     type = NavType.StringType
                     nullable = true
                 }
             )
         ) { backStackEntry ->
-            val countryIdString = backStackEntry.arguments?.getString("countryId")
+            val countryIdString = backStackEntry.arguments?.getString(COUNTRY_ID)
             val countryId: Int? = countryIdString?.toIntOrNull()
 
             FilterAreaScreen(
@@ -120,3 +131,6 @@ fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
         }
     }
 }
+
+private const val COUNTRY_ID = "countryId"
+private const val VACANCY_ID = "vacancyId"

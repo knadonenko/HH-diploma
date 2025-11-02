@@ -7,5 +7,5 @@ sealed interface VacancyDetailsResponseState {
     data object NoInternetConnection : VacancyDetailsResponseState
     data object InternalServerError : VacancyDetailsResponseState
     data object BadRequest : VacancyDetailsResponseState
-    data class Found(val result: VacancyDetails) : VacancyDetailsResponseState
+    data class Found(val result: Vacancy?) : VacancyDetailsResponseState
 }

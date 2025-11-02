@@ -47,9 +47,10 @@ import ru.practicum.android.diploma.ui.theme.white
 fun MainScreen(
     modifier: Modifier,
     onFilterClick: () -> Unit,
+    onDetailsClick: (String) -> Unit,
     viewModel: VacanciesViewModel = koinViewModel<VacanciesViewModel>()
 ) {
-    var query = viewModel.currentSearchText.collectAsStateWithLifecycle().value
+    val query = viewModel.currentSearchText.collectAsStateWithLifecycle().value
     Scaffold(
         modifier = Modifier,
         topBar = {
@@ -71,14 +72,14 @@ fun MainScreen(
                 placeHolder = stringResource(R.string.enter_request),
                 onSearchClear = { viewModel.onClearSearchText() }
             )
-            MainContent(viewModel)
+            MainContent(viewModel, onDetailsClick)
         }
     }
 }
 
 @Composable
-fun MainContent(viewModel: VacanciesViewModel) {
-    var state = viewModel.screenState.collectAsState().value
+fun MainContent(viewModel: VacanciesViewModel, onDetailsClick: (String) -> Unit) {
+    val state = viewModel.screenState.collectAsState().value
 
     when (state) {
         is VacanciesScreenState.Default -> Placeholder(R.drawable.main_placeholder)
@@ -107,7 +108,7 @@ fun MainContent(viewModel: VacanciesViewModel) {
             )
             VacanciesList(
                 state.data,
-                onItemClick = {},
+                onItemClick = onDetailsClick,
                 onLoadNextPage = { viewModel.loadNextPage() }
             )
         }
@@ -138,7 +139,7 @@ fun Chip(text: String) {
 @Composable
 fun VacanciesList(
     vacancyList: List<VacanciesInfo>,
-    onItemClick: (VacanciesInfo) -> Unit,
+    onItemClick: (String) -> Unit,
     onLoadNextPage: () -> Unit,
 ) {
     val listState = rememberLazyListState()

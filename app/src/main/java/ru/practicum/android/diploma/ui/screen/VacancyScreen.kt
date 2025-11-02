@@ -13,7 +13,7 @@ import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
 import ru.practicum.android.diploma.ui.theme.paddingBase
 
 @Composable
-fun VacancyScreen(modifier: Modifier, onBackClick: () -> Unit) {
+fun VacancyScreen(modifier: Modifier, vacancyId: String, onBackClick: () -> Unit) {
     Scaffold(
         modifier = modifier,
         topBar = {

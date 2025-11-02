@@ -29,12 +29,12 @@ import ru.practicum.android.diploma.ui.theme.paddingHalfBase
 import ru.practicum.android.diploma.ui.theme.size48
 
 @Composable
-fun VacancyItem(vacancy: VacanciesInfo, onClick: (VacanciesInfo) -> Unit = {}) {
+fun VacancyItem(vacancy: VacanciesInfo, onClick: (String) -> Unit) {
     Row(
         modifier = Modifier
+            .clickable(onClick = { onClick(vacancy.id) })
             .fillMaxSize()
             .padding(vertical = paddingHalfBase)
-            .clickable(onClick = { onClick.invoke(vacancy) })
     ) {
         Column {
             val iconModifier = Modifier
@@ -95,8 +95,10 @@ private fun getSalaryText(vacancy: VacanciesInfo): String {
 
         vacancy.salaryFrom != null ->
             "$fromText ${vacancy.salaryFrom} ${vacancy.salaryCurrencySymbol}"
+
         vacancy.salaryTo != null ->
             "$toText ${vacancy.salaryTo} ${vacancy.salaryCurrencySymbol}"
+
         else -> noSalaryText
     }
 }

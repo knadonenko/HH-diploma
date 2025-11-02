@@ -1,8 +1,18 @@
 package ru.practicum.android.diploma.data.converter
 
+import ru.practicum.android.diploma.data.dto.FilterAreaDto
+import ru.practicum.android.diploma.data.dto.VacancyDetailsDto
 import ru.practicum.android.diploma.data.network.response.VacanciesResponse
+import ru.practicum.android.diploma.data.network.response.VacancyDetailsResponse
 import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
 import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesPage
+import ru.practicum.android.diploma.domain.vacancydetails.models.Address
+import ru.practicum.android.diploma.domain.vacancydetails.models.Contacts
+import ru.practicum.android.diploma.domain.vacancydetails.models.Employer
+import ru.practicum.android.diploma.domain.vacancydetails.models.FilterArea
+import ru.practicum.android.diploma.domain.vacancydetails.models.Phone
+import ru.practicum.android.diploma.domain.vacancydetails.models.Salary
+import ru.practicum.android.diploma.domain.vacancydetails.models.Vacancy
 
 class VacancyConverter {
     fun map(vacanciesResponse: VacanciesResponse): VacanciesPage {
@@ -19,10 +29,90 @@ class VacancyConverter {
                     employerLogo = vacancyDto.employer.logo,
                     salaryFrom = vacancyDto.salary.from,
                     salaryTo = vacancyDto.salary.to,
-                    salaryCurrencySymbol = vacancyDto.salary.currency
+                    salaryCurrencySymbol = vacancyDto.salary.currency?.let { convert(it) }
                 )
             }
         )
+    }
+
+    fun map(vacancy: VacancyDetailsResponse): Vacancy {
+        return Vacancy(
+            id = vacancy.id,
+            name = vacancy.name,
+            description = vacancy.description,
+            salary = convertSalary(vacancy.salary),
+            address = convertAddress(vacancy.address),
+            experience = vacancy.experience?.name,
+            schedule = vacancy.schedule?.name,
+            employment = vacancy.employment?.name,
+            contacts = convertContracts(vacancy.contacts),
+            employer = convertEmployer(vacancy.employer),
+            area = convertFilterArea(vacancy.area),
+            skills = vacancy.skills,
+            url = vacancy.url,
+            industry = vacancy.industry?.name,
+            isFavorite = false
+        )
+    }
+
+    private fun convertSalary(salaryDto: VacancyDetailsDto.SalaryDto?): Salary? {
+        return salaryDto?.let {
+            Salary(
+                from = it.from,
+                to = it.to,
+                currency = it.currency
+            )
+        }
+    }
+
+    private fun convertAddress(addressDto: VacancyDetailsDto.AddressDto?): Address? {
+        return addressDto?.let {
+            Address(
+                city = it.city,
+                street = it.street,
+                building = it.building,
+                fullAddress = it.raw
+            )
+        }
+    }
+
+    private fun convertContracts(contactsDto: VacancyDetailsDto.ContactsDto?): Contacts? {
+        return contactsDto?.let {
+            Contacts(
+                id = it.id,
+                name = it.name,
+                email = it.email,
+                phones = it.phones?.map { phone ->
+                    Phone(
+                        phone.comment,
+                        phone.formatted
+                    )
+                }
+            )
+        }
+    }
+
+    private fun convertEmployer(employerDto: VacancyDetailsDto.EmployerDto?): Employer? {
+        return employerDto?.let {
+            Employer(
+                id = it.id,
+                name = it.name,
+                logo = it.logo
+            )
+        }
+    }
+
+    private fun convertFilterArea(areaDto: FilterAreaDto?): FilterArea? {
+        return areaDto?.let {
+            FilterArea(
+                id = it.id,
+                name = it.name,
+                parentId = it.parentId,
+                areas = it.areas?.mapNotNull { areaDto ->
+                    convertFilterArea(areaDto)
+                }
+            )
+        }
     }
 
     private fun convert(currency: String): String {

@@ -22,6 +22,9 @@ class VacancyDetailsViewModel(
     private val _vacancy: Vacancy? = null
     private var _isFavouriteChangeInProgress: Boolean = false
 
+    private val _favouriteState = MutableStateFlow<Boolean>(false)
+    val favouriteState = _favouriteState.asStateFlow()
+
     private val _screenState = MutableStateFlow<VacancyDetailsScreenState>(VacancyDetailsScreenState.Default)
     val screenState = _screenState.asStateFlow()
 
@@ -52,6 +55,8 @@ class VacancyDetailsViewModel(
     }
 
     private fun handleFoundResult(vacancy: Vacancy?) {
+        vacancy?.run { _favouriteState.update { vacancy.isFavorite } }
+
         _screenState.update {
             vacancy?.let { VacancyDetailsScreenState.Found(it) }
                 ?: VacancyDetailsScreenState.NotFound
@@ -59,8 +64,7 @@ class VacancyDetailsViewModel(
     }
 
     fun onFavoriteClick() {
-        if (_isFavouriteChangeInProgress)
-        {
+        if (_isFavouriteChangeInProgress) {
             return
         }
 
@@ -78,13 +82,11 @@ class VacancyDetailsViewModel(
         }
     }
 
-    private fun handleFavouriteResult(responseState: MarkFavouriteResponseState){
+    private fun handleFavouriteResult(responseState: MarkFavouriteResponseState) {
         _isFavouriteChangeInProgress = false
 
-        if (responseState is MarkFavouriteResponseState.IsSuccess)
-        {
-            _vacancy?.also { it.isFavorite = !it.isFavorite}
-            _vacancy?.apply { _screenState.update { VacancyDetailsScreenState.Found(_vacancy) } }
+        if (responseState is MarkFavouriteResponseState.IsSuccess) {
+            _favouriteState.update { !_favouriteState.value }
         }
     }
 

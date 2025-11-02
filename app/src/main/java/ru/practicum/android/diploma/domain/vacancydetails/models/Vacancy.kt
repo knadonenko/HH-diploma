@@ -18,5 +18,5 @@ data class Vacancy(
     val skills: List<String>?,
     val url: String?,
     val industry: String?,
-    var isFavorite: Boolean
+    val isFavorite: Boolean
 )

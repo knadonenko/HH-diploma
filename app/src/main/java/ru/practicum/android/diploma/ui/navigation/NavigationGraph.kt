@@ -29,6 +29,9 @@ fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
                 modifier,
                 onFilterClick = {
                     navController.navigate(Routes.FILTER_SETTINGS)
+                },
+                onDetailsClick = { vacancyId ->
+                    navController.navigate("${Routes.VACANCY}/$vacancyId")
                 }
             )
         }
@@ -45,7 +48,7 @@ fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
                     nullable = false
                 }
             )
-        ) {backStackEntry ->
+        ) { backStackEntry ->
             val vacancyId = backStackEntry.arguments?.getString(VACANCY_ID)!!
 
             VacancyScreen(

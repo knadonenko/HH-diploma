@@ -40,7 +40,7 @@ import ru.practicum.android.diploma.ui.theme.searchFieldCorner
 @Composable
 fun VacancyScreen(
     modifier: Modifier,
-    vacancyId: String, onBackClick: () -> Unit,
+    onBackClick: () -> Unit,
     viewModel: VacancyDetailsViewModel = koinViewModel()
 ) {
     Scaffold(

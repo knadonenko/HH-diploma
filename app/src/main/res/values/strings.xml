@@ -46,6 +46,9 @@
     <string name="bad_request">Не удалось получить список вакансий</string>
     <string name="no_vacancies">Таких вакансий нет</string>
 
+    <!--ScreenFavorites-->
+    <string name="empty_favorites">Список пуст</string>
+
     <!--Vacancy plurals-->
     <plurals name="vacancy_plurals" tools:ignore="MissingQuantity">">
         <item quantity="one">Найдена %1$d вакансия</item>

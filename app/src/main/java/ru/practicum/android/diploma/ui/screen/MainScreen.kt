@@ -1,7 +1,5 @@
 package ru.practicum.android.diploma.ui.screen
 
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -24,10 +21,8 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import ru.practicum.android.diploma.R
@@ -35,19 +30,17 @@ import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
 import ru.practicum.android.diploma.presentation.vacancies.models.VacanciesScreenState
 import ru.practicum.android.diploma.presentation.vacancies.viewmodel.VacanciesViewModel
 import ru.practicum.android.diploma.ui.components.LoadingComponent
+import ru.practicum.android.diploma.ui.components.Placeholder
 import ru.practicum.android.diploma.ui.components.SearchField
 import ru.practicum.android.diploma.ui.components.VacancyItem
 import ru.practicum.android.diploma.ui.components.topbars.MainTopBar
 import ru.practicum.android.diploma.ui.theme.LocalTypography
 import ru.practicum.android.diploma.ui.theme.blue
-import ru.practicum.android.diploma.ui.theme.chipCornerRadius
 import ru.practicum.android.diploma.ui.theme.chipHeight
+import ru.practicum.android.diploma.ui.theme.cornerRadius
 import ru.practicum.android.diploma.ui.theme.padding12
 import ru.practicum.android.diploma.ui.theme.padding4
-import ru.practicum.android.diploma.ui.theme.padding64
 import ru.practicum.android.diploma.ui.theme.paddingBase
-import ru.practicum.android.diploma.ui.theme.placeholderHeight
-import ru.practicum.android.diploma.ui.theme.placeholderWidth
 import ru.practicum.android.diploma.ui.theme.white
 
 @Composable
@@ -131,7 +124,7 @@ fun Chip(text: String) {
     Box(
         modifier = Modifier
             .height(chipHeight)
-            .background(blue, RoundedCornerShape(chipCornerRadius)),
+            .background(blue, RoundedCornerShape(cornerRadius)),
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -140,27 +133,6 @@ fun Chip(text: String) {
             color = white,
             style = LocalTypography.current.body16Regular
         )
-    }
-}
-
-@Composable
-fun Placeholder(@DrawableRes imageResId: Int, text: String? = null) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Image(
-                modifier = Modifier.size(width = placeholderWidth, height = placeholderHeight),
-                painter = painterResource(imageResId),
-                contentDescription = text
-            )
-            if (!text.isNullOrEmpty()) {
-                Text(
-                    modifier = Modifier.padding(horizontal = padding64, vertical = paddingBase),
-                    textAlign = TextAlign.Center,
-                    text = text,
-                    style = LocalTypography.current.body22Medium
-                )
-            }
-        }
     }
 }
 

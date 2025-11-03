@@ -31,10 +31,10 @@ val padding64 = 64.dp
 
 // chip
 val chipHeight = 28.dp
-val chipCornerRadius = 12.dp
 
-val progressBarSize = 48.dp
+val size1 = 1.dp
+val size48 = 48.dp
 
 // Icons/Images
-val iconRounding = 12.dp
+val cornerRadius = 12.dp
 val iconSmall = 16.dp

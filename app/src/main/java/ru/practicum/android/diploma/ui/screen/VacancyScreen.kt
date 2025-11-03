@@ -268,27 +268,29 @@ private fun EmployerContacts(
     onPhoneClick: (phone: String) -> Unit,
     onEmailClick: (email: String) -> Unit
 ) {
-    if (vacancy.contacts != null
-        && ((vacancy.contacts.email != null && vacancy.contacts.email.isNotEmpty()) || (vacancy.contacts.phones != null && vacancy.contacts.phones.isNotEmpty()))
-    ) {
+    if (vacancy.contacts == null) {
+        return
+    }
+
+    if (showEmail(vacancy.contacts) || showPhone(vacancy.contacts)) {
         Text(
             text = stringResource(R.string.contacts_title),
             style = Typography.body22Medium,
             color = colorResource(R.color.text)
         )
         Spacer(modifier = Modifier.padding(top = paddingBase))
-        if (vacancy.contacts.phones != null && vacancy.contacts.phones.isNotEmpty()) {
-            vacancy.contacts.phones.forEach { EmployerPhone(it, onPhoneClick) }
+        if (showPhone(vacancy.contacts)) {
+            vacancy.contacts.phones!!.forEach { EmployerPhone(it, onPhoneClick) }
         }
-        if (vacancy.contacts.email != null && vacancy.contacts.email.isNotEmpty()) {
+        if (showEmail(vacancy.contacts)) {
             Text(
                 text = stringResource(R.string.email_subtitle),
                 style = Typography.body16Medium,
                 color = colorResource(R.color.text)
             )
             Text(
-                modifier = Modifier.clickable(onClick = { onEmailClick.invoke(vacancy.contacts.email) }),
-                text = vacancy.contacts.email,
+                modifier = Modifier.clickable(onClick = { onEmailClick.invoke(vacancy.contacts.email!!) }),
+                text = vacancy.contacts.email!!,
                 style = Typography.body16Regular,
                 color = colorResource(R.color.text)
             )
@@ -344,4 +346,12 @@ private fun VacancyBodyPreview() {
         isFavorite = false
     )
     VacancyBody(vacancyDetails)
+}
+
+private fun showEmail(contacts: Contacts): Boolean {
+    return contacts.email != null && contacts.email.isNotEmpty()
+}
+
+private fun showPhone(contacts: Contacts): Boolean {
+    return contacts.phones != null && contacts.phones.isNotEmpty()
 }

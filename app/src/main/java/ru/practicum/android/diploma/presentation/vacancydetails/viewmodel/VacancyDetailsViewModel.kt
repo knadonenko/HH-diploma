@@ -98,7 +98,7 @@ class VacancyDetailsViewModel(
         vacancyDetailsLinkManagerInteractor.callPhone(phone)
     }
 
-    fun onEmailClick() {
-        _vacancy?.contacts?.email?.let { vacancyDetailsLinkManagerInteractor.shareLink(it) }
+    fun onEmailClick(email: String) {
+        vacancyDetailsLinkManagerInteractor.sendEmail(email)
     }
 }

@@ -31,7 +31,9 @@ class VacanciesViewModel(
     val currentSearchText = _currentSearchText.asStateFlow()
 
     private var _searchJob: Job? = null
+    private var _loadNextPageJob: Job? = null
     private var _vacancies = mutableListOf<VacanciesInfo>()
+    private var _totalCount: Int = 0
 
     fun onSearchTextChange(newSearchText: String?) {
         if (_currentSearchText.value == newSearchText) {
@@ -40,9 +42,12 @@ class VacanciesViewModel(
 
         _currentSearchText.update { newSearchText ?: "" }
 
+        cancelPreviousSearch()
+        cancelNextPageLoad()
+
         if (_currentSearchText.value.isEmpty()) {
-            cancelPreviousSearch()
             _vacancies.clear()
+            _screenState.update { VacanciesScreenState.Default }
             return
         }
 
@@ -50,8 +55,6 @@ class VacanciesViewModel(
     }
 
     private fun searchDebounce() {
-        cancelPreviousSearch()
-
         _searchJob = viewModelScope.launch {
             delay(SEARCH_DEBOUNCE_DELAY)
             loadFirstPage()
@@ -59,66 +62,109 @@ class VacanciesViewModel(
     }
 
     private fun loadFirstPage() {
-        _currentPage = 0
+        _currentPage = 1
         _isLastPage = false
         _vacancies.clear()
+        _totalCount = 0
 
-        loadNextPage()
-    }
-
-    fun loadNextPage() {
-        if (_isLastPage) {
-            return
-        }
-
-        _currentPage++
-
-        _screenState.update { VacanciesScreenState.Loading }
-
+        _screenState.update { VacanciesScreenState.Loading(true) }
         _searchJob = viewModelScope.launch {
             vacanciesInteractor
                 .searchVacancies(_currentSearchText.value, _currentPage, _filterSettings)
                 .cancellable()
                 .collect { responseState ->
-                    handleSearchResult(responseState)
+                    handleSearchResult(responseState, isFirstPage = true)
                 }
         }
     }
 
-    private fun handleSearchResult(responseState: VacanciesResponseState) {
-        when (responseState) {
-            is VacanciesResponseState.BadRequest,
-            is VacanciesResponseState.InternalServerError ->
-                _screenState.update { VacanciesScreenState.InternalServerError }
+    fun loadNextPage() {
+        if (_isLastPage || _loadNextPageJob?.isActive == true) {
+            return
+        }
 
-            is VacanciesResponseState.NoInternetConnection ->
-                _screenState.update { VacanciesScreenState.NoInternetConnection }
+        _currentPage++
 
-            is VacanciesResponseState.Found -> handleSearchFoundResult(responseState.result)
+        val currentData = _vacancies.toList()
+        _screenState.update {
+            VacanciesScreenState.Found(
+                data = currentData,
+                isLastPage = _isLastPage,
+                totalCount = _totalCount
+            )
+        }
+
+        _loadNextPageJob = viewModelScope.launch {
+            vacanciesInteractor
+                .searchVacancies(_currentSearchText.value, _currentPage, _filterSettings)
+                .cancellable()
+                .collect { responseState ->
+                    handleSearchResult(responseState, isFirstPage = false)
+                }
         }
     }
 
-    private fun handleSearchFoundResult(vacanciesPage: VacanciesPage) {
-        _isLastPage = vacanciesPage.page == vacanciesPage.pages
+    private fun handleSearchResult(responseState: VacanciesResponseState, isFirstPage: Boolean) {
+        when (responseState) {
+            is VacanciesResponseState.BadRequest,
+            is VacanciesResponseState.InternalServerError -> {
+                if (isFirstPage) {
+                    _screenState.update { VacanciesScreenState.InternalServerError }
+                } else {
+                    _currentPage--
+                    updateFoundState()
+                }
+            }
 
-        if (vacanciesPage.vacancies.isEmpty()) {
-            _screenState.update { VacanciesScreenState.NotFound }
+            is VacanciesResponseState.NoInternetConnection -> {
+                if (isFirstPage) {
+                    _screenState.update { VacanciesScreenState.NoInternetConnection }
+                } else {
+                    _currentPage--
+                    updateFoundState()
+                }
+            }
+
+            is VacanciesResponseState.Found -> handleSearchFoundResult(responseState.result, isFirstPage)
+        }
+    }
+
+    private fun handleSearchFoundResult(vacanciesPage: VacanciesPage, isFirstPage: Boolean) {
+        _isLastPage = vacanciesPage.page == vacanciesPage.pages
+        _totalCount = vacanciesPage.found
+
+        if (isFirstPage) {
+            if (vacanciesPage.vacancies.isEmpty()) {
+                _screenState.update { VacanciesScreenState.NotFound }
+            } else {
+                _vacancies.clear()
+                _vacancies.addAll(vacanciesPage.vacancies)
+                updateFoundState()
+            }
         } else {
             _vacancies.addAll(vacanciesPage.vacancies)
-            _screenState.update {
-                VacanciesScreenState.Found(
-                    _vacancies,
-                    _isLastPage,
-                    vacanciesPage.found,
-                )
-            }
+            updateFoundState()
+        }
+    }
+
+    private fun updateFoundState() {
+        _screenState.update {
+            VacanciesScreenState.Found(
+                data = _vacancies.toList(),
+                isLastPage = _isLastPage,
+                totalCount = _totalCount
+            )
         }
     }
 
     fun onClearSearchText() {
         cancelPreviousSearch()
+        cancelNextPageLoad()
         _currentSearchText.update { "" }
         _vacancies.clear()
+        _currentPage = 0
+        _isLastPage = false
+        _totalCount = 0
 
         _screenState.update { VacanciesScreenState.Default }
     }
@@ -126,6 +172,17 @@ class VacanciesViewModel(
     private fun cancelPreviousSearch() {
         _searchJob?.cancel()
         _searchJob = null
+    }
+
+    private fun cancelNextPageLoad() {
+        _loadNextPageJob?.cancel()
+        _loadNextPageJob = null
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        cancelPreviousSearch()
+        cancelNextPageLoad()
     }
 
     companion object {

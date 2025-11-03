@@ -83,7 +83,11 @@ fun MainContent(viewModel: VacanciesViewModel, onDetailsClick: (String) -> Unit)
 
     when (state) {
         is VacanciesScreenState.Default -> Placeholder(R.drawable.main_placeholder)
-        is VacanciesScreenState.Loading -> LoadingComponent()
+        is VacanciesScreenState.Loading -> {
+            if (state.fullScreenLoader) {
+                LoadingComponent()
+            }
+        }
 
         is VacanciesScreenState.NoInternetConnection -> Placeholder(
             R.drawable.error_placeholder,

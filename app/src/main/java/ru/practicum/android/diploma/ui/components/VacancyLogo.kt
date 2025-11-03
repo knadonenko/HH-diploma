@@ -17,16 +17,18 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.theme.cornerRadius
+import ru.practicum.android.diploma.ui.theme.size1
+import ru.practicum.android.diploma.ui.theme.size48
 
 @Composable
 fun VacancyLogo(modifier: Modifier = Modifier, logo: String? = null) {
     Column {
         val iconModifier = modifier
-            .size(48.dp)
+            .size(size48)
             .aspectRatio(1f)
             .clip(RoundedCornerShape(cornerRadius))
             .border(
-                width = 1.dp,
+                width = size1,
                 color = colorResource(R.color.stroke),
                 shape = RoundedCornerShape(cornerRadius)
             )

@@ -165,7 +165,7 @@ private fun EmployerDescription(vacancy: Vacancy) {
                 .fillMaxWidth()
                 .padding(all = paddingBase)
         ) {
-            VacancyLogo()
+            VacancyLogo(logo = vacancy.employer?.logo ?: "")
             Column(
                 modifier = Modifier.padding(start = paddingHalfBase)
             ) {

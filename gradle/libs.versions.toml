@@ -45,6 +45,7 @@ koin-bom = "4.1.1"
 #navigation
 navigationCompose = "2.9.5"
 uiTooling = "1.9.4"
+materialIconsExtended = "1.7.8"
 
 [libraries]
 
@@ -100,6 +101,7 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 
 androidx-ui-tooling-preview-android = { group = "androidx.compose.ui", name = "ui-tooling-preview-android", version.ref = "uiToolingPreviewAndroid" }
+androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIconsExtended" }
 
 [bundles]
 

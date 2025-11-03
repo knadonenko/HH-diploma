@@ -31,6 +31,9 @@ val padding64 = 64.dp
 
 // chip
 val chipHeight = 28.dp
+val floatingChipPadding = 50.dp
+val floatingChipContentPadding = 38.dp
+val loaderItemPadding = 80.dp
 
 val size1 = 1.dp
 val size48 = 48.dp

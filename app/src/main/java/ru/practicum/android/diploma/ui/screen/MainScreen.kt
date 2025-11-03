@@ -1,20 +1,16 @@
 package ru.practicum.android.diploma.ui.screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -31,20 +27,18 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
 import ru.practicum.android.diploma.presentation.vacancies.models.VacanciesScreenState
 import ru.practicum.android.diploma.presentation.vacancies.viewmodel.VacanciesViewModel
+import ru.practicum.android.diploma.ui.components.Chip
 import ru.practicum.android.diploma.ui.components.LoadingComponent
 import ru.practicum.android.diploma.ui.components.Placeholder
 import ru.practicum.android.diploma.ui.components.SearchField
 import ru.practicum.android.diploma.ui.components.VacancyItem
 import ru.practicum.android.diploma.ui.components.VacancyLoadingItem
 import ru.practicum.android.diploma.ui.components.topbars.MainTopBar
-import ru.practicum.android.diploma.ui.theme.LocalTypography
-import ru.practicum.android.diploma.ui.theme.blue
-import ru.practicum.android.diploma.ui.theme.chipHeight
-import ru.practicum.android.diploma.ui.theme.cornerRadius
+import ru.practicum.android.diploma.ui.theme.floatingChipContentPadding
+import ru.practicum.android.diploma.ui.theme.floatingChipPadding
+import ru.practicum.android.diploma.ui.theme.loaderItemPadding
 import ru.practicum.android.diploma.ui.theme.padding12
-import ru.practicum.android.diploma.ui.theme.padding4
 import ru.practicum.android.diploma.ui.theme.paddingBase
-import ru.practicum.android.diploma.ui.theme.white
 
 @Composable
 fun MainScreen(
@@ -94,6 +88,7 @@ fun MainContent(viewModel: VacanciesViewModel, onDetailsClick: (String) -> Unit)
         )
 
         is VacanciesScreenState.NotFound -> {
+            Spacer(modifier = Modifier.padding(top = padding12))
             Chip(stringResource(R.string.no_vacancies))
             Placeholder(
                 R.drawable.no_vacancy_placeholder,
@@ -101,42 +96,42 @@ fun MainContent(viewModel: VacanciesViewModel, onDetailsClick: (String) -> Unit)
             )
         }
 
-        is VacanciesScreenState.Found -> {
+        is VacanciesScreenState.Found -> MainScreenContent(viewModel, state, onDetailsClick)
+
+        is VacanciesScreenState.InternalServerError -> {}
+    }
+}
+
+@Composable
+fun MainScreenContent(
+    viewModel: VacanciesViewModel,
+    state: VacanciesScreenState.Found,
+    onDetailsClick: (String) -> Unit
+) {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        VacanciesList(
+            state.data,
+            onItemClick = onDetailsClick,
+            onLoadNextPage = { viewModel.loadNextPage() },
+            isNextPageLoading = state.isNextPageLoading
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopCenter),
+            contentAlignment = Alignment.Center
+        ) {
+            Spacer(modifier = Modifier.padding(top = floatingChipPadding))
             Chip(
-                pluralStringResource(
+                text = pluralStringResource(
                     R.plurals.vacancy_plurals,
                     state.totalCount,
                     state.totalCount
                 )
             )
-            VacanciesList(
-                state.data,
-                onItemClick = onDetailsClick,
-                onLoadNextPage = { viewModel.loadNextPage() },
-                isNextPageLoading = state.isNextPageLoading
-            )
         }
-
-        is VacanciesScreenState.InternalServerError -> {}
-    }
-
-}
-
-@Composable
-fun Chip(text: String) {
-    Spacer(modifier = Modifier.height(padding12))
-    Box(
-        modifier = Modifier
-            .height(chipHeight)
-            .background(blue, RoundedCornerShape(cornerRadius)),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            modifier = Modifier.padding(vertical = padding4, horizontal = padding12),
-            text = text,
-            color = white,
-            style = LocalTypography.current.body16Regular
-        )
     }
 }
 
@@ -166,8 +161,11 @@ fun VacanciesList(
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
         state = listState,
-        contentPadding = PaddingValues(bottom = if (isNextPageLoading) 80.dp else 0.dp)
+        contentPadding = PaddingValues(bottom = if (isNextPageLoading) loaderItemPadding else 0.dp)
     ) {
+        item {
+            Spacer(modifier = Modifier.padding(top = floatingChipContentPadding))
+        }
         items(vacancyList) { vacancy ->
             VacancyItem(
                 vacancy = vacancy,

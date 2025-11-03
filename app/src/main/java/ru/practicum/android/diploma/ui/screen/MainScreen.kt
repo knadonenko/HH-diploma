@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.ui.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import ru.practicum.android.diploma.R
@@ -33,6 +35,7 @@ import ru.practicum.android.diploma.ui.components.LoadingComponent
 import ru.practicum.android.diploma.ui.components.Placeholder
 import ru.practicum.android.diploma.ui.components.SearchField
 import ru.practicum.android.diploma.ui.components.VacancyItem
+import ru.practicum.android.diploma.ui.components.VacancyLoadingItem
 import ru.practicum.android.diploma.ui.components.topbars.MainTopBar
 import ru.practicum.android.diploma.ui.theme.LocalTypography
 import ru.practicum.android.diploma.ui.theme.blue
@@ -83,11 +86,7 @@ fun MainContent(viewModel: VacanciesViewModel, onDetailsClick: (String) -> Unit)
 
     when (state) {
         is VacanciesScreenState.Default -> Placeholder(R.drawable.main_placeholder)
-        is VacanciesScreenState.Loading -> {
-            if (state.fullScreenLoader) {
-                LoadingComponent()
-            }
-        }
+        is VacanciesScreenState.Loading -> LoadingComponent()
 
         is VacanciesScreenState.NoInternetConnection -> Placeholder(
             R.drawable.error_placeholder,
@@ -113,7 +112,8 @@ fun MainContent(viewModel: VacanciesViewModel, onDetailsClick: (String) -> Unit)
             VacanciesList(
                 state.data,
                 onItemClick = onDetailsClick,
-                onLoadNextPage = { viewModel.loadNextPage() }
+                onLoadNextPage = { viewModel.loadNextPage() },
+                isNextPageLoading = state.isNextPageLoading
             )
         }
 
@@ -145,6 +145,7 @@ fun VacanciesList(
     vacancyList: List<VacanciesInfo>,
     onItemClick: (String) -> Unit,
     onLoadNextPage: () -> Unit,
+    isNextPageLoading: Boolean
 ) {
     val listState = rememberLazyListState()
     val shouldLoadNext = remember {
@@ -163,9 +164,9 @@ fun VacanciesList(
     }
 
     LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth(),
-        state = listState
+        modifier = Modifier.fillMaxWidth(),
+        state = listState,
+        contentPadding = PaddingValues(bottom = if (isNextPageLoading) 80.dp else 0.dp)
     ) {
         items(vacancyList) { vacancy ->
             VacancyItem(
@@ -173,8 +174,10 @@ fun VacanciesList(
                 onClick = onItemClick
             )
         }
-        item {
-            LoadingComponent()
+        if (isNextPageLoading) {
+            item {
+                VacancyLoadingItem()
+            }
         }
     }
 }

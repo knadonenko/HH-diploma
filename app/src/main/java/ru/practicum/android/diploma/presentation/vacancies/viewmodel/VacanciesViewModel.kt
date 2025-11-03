@@ -67,7 +67,7 @@ class VacanciesViewModel(
         _vacancies.clear()
         _totalCount = 0
 
-        _screenState.update { VacanciesScreenState.Loading(true) }
+        _screenState.update { VacanciesScreenState.Loading }
         _searchJob = viewModelScope.launch {
             vacanciesInteractor
                 .searchVacancies(_currentSearchText.value, _currentPage, _filterSettings)
@@ -90,7 +90,8 @@ class VacanciesViewModel(
             VacanciesScreenState.Found(
                 data = currentData,
                 isLastPage = _isLastPage,
-                totalCount = _totalCount
+                totalCount = _totalCount,
+                isNextPageLoading = true
             )
         }
 
@@ -152,7 +153,8 @@ class VacanciesViewModel(
             VacanciesScreenState.Found(
                 data = _vacancies.toList(),
                 isLastPage = _isLastPage,
-                totalCount = _totalCount
+                totalCount = _totalCount,
+                isNextPageLoading = false
             )
         }
     }

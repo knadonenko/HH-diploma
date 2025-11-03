@@ -34,6 +34,8 @@ import ru.practicum.android.diploma.domain.vacancydetails.models.Phone
 import ru.practicum.android.diploma.domain.vacancydetails.models.Vacancy
 import ru.practicum.android.diploma.presentation.vacancydetails.models.VacancyDetailsScreenState
 import ru.practicum.android.diploma.presentation.vacancydetails.viewmodel.VacancyDetailsViewModel
+import ru.practicum.android.diploma.ui.components.LoadingComponent
+import ru.practicum.android.diploma.ui.components.Placeholder
 import ru.practicum.android.diploma.ui.components.SalaryText
 import ru.practicum.android.diploma.ui.components.VacancyLogo
 import ru.practicum.android.diploma.ui.components.topbars.CommonTopBar
@@ -106,10 +108,21 @@ fun VacancyScreen(
                     onEmailClick = { viewModel.onEmailClick() }
                 )
 
-                VacancyDetailsScreenState.InternalServerError -> {}
-                VacancyDetailsScreenState.Loading -> {}
-                VacancyDetailsScreenState.NoInternetConnection -> {}
-                VacancyDetailsScreenState.NotFound -> {}
+                VacancyDetailsScreenState.InternalServerError -> Placeholder(
+                    R.drawable.server_error_placeholder,
+                    stringResource(R.string.server_error)
+                )
+
+                VacancyDetailsScreenState.Loading -> LoadingComponent()
+                VacancyDetailsScreenState.NoInternetConnection -> Placeholder(
+                    R.drawable.error_placeholder,
+                    stringResource(R.string.no_internet)
+                )
+
+                VacancyDetailsScreenState.NotFound -> Placeholder(
+                    R.drawable.no_vacancy_placeholder,
+                    stringResource(R.string.bad_request)
+                )
             }
         }
     }

@@ -113,7 +113,10 @@ fun MainContent(viewModel: VacanciesViewModel, onDetailsClick: (String) -> Unit)
             )
         }
 
-        is VacanciesScreenState.InternalServerError -> {}
+        is VacanciesScreenState.InternalServerError -> Placeholder(
+            R.drawable.server_error_placeholder,
+            stringResource(R.string.server_error)
+        )
     }
 
 }

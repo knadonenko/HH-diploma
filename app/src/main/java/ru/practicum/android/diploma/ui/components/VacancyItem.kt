@@ -12,8 +12,6 @@ import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
 import ru.practicum.android.diploma.ui.theme.LocalCustomColors
 import ru.practicum.android.diploma.ui.theme.Typography
 import ru.practicum.android.diploma.ui.theme.paddingHalfBase
-import ru.practicum.android.diploma.ui.theme.size1
-import ru.practicum.android.diploma.ui.theme.size48
 
 @Composable
 fun VacancyItem(vacancy: VacanciesInfo, onClick: (String) -> Unit) {

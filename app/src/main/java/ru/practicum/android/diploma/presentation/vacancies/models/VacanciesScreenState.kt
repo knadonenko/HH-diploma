@@ -7,7 +7,12 @@ import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
 sealed class VacanciesScreenState {
     data object Default : VacanciesScreenState()
     data object Loading : VacanciesScreenState()
-    data class Found(val data: List<VacanciesInfo>, val isLastPage: Boolean, val totalCount: Int) :
+    data class Found(
+        val data: List<VacanciesInfo>,
+        val isLastPage: Boolean,
+        val totalCount: Int,
+        val isNextPageLoading: Boolean
+    ) :
         VacanciesScreenState()
 
     data object NotFound : VacanciesScreenState()

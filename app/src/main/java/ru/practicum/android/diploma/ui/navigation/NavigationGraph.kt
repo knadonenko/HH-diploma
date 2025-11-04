@@ -56,7 +56,6 @@ fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
 
             VacancyScreen(
                 modifier,
-                vacancyId,
                 onBackClick = {
                     navController.popBackStack()
                 },

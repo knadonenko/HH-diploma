@@ -27,10 +27,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.domain.vacanceis.models.VacancyDetails
+import ru.practicum.android.diploma.domain.vacancydetails.models.Address
+import ru.practicum.android.diploma.domain.vacancydetails.models.Contacts
+import ru.practicum.android.diploma.domain.vacancydetails.models.Employer
+import ru.practicum.android.diploma.domain.vacancydetails.models.FilterArea
 import ru.practicum.android.diploma.domain.vacancydetails.models.Phone
+import ru.practicum.android.diploma.domain.vacancydetails.models.Salary
 import ru.practicum.android.diploma.domain.vacancydetails.models.Vacancy
 import ru.practicum.android.diploma.presentation.vacancydetails.models.VacancyDetailsScreenState
 import ru.practicum.android.diploma.presentation.vacancydetails.viewmodel.VacancyDetailsViewModel
@@ -49,7 +54,6 @@ import ru.practicum.android.diploma.ui.theme.searchFieldCorner
 @Composable
 fun VacancyScreen(
     modifier: Modifier,
-    vacancyId: String,
     onBackClick: () -> Unit,
     viewModel: VacancyDetailsViewModel = koinViewModel()
 ) {
@@ -101,11 +105,10 @@ fun VacancyScreen(
             val state = viewModel.screenState.collectAsState().value
 
             when (state) {
-                VacancyDetailsScreenState.Default -> {}
                 is VacancyDetailsScreenState.Found -> VacancyBody(
                     vacancy = state.data,
-                    onPhoneClick = { viewModel.onPhoneClick(state.data.contacts?.phones?.first()?.formatted!!) },
-                    onEmailClick = { viewModel.onEmailClick() }
+                    onPhoneClick = { viewModel.onPhoneClick(it) },
+                    onEmailClick = { viewModel.onEmailClick(it) }
                 )
 
                 VacancyDetailsScreenState.InternalServerError -> Placeholder(
@@ -119,10 +122,12 @@ fun VacancyScreen(
                     stringResource(R.string.no_internet)
                 )
 
-                VacancyDetailsScreenState.NotFound -> Placeholder(
-                    R.drawable.no_vacancy_placeholder,
-                    stringResource(R.string.bad_request)
-                )
+                else -> {
+                    Placeholder(
+                        R.drawable.no_vacancy_placeholder,
+                        stringResource(R.string.bad_request)
+                    )
+                }
             }
         }
     }
@@ -188,11 +193,6 @@ private fun EmployerDescription(vacancy: Vacancy) {
                     color = colorResource(R.color.highlighted_block_text)
                 )
                 Text(
-                    text = vacancy.employer?.name ?: "",
-                    style = Typography.body22Medium,
-                    color = colorResource(R.color.highlighted_block_text)
-                )
-                Text(
                     text = vacancy.address?.fullAddress ?: vacancy.area?.name ?: "",
                     style = Typography.body16Regular,
                     color = colorResource(R.color.highlighted_block_text)
@@ -232,12 +232,69 @@ private fun VacancyDescription(vacancyDetails: Vacancy) {
         color = colorResource(R.color.text)
     )
     Spacer(modifier = Modifier.padding(top = paddingBase))
+    VacancyDescriptionText(vacancyDetails.description ?: "")
+    Spacer(modifier = Modifier.padding(top = paddingDouble))
+}
+
+@Composable
+private fun VacancyDescriptionText(description: String) {
+    val lines = description.split("\n")
+    Column {
+        lines.forEach { line ->
+            val trimmedLine = line.trim()
+            when {
+                trimmedLine.matches(".*[А-Яа-я]+:".toRegex())
+                    && !trimmedLine.startsWith("-") -> VacancyTextSubtitle(trimmedLine)
+
+                trimmedLine.startsWith("-") || trimmedLine.startsWith("\n") -> VacancyTextEnumeration(
+                    trimmedLine.replaceFirst(
+                        "-",
+                        ""
+                    )
+                )
+
+                else -> VacancyTextRegular(trimmedLine)
+            }
+        }
+    }
+}
+
+@Composable
+private fun VacancyTextSubtitle(line: String) {
+    Spacer(modifier = Modifier.padding(top = paddingBase))
     Text(
-        text = vacancyDetails.description ?: "",
-        style = Typography.body16Regular,
+        text = line,
+        style = Typography.body16Medium,
         color = colorResource(R.color.text)
     )
-    Spacer(modifier = Modifier.padding(top = paddingDouble))
+    Spacer(modifier = Modifier.padding(top = 4.dp))
+}
+
+@Composable
+private fun VacancyTextEnumeration(line: String) {
+    Row {
+        Text(
+            modifier = Modifier.padding(horizontal = paddingHalfBase),
+            style = Typography.body16Medium,
+            text = stringResource(R.string.skill_prefix)
+        )
+        Text(
+            text = line,
+            style = Typography.body16Regular,
+            color = colorResource(R.color.text)
+        )
+    }
+}
+
+@Composable
+private fun VacancyTextRegular(line: String) {
+    if (line.isNotEmpty()) {
+        Text(
+            text = line,
+            style = Typography.body16Regular,
+            color = colorResource(R.color.text)
+        )
+    }
 }
 
 @Composable
@@ -249,24 +306,8 @@ private fun VacancySkills(vacancy: Vacancy) {
             color = colorResource(R.color.text)
         )
         Spacer(modifier = Modifier.padding(top = paddingBase))
-        vacancy.skills.forEach { VacancySkill(it) }
+        vacancy.skills.forEach { VacancyTextEnumeration(it) }
         Spacer(modifier = Modifier.padding(top = paddingDouble))
-    }
-}
-
-@Composable
-private fun VacancySkill(skill: String) {
-    Row {
-        Text(
-            modifier = Modifier.padding(horizontal = paddingHalfBase),
-            style = Typography.body16Medium,
-            text = stringResource(R.string.skill_prefix)
-        )
-        Text(
-            text = skill,
-            style = Typography.body16Regular,
-            color = colorResource(R.color.text)
-        )
     }
 }
 
@@ -276,27 +317,33 @@ private fun EmployerContacts(
     onPhoneClick: (phone: String) -> Unit,
     onEmailClick: (email: String) -> Unit
 ) {
-    if (vacancy.contacts?.email != null && vacancy.contacts.phones != null) {
+    if (vacancy.contacts == null) {
+        return
+    }
+
+    if (showEmail(vacancy.contacts) || showPhone(vacancy.contacts)) {
         Text(
             text = stringResource(R.string.contacts_title),
             style = Typography.body22Medium,
             color = colorResource(R.color.text)
         )
         Spacer(modifier = Modifier.padding(top = paddingBase))
-        if (vacancy.contacts.phones.isNotEmpty()) {
-            vacancy.contacts.phones.forEach { EmployerPhone(it, onPhoneClick) }
+        if (showPhone(vacancy.contacts)) {
+            vacancy.contacts.phones!!.forEach { EmployerPhone(it, onPhoneClick) }
         }
-        Text(
-            text = stringResource(R.string.email_subtitle),
-            style = Typography.body16Medium,
-            color = colorResource(R.color.text)
-        )
-        Text(
-            modifier = Modifier.clickable(onClick = { onEmailClick.invoke(vacancy.contacts.email) }),
-            text = vacancy.contacts.email,
-            style = Typography.body16Regular,
-            color = colorResource(R.color.text)
-        )
+        if (showEmail(vacancy.contacts)) {
+            Text(
+                text = stringResource(R.string.email_subtitle),
+                style = Typography.body16Medium,
+                color = colorResource(R.color.text)
+            )
+            Text(
+                modifier = Modifier.clickable(onClick = { onEmailClick.invoke(vacancy.contacts.email!!) }),
+                text = vacancy.contacts.email!!,
+                style = Typography.body16Regular,
+                color = colorResource(R.color.text)
+            )
+        }
     }
 }
 
@@ -307,7 +354,7 @@ private fun EmployerPhone(
 ) {
     Text(
         modifier = Modifier.clickable(onClick = { onPhoneClick.invoke(phone.formatted!!) }),
-        text = phone.comment ?: "",
+        text = phone.formatted ?: "",
         style = Typography.body16Medium,
         color = colorResource(R.color.text)
     )
@@ -325,25 +372,35 @@ private fun EmployerPhone(
 @Composable
 @Suppress("MagicNumber")
 private fun VacancyBodyPreview() {
-    val vacancyDetails = VacancyDetails(
+    val vacancyDetails = Vacancy(
         id = "mock",
-        vacancyName = "Переворчиватель пингвинов",
-        address = "Большая Грузинская, д.1с99, Москва",
-        salaryFrom = 1000,
-        salaryTo = 100_000,
-        salaryCurrencySymbol = "$",
-        employerName = "Московский зоопарк",
-        employerPhone = listOf(
-            VacancyDetails.EmployerPhone("+7 (495) 775-33-70", "основной способ связи"),
-            VacancyDetails.EmployerPhone("+7 (495) 775-33-70")
+        name = "Переворчиватель пингвинов",
+        address = Address("Москва", "Большая Грузинская", "д.1с99", "Большая Грузинская, д.1с99, Москва"),
+        salary = Salary(1000, 100_000, "$"),
+        employer = Employer("mock", "Московский зоопарк", null),
+        contacts = Contacts(
+            "mock",
+            "mock",
+            "zoopark@culture.mos.ru",
+            listOf(Phone("основной способ связи", "+7 (495) 775-33-70"), Phone(null, "+7 (495) 775-33-70"))
         ),
-        employerEmail = "zoopark@culture.mos.ru",
         schedule = "Полный день",
-        areaName = "Москва",
+        area = FilterArea(0, "Москва", null, null),
         experience = "Не требуется",
-        description = "Ответственность за переворачивание пингвинов, упавших на спину.\n" +
-            "Контроль за правильным положением птиц. Взаимодействие с ветеринарной службой.\n" +
-            "Наблюдение за поведением пингвинов в вольере.",
-        skills = listOf("Работа с животными", "Внимательность", "Физическая выносливость", "Любовь к птицам")
+        description = "123",
+        skills = listOf("Работа с животными", "Внимательность", "Физическая выносливость", "Любовь к птицам"),
+        employment = null,
+        url = null,
+        industry = null,
+        isFavorite = false
     )
+    VacancyBody(vacancyDetails)
+}
+
+private fun showEmail(contacts: Contacts): Boolean {
+    return contacts.email != null && contacts.email.isNotEmpty()
+}
+
+private fun showPhone(contacts: Contacts): Boolean {
+    return contacts.phones != null && contacts.phones.isNotEmpty()
 }

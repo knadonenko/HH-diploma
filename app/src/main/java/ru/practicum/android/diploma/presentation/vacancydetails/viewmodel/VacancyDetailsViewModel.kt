@@ -19,7 +19,7 @@ class VacancyDetailsViewModel(
     private val vacancyDetailsInteractor: VacancyDetailsInteractor,
     private val vacancyDetailsLinkManagerInteractor: VacancyDetailsLinkManagerInteractor
 ) : ViewModel() {
-    private val _vacancy: Vacancy? = null
+    private var _vacancy: Vacancy? = null
     private var _isFavouriteChangeInProgress: Boolean = false
 
     private val _favouriteState = MutableStateFlow<Boolean>(false)
@@ -58,7 +58,10 @@ class VacancyDetailsViewModel(
         vacancy?.run { _favouriteState.update { vacancy.isFavorite } }
 
         _screenState.update {
-            vacancy?.let { VacancyDetailsScreenState.Found(it) }
+            vacancy?.let {
+                _vacancy = vacancy
+                VacancyDetailsScreenState.Found(it)
+            }
                 ?: VacancyDetailsScreenState.NotFound
         }
     }
@@ -73,7 +76,7 @@ class VacancyDetailsViewModel(
 
             viewModelScope.launch {
                 vacancyDetailsInteractor
-                    .markFavourite(_vacancy)
+                    .markFavourite(_vacancy!!)
                     .cancellable()
                     .collect { responseState ->
                         handleFavouriteResult(responseState)

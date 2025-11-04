@@ -46,8 +46,12 @@ private val LightColorScheme = lightColorScheme(
 val LightCustomColors = CustomColors(
     text = TextColors(
         primaryTextColors = TextStateColors(
-            textColor = blackUniversal,
+            textColor = blackUniversal
         )
+    ),
+    icons = IconColors(
+        defaultIconColors = blackUniversal,
+        activeIconColors = red
     )
 )
 
@@ -56,15 +60,25 @@ val DarkCustomColors = CustomColors(
         primaryTextColors = TextStateColors(
             textColor = white,
         ),
+    ),
+    icons = IconColors(
+        defaultIconColors = white,
+        activeIconColors = red
     )
 )
 
 data class CustomColors(
-    val text: TextColors
+    val text: TextColors,
+    val icons: IconColors
 )
 
 data class TextColors(
     val primaryTextColors: TextStateColors,
+)
+
+data class IconColors(
+    val defaultIconColors: Color,
+    val activeIconColors: Color
 )
 
 data class TextStateColors(

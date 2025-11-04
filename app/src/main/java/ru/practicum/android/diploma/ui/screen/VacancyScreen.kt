@@ -12,6 +12,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,9 +34,12 @@ import ru.practicum.android.diploma.domain.vacancydetails.models.Phone
 import ru.practicum.android.diploma.domain.vacancydetails.models.Vacancy
 import ru.practicum.android.diploma.presentation.vacancydetails.models.VacancyDetailsScreenState
 import ru.practicum.android.diploma.presentation.vacancydetails.viewmodel.VacancyDetailsViewModel
+import ru.practicum.android.diploma.ui.components.LoadingComponent
+import ru.practicum.android.diploma.ui.components.Placeholder
 import ru.practicum.android.diploma.ui.components.SalaryText
 import ru.practicum.android.diploma.ui.components.VacancyLogo
-import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
+import ru.practicum.android.diploma.ui.components.topbars.CommonTopBar
+import ru.practicum.android.diploma.ui.theme.LocalCustomColors
 import ru.practicum.android.diploma.ui.theme.Typography
 import ru.practicum.android.diploma.ui.theme.paddingBase
 import ru.practicum.android.diploma.ui.theme.paddingDouble
@@ -44,12 +53,41 @@ fun VacancyScreen(
     onBackClick: () -> Unit,
     viewModel: VacancyDetailsViewModel = koinViewModel()
 ) {
+    val favoriteState = viewModel.favouriteState.collectAsState().value
     Scaffold(
         modifier = modifier,
         topBar = {
-            FilterTopBar(
+            CommonTopBar(
                 stringResource(id = R.string.top_bar_label_vacancy),
-                onBackClick
+                onBackClick,
+                actions = {
+                    IconButton(
+                        onClick = { viewModel.onFavoriteClick() }
+                    ) {
+                        if (favoriteState) {
+                            Icon(
+                                imageVector = Icons.Default.Favorite,
+                                tint = LocalCustomColors.current.icons.activeIconColors,
+                                contentDescription = "Favorite"
+                            )
+                        } else {
+                            Icon(
+                                imageVector = Icons.Default.FavoriteBorder,
+                                tint = LocalCustomColors.current.icons.defaultIconColors,
+                                contentDescription = "Favorite"
+                            )
+                        }
+                    }
+                    IconButton(
+                        onClick = { viewModel.onShareClick() }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Share,
+                            tint = LocalCustomColors.current.icons.defaultIconColors,
+                            contentDescription = "Share"
+                        )
+                    }
+                }
             )
         }
     ) { padding ->
@@ -70,10 +108,21 @@ fun VacancyScreen(
                     onEmailClick = { viewModel.onEmailClick() }
                 )
 
-                VacancyDetailsScreenState.InternalServerError -> {}
-                VacancyDetailsScreenState.Loading -> {}
-                VacancyDetailsScreenState.NoInternetConnection -> {}
-                VacancyDetailsScreenState.NotFound -> {}
+                VacancyDetailsScreenState.InternalServerError -> Placeholder(
+                    R.drawable.server_error_placeholder,
+                    stringResource(R.string.server_error)
+                )
+
+                VacancyDetailsScreenState.Loading -> LoadingComponent()
+                VacancyDetailsScreenState.NoInternetConnection -> Placeholder(
+                    R.drawable.error_placeholder,
+                    stringResource(R.string.no_internet)
+                )
+
+                VacancyDetailsScreenState.NotFound -> Placeholder(
+                    R.drawable.no_vacancy_placeholder,
+                    stringResource(R.string.bad_request)
+                )
             }
         }
     }
@@ -129,7 +178,7 @@ private fun EmployerDescription(vacancy: Vacancy) {
                 .fillMaxWidth()
                 .padding(all = paddingBase)
         ) {
-            VacancyLogo()
+            VacancyLogo(logo = vacancy.employer?.logo ?: "")
             Column(
                 modifier = Modifier.padding(start = paddingHalfBase)
             ) {

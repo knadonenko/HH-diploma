@@ -122,10 +122,12 @@ fun VacancyScreen(
                     stringResource(R.string.no_internet)
                 )
 
-                VacancyDetailsScreenState.NotFound -> Placeholder(
-                    R.drawable.no_vacancy_placeholder,
-                    stringResource(R.string.bad_request)
-                )
+                else -> {
+                    Placeholder(
+                        R.drawable.no_vacancy_placeholder,
+                        stringResource(R.string.bad_request)
+                    )
+                }
             }
         }
     }

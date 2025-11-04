@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import ru.practicum.android.diploma.ui.theme.cornerRadius
 import ru.practicum.android.diploma.ui.theme.padding4
 import ru.practicum.android.diploma.ui.theme.size1
 import ru.practicum.android.diploma.ui.theme.size48
+import ru.practicum.android.diploma.ui.theme.white
 
 @Composable
 fun VacancyLogo(modifier: Modifier = Modifier, logo: String? = null) {
@@ -31,6 +33,7 @@ fun VacancyLogo(modifier: Modifier = Modifier, logo: String? = null) {
                 .size(size48)
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(cornerRadius))
+                .background(color = white)
                 .border(
                     width = size1,
                     color = colorResource(R.color.stroke),

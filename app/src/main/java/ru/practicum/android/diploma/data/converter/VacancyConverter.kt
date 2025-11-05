@@ -1,8 +1,12 @@
 package ru.practicum.android.diploma.data.converter
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import ru.practicum.android.diploma.data.dto.FilterAreaDto
 import ru.practicum.android.diploma.data.dto.VacancyDetailsDto
 import ru.practicum.android.diploma.data.entity.VacancyEntity
+import ru.practicum.android.diploma.data.entity.embedded.ContactsEmbedded
+import ru.practicum.android.diploma.data.entity.embedded.FilterAreaEmbedded
 import ru.practicum.android.diploma.data.network.response.VacanciesResponse
 import ru.practicum.android.diploma.data.network.response.VacancyDetailsResponse
 import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
@@ -14,8 +18,9 @@ import ru.practicum.android.diploma.domain.vacancydetails.models.FilterArea
 import ru.practicum.android.diploma.domain.vacancydetails.models.Phone
 import ru.practicum.android.diploma.domain.vacancydetails.models.Salary
 import ru.practicum.android.diploma.domain.vacancydetails.models.Vacancy
+import java.lang.reflect.Type
 
-class VacancyConverter {
+class VacancyConverter(private val gson: Gson) {
     fun map(vacanciesResponse: VacanciesResponse): VacanciesPage {
         return VacanciesPage(
             found = vacanciesResponse.found,
@@ -120,7 +125,19 @@ class VacancyConverter {
         return VacancyEntity(
             id = vacancy.id,
             name = vacancy.name,
-            description = vacancy.description
+            description = vacancy.description,
+            salary = vacancy.salary,
+            address = vacancy.address,
+            experience = vacancy.experience,
+            schedule = vacancy.schedule,
+            employment = vacancy.employment,
+            contacts = vacancy.contacts?.let { mapContactsToEmbed(it) },
+            employer = vacancy.employer,
+            area = vacancy.area?.let { mapAreaToEmbed(it) },
+            skills = vacancy.skills?.let { serializeToJson(it) },
+            url = vacancy.url,
+            industry = vacancy.industry,
+            isFavorite = vacancy.isFavorite
         )
     }
 
@@ -129,20 +146,63 @@ class VacancyConverter {
             id = entity.id,
             name = entity.name,
             description = entity.description,
-            salary = null,
-            address = null,
-            experience = null,
-            schedule = null,
-            employment = null,
-            contacts = null,
-            employer = null,
-            area = null,
-            skills = null,
-            url = null,
-            industry = null,
-            isFavorite = false
+            salary = entity.salary,
+            address = entity.address,
+            experience = entity.experience,
+            schedule = entity.schedule,
+            employment = entity.employment,
+            contacts = entity.contacts?.let { mapEmbedToContacts(it) },
+            employer = entity.employer,
+            area = entity.area?.let { mapEmbedToArea(it) },
+            skills = entity.skills?.let { createListFromJson(it) },
+            url = entity.url,
+            industry = entity.industry,
+            isFavorite = entity.isFavorite
         )
     }
+
+    private fun mapContactsToEmbed(contacts: Contacts): ContactsEmbedded {
+        return ContactsEmbedded(
+            id = contacts.id,
+            name = contacts.name,
+            email = contacts.email,
+            phones = contacts.phones?.let { serializeToJson(it) }
+        )
+    }
+
+    private fun mapEmbedToContacts(embed: ContactsEmbedded): Contacts {
+        return Contacts(
+            id = embed.id,
+            name = embed.name,
+            email = embed.email,
+            phones = embed.phones?.let { createListFromJson(it) }
+        )
+    }
+
+    private fun mapAreaToEmbed(area: FilterArea): FilterAreaEmbedded {
+        return FilterAreaEmbedded(
+            id = area.id,
+            name = area.name,
+            parentId = area.id,
+            areas = area.areas?.let { serializeToJson(it) }
+        )
+    }
+
+    private fun mapEmbedToArea(embed: FilterAreaEmbedded): FilterArea {
+        return FilterArea(
+            id = embed.id,
+            name = embed.name,
+            parentId = embed.parentId,
+            areas = embed.areas?.let { createListFromJson(it) }
+        )
+    }
+
+    private fun <T> createListFromJson(json: String): List<T> {
+        val type: Type = object : TypeToken<List<T>>() {}.type
+        return gson.fromJson(json, type)
+    }
+
+    private fun serializeToJson(obj: Any): String = gson.toJson(obj)
 
     private fun convert(currency: String): String {
         return when (currency) {

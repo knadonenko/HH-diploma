@@ -26,6 +26,7 @@ import ru.practicum.android.diploma.ui.theme.paddingBase
 @Composable
 fun FavouritesScreen(
     modifier: Modifier,
+    onDetailsClick: (String) -> Unit,
     viewModel: FavoritesViewModel = koinViewModel<FavoritesViewModel>()
 ) {
     LaunchedEffect(Unit) { viewModel.getFavorites() }
@@ -43,13 +44,13 @@ fun FavouritesScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            MainContent(viewModel)
+            MainContent(viewModel, onDetailsClick)
         }
     }
 }
 
 @Composable
-fun MainContent(viewModel: FavoritesViewModel) {
+fun MainContent(viewModel: FavoritesViewModel, onDetailsClick: (String) -> Unit) {
     when (val state = viewModel.screenState.collectAsState().value) {
         is FavoritesScreenState.Default -> Placeholder(
             R.drawable.empty_placeholder,
@@ -61,7 +62,7 @@ fun MainContent(viewModel: FavoritesViewModel) {
             stringResource(R.string.bad_request)
         )
 
-        is FavoritesScreenState.Content -> FavoritesList(state.data, onItemClick = {})
+        is FavoritesScreenState.Content -> FavoritesList(state.data, onItemClick = onDetailsClick)
 
     }
 }
@@ -69,7 +70,7 @@ fun MainContent(viewModel: FavoritesViewModel) {
 @Composable
 fun FavoritesList(
     vacancyList: List<VacanciesInfo>,
-    onItemClick: (VacanciesInfo) -> Unit,
+    onItemClick: (String) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -79,7 +80,7 @@ fun FavoritesList(
         items(vacancyList) { vacancy ->
             VacancyItem(
                 vacancy = vacancy,
-                onClick = { onItemClick }
+                onClick = onItemClick
             )
         }
     }

@@ -40,7 +40,11 @@ fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
         }
 
         composable(Routes.FAVOURITES) {
-            FavouritesScreen(modifier)
+            FavouritesScreen(
+                modifier,
+                onDetailsClick = { vacancyId ->
+                    navController.navigate("${Routes.VACANCY}/$vacancyId")
+                })
         }
 
         composable(

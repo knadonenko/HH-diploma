@@ -37,4 +37,3 @@ class VacancyDetailsLinkManagerInteractorImpl(
         context.startActivity(intent)
     }
 }
-

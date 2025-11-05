@@ -9,5 +9,4 @@ data class VacancyEntity(
     val id: String,
     val name: String?,
     val description: String?
-    //TODO: Добавить в entity остальные поля, настроить конвертацию объектов для хранения в БД
 )

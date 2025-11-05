@@ -121,7 +121,6 @@ class VacancyConverter {
             id = vacancy.id,
             name = vacancy.name,
             description = vacancy.description
-            //TODO: доработать в рамках следующего эпика с избранным. Пробрасывать в entity и обратно полную вакансию, а не её часть. Сделать конверторы для объектов.
         )
     }
 
@@ -130,7 +129,6 @@ class VacancyConverter {
             id = entity.id,
             name = entity.name,
             description = entity.description,
-            //TODO: доработать в рамках следующего эпика с избранным. Пробрасывать в entity и обратно полную вакансию, а не её часть. Сделать конверторы для объектов.
             salary = null,
             address = null,
             experience = null,

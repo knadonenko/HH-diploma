@@ -71,7 +71,7 @@ val dataModule = module {
     }
 
     single<VacancyConverter> {
-        VacancyConverter()
+        VacancyConverter(get())
     }
 
     single {

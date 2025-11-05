@@ -154,7 +154,7 @@ class VacancyConverter(private val gson: Gson) {
             contacts = entity.contacts?.let { mapEmbedToContacts(it) },
             employer = entity.employer,
             area = entity.area?.let { mapEmbedToArea(it) },
-            skills = entity.skills?.let { createListFromJson(it) },
+            skills = entity.skills?.let { createStringListFromJson(it) },
             url = entity.url,
             industry = entity.industry,
             isFavorite = entity.isFavorite
@@ -175,7 +175,7 @@ class VacancyConverter(private val gson: Gson) {
             id = embed.id,
             name = embed.name,
             email = embed.email,
-            phones = embed.phones?.let { createListFromJson(it) }
+            phones = embed.phones?.let { createPhonesListFromJson(it) }
         )
     }
 
@@ -193,12 +193,22 @@ class VacancyConverter(private val gson: Gson) {
             id = embed.id,
             name = embed.name,
             parentId = embed.parentId,
-            areas = embed.areas?.let { createListFromJson(it) }
+            areas = embed.areas?.let { createAreasListFromJson(it) }
         )
     }
 
-    private fun <T> createListFromJson(json: String): List<T> {
-        val type: Type = object : TypeToken<List<T>>() {}.type
+    private fun createPhonesListFromJson(json: String): List<Phone> {
+        val type: Type = object : TypeToken<List<Phone>>() {}.type
+        return gson.fromJson(json, type)
+    }
+
+    private fun createAreasListFromJson(json: String): List<FilterArea> {
+        val type: Type = object : TypeToken<List<FilterArea>>() {}.type
+        return gson.fromJson(json, type)
+    }
+
+    private fun createStringListFromJson(json: String): List<String> {
+        val type: Type = object : TypeToken<List<String>>() {}.type
         return gson.fromJson(json, type)
     }
 

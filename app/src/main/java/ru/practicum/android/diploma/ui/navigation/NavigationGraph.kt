@@ -44,7 +44,8 @@ fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
                 modifier,
                 onDetailsClick = { vacancyId ->
                     navController.navigate("${Routes.VACANCY}/$vacancyId")
-                })
+                }
+            )
         }
 
         composable(

@@ -2,6 +2,8 @@ package ru.practicum.android.diploma.di
 
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
+import ru.practicum.android.diploma.domain.favorites.api.interactor.FavoritesInteractor
+import ru.practicum.android.diploma.domain.favorites.impl.FavoritesInteractorImpl
 import ru.practicum.android.diploma.domain.filtersettings.api.interactor.FilterSettingsInteractor
 import ru.practicum.android.diploma.domain.filtersettings.impl.FilterSettingsInteractorImpl
 import ru.practicum.android.diploma.domain.vacanceis.api.interactor.VacanciesInteractor
@@ -27,5 +29,9 @@ val interactorModule = module {
 
     factory<VacancyDetailsLinkManagerInteractor> {
         VacancyDetailsLinkManagerInteractorImpl(androidContext())
+    }
+
+    factory<FavoritesInteractor> {
+        FavoritesInteractorImpl(get())
     }
 }

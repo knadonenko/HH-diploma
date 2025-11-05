@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.favorites.api.interactor.FavoritesInteractor
 import ru.practicum.android.diploma.domain.vacancydetails.api.interactor.VacancyDetailsInteractor
 import ru.practicum.android.diploma.domain.vacancydetails.api.interactor.VacancyDetailsLinkManagerInteractor
 import ru.practicum.android.diploma.domain.vacancydetails.models.MarkFavouriteResponseState
@@ -17,7 +18,8 @@ import ru.practicum.android.diploma.presentation.vacancydetails.models.VacancyDe
 class VacancyDetailsViewModel(
     private val vacancyId: String,
     private val vacancyDetailsInteractor: VacancyDetailsInteractor,
-    private val vacancyDetailsLinkManagerInteractor: VacancyDetailsLinkManagerInteractor
+    private val vacancyDetailsLinkManagerInteractor: VacancyDetailsLinkManagerInteractor,
+    private val favoritesInteractor: FavoritesInteractor
 ) : ViewModel() {
     private var _vacancy: Vacancy? = null
     private var _isFavouriteChangeInProgress: Boolean = false
@@ -55,7 +57,9 @@ class VacancyDetailsViewModel(
     }
 
     private fun handleFoundResult(vacancy: Vacancy?) {
-        vacancy?.run { _favouriteState.update { vacancy.isFavorite } }
+        viewModelScope.launch {
+            _favouriteState.update { favoritesInteractor.checkIsFavorite(vacancyId) }
+        }
 
         _screenState.update {
             vacancy?.let {
@@ -75,12 +79,14 @@ class VacancyDetailsViewModel(
             _isFavouriteChangeInProgress = true
 
             viewModelScope.launch {
-                vacancyDetailsInteractor
-                    .markFavourite(_vacancy!!)
-                    .cancellable()
-                    .collect { responseState ->
-                        handleFavouriteResult(responseState)
-                    }
+                if (_favouriteState.value) {
+                    favoritesInteractor.deleteFromFavorites(_vacancy!!)
+                } else {
+                    favoritesInteractor.saveInFavorites(_vacancy!!)
+                }
+                _favouriteState.update { !_favouriteState.value }
+
+                _isFavouriteChangeInProgress = false
             }
         }
     }

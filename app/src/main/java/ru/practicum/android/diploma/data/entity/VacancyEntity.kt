@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class VacancyEntity(
     @PrimaryKey
     val id: String,
-    val name: String,
-    val description: String
+    val name: String?,
+    val description: String?
+    //TODO: Добавить в entity остальные поля, настроить конвертацию объектов для хранения в БД
 )

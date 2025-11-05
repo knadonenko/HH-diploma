@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.data.converter
 
 import ru.practicum.android.diploma.data.dto.FilterAreaDto
 import ru.practicum.android.diploma.data.dto.VacancyDetailsDto
+import ru.practicum.android.diploma.data.entity.VacancyEntity
 import ru.practicum.android.diploma.data.network.response.VacanciesResponse
 import ru.practicum.android.diploma.data.network.response.VacancyDetailsResponse
 import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
@@ -113,6 +114,36 @@ class VacancyConverter {
                 }
             )
         }
+    }
+
+    fun mapVacancyToEntity(vacancy: Vacancy): VacancyEntity {
+        return VacancyEntity(
+            id = vacancy.id,
+            name = vacancy.name,
+            description = vacancy.description
+            //TODO: доработать в рамках следующего эпика с избранным. Пробрасывать в entity и обратно полную вакансию, а не её часть. Сделать конверторы для объектов.
+        )
+    }
+
+    fun mapEntityToVacancy(entity: VacancyEntity): Vacancy {
+        return Vacancy(
+            id = entity.id,
+            name = entity.name,
+            description = entity.description,
+            //TODO: доработать в рамках следующего эпика с избранным. Пробрасывать в entity и обратно полную вакансию, а не её часть. Сделать конверторы для объектов.
+            salary = null,
+            address = null,
+            experience = null,
+            schedule = null,
+            employment = null,
+            contacts = null,
+            employer = null,
+            area = null,
+            skills = null,
+            url = null,
+            industry = null,
+            isFavorite = false
+        )
     }
 
     private fun convert(currency: String): String {

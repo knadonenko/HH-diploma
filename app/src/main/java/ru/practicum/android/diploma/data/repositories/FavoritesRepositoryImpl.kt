@@ -22,15 +22,17 @@ class FavoritesRepositoryImpl(
 
     override suspend fun getFavorites(): Flow<List<Vacancy>> {
         return flow {
-            database.vacancyDao()
-                .getAll()
-                .map { vacancyEntity -> converter.mapEntityToVacancy(vacancyEntity) }
+            emit(
+                database.vacancyDao()
+                    .getAll()
+                    .map { vacancyEntity -> converter.mapEntityToVacancy(vacancyEntity) }
+            )
         }
     }
 
     override suspend fun getFavoritesById(id: Int): Flow<Vacancy> {
         return flow {
-            converter.mapEntityToVacancy(database.vacancyDao().getById(id))
+            emit(converter.mapEntityToVacancy(database.vacancyDao().getById(id)))
         }
     }
 

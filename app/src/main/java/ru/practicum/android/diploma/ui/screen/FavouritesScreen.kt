@@ -2,12 +2,13 @@ package ru.practicum.android.diploma.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +28,8 @@ fun FavouritesScreen(
     modifier: Modifier,
     viewModel: FavoritesViewModel = koinViewModel<FavoritesViewModel>()
 ) {
+    LaunchedEffect(Unit) { viewModel.getFavorites() }
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -47,9 +50,7 @@ fun FavouritesScreen(
 
 @Composable
 fun MainContent(viewModel: FavoritesViewModel) {
-    var state = viewModel.screenState.collectAsState().value
-
-    when (state) {
+    when (val state = viewModel.screenState.collectAsState().value) {
         is FavoritesScreenState.Default -> Placeholder(
             R.drawable.empty_placeholder,
             stringResource(R.string.empty_favorites)
@@ -72,7 +73,8 @@ fun FavoritesList(
 ) {
     LazyColumn(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Top
     ) {
         items(vacancyList) { vacancy ->
             VacancyItem(

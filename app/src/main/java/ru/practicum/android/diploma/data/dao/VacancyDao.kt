@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
-import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.data.entity.VacancyEntity
 
 @Dao
@@ -16,11 +15,11 @@ interface VacancyDao {
     suspend fun delete(vacancy: VacancyEntity)
 
     @Query("SELECT * FROM favourite_vacancy_table")
-    fun getAll(): Flow<List<VacancyEntity>>
+    suspend fun getAll(): List<VacancyEntity>
 
     @Query("SELECT * FROM favourite_vacancy_table WHERE id = :id")
-    fun getById(id: Int): Flow<VacancyEntity?>
+    suspend fun getById(id: Int): VacancyEntity
 
     @Query("SELECT EXISTS(SELECT 1 FROM favourite_vacancy_table WHERE id = :id)")
-    fun isFavorite(id: Int): Flow<Boolean>
+    suspend fun isFavorite(id: String): Boolean
 }

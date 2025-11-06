@@ -7,6 +7,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
+import ru.practicum.android.diploma.presentation.vacancydetails.viewmodel.VacancyDetailsViewModel
 import ru.practicum.android.diploma.ui.screen.FavouritesScreen
 import ru.practicum.android.diploma.ui.screen.FilterAreaScreen
 import ru.practicum.android.diploma.ui.screen.FilterCountryScreen
@@ -29,20 +32,39 @@ fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
                 modifier,
                 onFilterClick = {
                     navController.navigate(Routes.FILTER_SETTINGS)
+                },
+                onDetailsClick = { vacancyId ->
+                    navController.navigate("${Routes.VACANCY}/$vacancyId")
                 }
             )
         }
 
         composable(Routes.FAVOURITES) {
-            FavouritesScreen(modifier)
+            FavouritesScreen(
+                modifier,
+                onDetailsClick = { vacancyId ->
+                    navController.navigate("${Routes.VACANCY}/$vacancyId")
+                }
+            )
         }
 
-        composable(Routes.VACANCY) {
+        composable(
+            "${Routes.VACANCY}/{$VACANCY_ID}",
+            arguments = listOf(
+                navArgument(VACANCY_ID) {
+                    type = NavType.StringType
+                    nullable = false
+                }
+            )
+        ) { backStackEntry ->
+            val vacancyId = backStackEntry.arguments?.getString(VACANCY_ID)!!
+
             VacancyScreen(
                 modifier,
                 onBackClick = {
                     navController.popBackStack()
-                }
+                },
+                viewModel = koinViewModel<VacancyDetailsViewModel>(parameters = { parametersOf(vacancyId) })
             )
         }
 
@@ -90,15 +112,15 @@ fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
         }
 
         composable(
-            "${Routes.FILTER_AREA}/{countryId}",
+            "${Routes.FILTER_AREA}/{$COUNTRY_ID}",
             arguments = listOf(
-                navArgument("countryId") {
+                navArgument(COUNTRY_ID) {
                     type = NavType.StringType
                     nullable = true
                 }
             )
         ) { backStackEntry ->
-            val countryIdString = backStackEntry.arguments?.getString("countryId")
+            val countryIdString = backStackEntry.arguments?.getString(COUNTRY_ID)
             val countryId: Int? = countryIdString?.toIntOrNull()
 
             FilterAreaScreen(
@@ -120,3 +142,6 @@ fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
         }
     }
 }
+
+private const val COUNTRY_ID = "countryId"
+private const val VACANCY_ID = "vacancyId"

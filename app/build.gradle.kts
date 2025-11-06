@@ -62,12 +62,17 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.tooling.preview.android)
     implementation(libs.androidx.runtime)
+    implementation(libs.androidx.material.icons.extended)
+    debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.coil.compose)
 
     // Network
     implementation(libs.glide)
     implementation(libs.gson)
     implementation(libs.retrofit)
     implementation(libs.retrofit2.converter.gson)
+    debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.logging.interceptor)
 
     // room
     ksp(libs.androidx.room.compiler)
@@ -89,6 +94,7 @@ dependencies {
 
     // kotlin
     implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
     implementation(libs.kotlinx.coroutines.android)
 
     annotationProcessor(libs.compiler)

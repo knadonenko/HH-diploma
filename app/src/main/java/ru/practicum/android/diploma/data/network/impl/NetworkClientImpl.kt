@@ -12,11 +12,19 @@ import ru.practicum.android.diploma.data.network.consts.ResponseStates.SUCCESS
 import ru.practicum.android.diploma.data.network.consts.ResponseStates.UNAUTHORIZED
 import ru.practicum.android.diploma.data.network.request.Request
 import ru.practicum.android.diploma.data.network.response.Response
+import ru.practicum.android.diploma.util.NetworkProvider
 import java.io.IOException
 
-class NetworkClientImpl(private val apiService: APIService) : NetworkClient {
+class NetworkClientImpl(
+    private val apiService: APIService,
+    private val networkProvider: NetworkProvider
+) : NetworkClient {
 
     override suspend fun doRequest(dto: Request): Response {
+        if (!networkProvider.isConnected()) {
+            return Response().apply { resultCode = NO_INTERNET_CONNECTION }
+        }
+
         return withContext(Dispatchers.IO) {
             try {
                 sendRequest(dto)
@@ -33,9 +41,8 @@ class NetworkClientImpl(private val apiService: APIService) : NetworkClient {
             is Request.AreasRequest -> apiService.getAreas()
             is Request.IndustriesRequest -> apiService.getIndustries()
             is Request.VacanciesRequest -> apiService.getVacancies(dto.options)
-            is Request.VacancyRequest -> apiService.getVacancy(dto.vacancyId)
+            is Request.VacancyDetailsRequest -> apiService.getVacancy(dto.vacancyId)
         }
-
         return handleResponse(response)
     }
 

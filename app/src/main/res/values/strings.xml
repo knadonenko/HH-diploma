@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Practicum-Android-Diploma</string>
 
     <!--AppNavigationBottomBar-->
@@ -28,6 +28,55 @@
     <string name="filter_apply_label">Применить</string>
     <string name="filter_reset_label">Сбросить</string>
 
+    <string name="from">от</string>
+    <string name="to">до</string>
+    <string name="no_salary">Зарплата не указана</string>
+    <string name="exp_title">Требуемый опыт</string>
+    <string name="no_exp">Не требуется</string>
+    <string name="no_schedule">Тип занятости не указан</string>
+    <string name="description_title">Описание вакансии</string>
+    <string name="skills_title">Ключевые навыки</string>
+    <string name="contacts_title">Контакты</string>
+    <string name="email_subtitle">Электронная почта</string>
+    <string name="skill_prefix">·</string>
+    <string name="details_error">Вакансия не найдена или удалена</string>
+
+    <!--SearchLabels-->
+    <string name="enter_request">Введите запрос</string>
+    <string name="no_internet">Нет интернета</string>
+    <string name="bad_request">Не удалось получить список вакансий</string>
+    <string name="no_vacancies">Таких вакансий нет</string>
+    <string name="server_error">Ошибка сервера</string>
+
+    <!--ScreenFavorites-->
+    <string name="empty_favorites">Список пуст</string>
+
+    <!--Vacancy plurals-->
+    <plurals name="vacancy_plurals" tools:ignore="MissingQuantity">">
+        <item quantity="one">Найдена %1$d вакансия</item>
+        <item quantity="few">Найдено %1$d вакансии</item>
+        <item quantity="many">Найдено %1$d вакансий</item>
+        <item quantity="other">Найдено %1$d вакансий</item>
+    </plurals>
+
     <!--Test-->
     <string name="test">Тест</string>
+
+    <!--Team-->
+    <string name="team_about">Над приложением работали</string>
+    <string name="team_konstantin">Константин Надоненко</string>
+    <string name="team_konstantin_link">https://github.com/knadonenko</string>
+    <string name="team_konstantin_emoji">🧐</string>
+    <string name="team_dmitriy_r">Дмитрий Росинский</string>
+    <string name="team_dmitriy_r_link">https://github.com/Dezrio</string>
+    <string name="team_dmitriy_r_emoji">😵‍</string>
+    <string name="team_dmitriy_g">Дмитрий Гуманюк</string>
+    <string name="team_dmitriy_g_link">https://github.com/twistofthemyth</string>
+    <string name="team_dmitriy_g_emoji">🤩</string>
+    <string name="team_victor">Виктор Винокуров</string>
+    <string name="team_victor_link">https://github.com/i-Mondzy</string>
+    <string name="team_victor_emoji">🤓</string>
+    <string name="team_dmitriy_s">Дмитрий Широков</string>
+    <string name="team_dmitriy_s_link">https://github.com/Hastur</string>
+    <string name="team_dmitriy_s_emoji">🤔</string>
 </resources>

@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
@@ -19,8 +20,8 @@ private val DarkColorScheme = darkColorScheme(
     onBackground = white,
     surface = blackUniversal,
     onSurface = white,
-    surfaceVariant = grey200,
-    onSurfaceVariant = grey500,
+    surfaceVariant = grey500,
+    onSurfaceVariant = white,
     secondary = blue,
     onSecondary = white,
     outline = grey200,
@@ -34,16 +35,62 @@ private val LightColorScheme = lightColorScheme(
     onBackground = blackUniversal,
     surface = white,
     onSurface = blackUniversal,
-    surfaceVariant = grey500,
-    onSurfaceVariant = grey200,
+    surfaceVariant = grey200,
+    onSurfaceVariant = grey500,
     secondary = blue,
     onSecondary = white,
     outline = grey200,
     surfaceTint = blue,
 )
 
+val LightCustomColors = CustomColors(
+    text = TextColors(
+        primaryTextColors = TextStateColors(
+            textColor = blackUniversal
+        )
+    ),
+    icons = IconColors(
+        defaultIconColors = blackUniversal,
+        activeIconColors = red
+    )
+)
+
+val DarkCustomColors = CustomColors(
+    text = TextColors(
+        primaryTextColors = TextStateColors(
+            textColor = white,
+        ),
+    ),
+    icons = IconColors(
+        defaultIconColors = white,
+        activeIconColors = red
+    )
+)
+
+data class CustomColors(
+    val text: TextColors,
+    val icons: IconColors
+)
+
+data class TextColors(
+    val primaryTextColors: TextStateColors,
+)
+
+data class IconColors(
+    val defaultIconColors: Color,
+    val activeIconColors: Color
+)
+
+data class TextStateColors(
+    val textColor: Color
+)
+
 val LocalTypography = staticCompositionLocalOf<DiplomaTypography> {
     error("No CustomTypography provided")
+}
+
+val LocalCustomColors = staticCompositionLocalOf<CustomColors> {
+    error("No CustomColors provided")
 }
 
 @Composable
@@ -56,9 +103,16 @@ fun DiplomaAppTheme(
         else -> LightColorScheme
     }
 
+    val customColors = if (darkTheme) {
+        DarkCustomColors
+    } else {
+        LightCustomColors
+    }
+
     ThemedSystemBars(isDarkTheme = darkTheme)
 
     CompositionLocalProvider(
+        LocalCustomColors provides customColors,
         LocalTypography provides Typography
     ) {
         MaterialTheme(

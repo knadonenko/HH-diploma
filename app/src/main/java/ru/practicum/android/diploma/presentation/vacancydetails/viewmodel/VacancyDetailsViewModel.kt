@@ -10,7 +10,6 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.favorites.api.interactor.FavoritesInteractor
 import ru.practicum.android.diploma.domain.vacancydetails.api.interactor.VacancyDetailsInteractor
 import ru.practicum.android.diploma.domain.vacancydetails.api.interactor.VacancyDetailsLinkManagerInteractor
-import ru.practicum.android.diploma.domain.vacancydetails.models.MarkFavouriteResponseState
 import ru.practicum.android.diploma.domain.vacancydetails.models.Vacancy
 import ru.practicum.android.diploma.domain.vacancydetails.models.VacancyDetailsResponseState
 import ru.practicum.android.diploma.presentation.vacancydetails.models.VacancyDetailsScreenState
@@ -88,14 +87,6 @@ class VacancyDetailsViewModel(
 
                 _isFavouriteChangeInProgress = false
             }
-        }
-    }
-
-    private fun handleFavouriteResult(responseState: MarkFavouriteResponseState) {
-        _isFavouriteChangeInProgress = false
-
-        if (responseState is MarkFavouriteResponseState.IsSuccess) {
-            _favouriteState.update { !_favouriteState.value }
         }
     }
 

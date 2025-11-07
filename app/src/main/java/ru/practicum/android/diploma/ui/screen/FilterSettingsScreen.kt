@@ -1,22 +1,66 @@
 package ru.practicum.android.diploma.ui.screen
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color.Companion.Transparent
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.ui.components.FilterItem
 import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
+import ru.practicum.android.diploma.ui.theme.LocalCustomColors
+import ru.practicum.android.diploma.ui.theme.LocalTypography
+import ru.practicum.android.diploma.ui.theme.blue
+import ru.practicum.android.diploma.ui.theme.cornerRadius
+import ru.practicum.android.diploma.ui.theme.grey500
+import ru.practicum.android.diploma.ui.theme.padding0
+import ru.practicum.android.diploma.ui.theme.padding16
 import ru.practicum.android.diploma.ui.theme.paddingBase
+import ru.practicum.android.diploma.ui.theme.red
+import ru.practicum.android.diploma.ui.theme.searchFieldCorner
+import ru.practicum.android.diploma.ui.theme.size18
+import ru.practicum.android.diploma.ui.theme.size2
+import ru.practicum.android.diploma.ui.theme.size60
+import ru.practicum.android.diploma.ui.theme.size8
+import ru.practicum.android.diploma.ui.theme.white
 
 @Composable
 fun FilterSettingsScreen(
@@ -38,25 +82,182 @@ fun FilterSettingsScreen(
             modifier = modifier
                 .padding(padding)
                 .fillMaxSize()
-                .padding(horizontal = paddingBase),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(paddingBase),
         ) {
-            Button(toFilterWorkPlace) {
-                Text(stringResource(R.string.filter_work_place_label))
+            // todo переделать на viewmodel вместо заглушки
+            val filtersApplied = false
+            FilterItem(
+                modifier = Modifier.clickable(onClick = toFilterWorkPlace),
+                stringResource(R.string.filter_work_place_label),
+                composableElement = {
+                    Icon(
+                        modifier = Modifier.height(size18),
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                        tint = LocalCustomColors.current.icons.defaultIconColors,
+                        contentDescription = "Arrow Forward"
+                    )
+                },
+                color = LocalCustomColors.current.text.secondaryTextColors.textColor
+            )
+            FilterItem(
+                modifier = Modifier.clickable(onClick = toFilterIndustry),
+                stringResource(R.string.filter_industry_label),
+                composableElement = {
+                    Icon(
+                        modifier = Modifier.height(size18),
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                        tint = LocalCustomColors.current.icons.defaultIconColors,
+                        contentDescription = "Arrow Forward"
+                    )
+                },
+                color = LocalCustomColors.current.text.secondaryTextColors.textColor
+            )
+            Spacer(modifier = Modifier.height(paddingBase))
+            MoneyField("", { })
+            val checked = remember { mutableStateOf(false) }
+            FilterItem(
+                modifier = Modifier.padding(top = padding16),
+                stringResource(R.string.filter_without_salary),
+                composableElement = {
+                    Checkbox(
+                        checked = checked.value,
+                        onCheckedChange = { value ->
+                            checked.value = value
+                        },
+                        colors = CheckboxDefaults.colors(
+                            uncheckedColor = blue,
+                            checkedColor = blue,
+                            checkmarkColor = white
+                        )
+                    )
+                },
+                color = LocalCustomColors.current.text.primaryTextColors.textColor
+            )
+            if (filtersApplied) {
+                Spacer(modifier = Modifier.weight(WEIGHT_1F))
+
+                Button(
+                    modifier = Modifier
+                        .height(size60)
+                        .padding(horizontal = padding16)
+                        .fillMaxSize(),
+                    shape = RoundedCornerShape(cornerRadius),
+                    onClick = { },
+                    content = {
+                        Text(
+                            text = stringResource(R.string.filter_apply_button),
+                            style = LocalTypography.current.body16Medium
+                        )
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(size8))
+
+                Button(
+                    modifier = Modifier
+                        .height(size60)
+                        .padding(horizontal = padding16)
+                        .fillMaxSize(),
+                    shape = RoundedCornerShape(cornerRadius),
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = red,
+                        containerColor = Transparent
+                    ),
+                    onClick = { },
+                    content = {
+                        Text(
+                            text = stringResource(R.string.filter_reset_button),
+                            style = LocalTypography.current.body16Medium
+                        )
+                    }
+                )
             }
+        }
+    }
+}
 
-            Spacer(modifier = Modifier.height(20.dp))
+private const val WEIGHT_1F = 1F
 
-            Button(toFilterIndustry) {
-                Text(stringResource(R.string.filter_industry_label))
-            }
+@Composable
+fun MoneyField(
+    salary: String,
+    onSalaryClear: () -> Unit
+) {
+    var isFocused by remember { mutableStateOf(false) }
+    // todo переделать как viewmodel будет готов
+    val text = remember { mutableStateOf("") }
 
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Button(onBackClick) {
-                Text(stringResource(R.string.filter_apply_label))
-            }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(size60)
+            .background(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = RoundedCornerShape(searchFieldCorner)
+            )
+            .padding(start = padding16),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(modifier = Modifier.weight(WEIGHT_1F)) {
+            Spacer(modifier = Modifier.height(size2))
+            Text(
+                text = stringResource(R.string.filter_expected_salary),
+                style = LocalTypography.current.body12Regular,
+                color = if (isFocused) {
+                    blue
+                } else {
+                    grey500
+                },
+                overflow = TextOverflow.Ellipsis,
+            )
+            BasicTextField(
+                value = text.value,
+                onValueChange = { newText -> text.value = newText },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged { isFocused = it.isFocused },
+                textStyle = LocalTypography.current.body16Medium,
+                cursorBrush = SolidColor(blue),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Number),
+                keyboardActions = KeyboardActions(
+                    onDone = {}
+                ),
+                decorationBox = { innerTextField ->
+                    TextFieldDefaults.DecorationBox(
+                        value = text.value,
+                        innerTextField = innerTextField,
+                        singleLine = true,
+                        enabled = true,
+                        shape = RoundedCornerShape(searchFieldCorner),
+                        visualTransformation = VisualTransformation.None,
+                        contentPadding = PaddingValues(padding0),
+                        interactionSource = remember { MutableInteractionSource() },
+                        placeholder = {
+                            Text(
+                                text = stringResource(R.string.filter_placeholder),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                style = LocalTypography.current.body16Regular,
+                            )
+                        },
+                        colors = TextFieldDefaults.colors(
+                            focusedIndicatorColor = Transparent,
+                            unfocusedIndicatorColor = Transparent,
+                            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+                        ),
+                    )
+                }
+            )
+        }
+        if (!text.value.isEmpty()) {
+            Icon(
+                modifier = Modifier
+                    .padding(end = 20.dp)
+                    .clickable(onClick = onSalaryClear),
+                painter = painterResource(id = R.drawable.ic_cross),
+                contentDescription = "Cross",
+                tint = MaterialTheme.colorScheme.onBackground
+            )
         }
     }
 }

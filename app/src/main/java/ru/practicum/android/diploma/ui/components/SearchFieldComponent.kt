@@ -64,7 +64,7 @@ fun SearchField(
                             true -> Icon(
                                 painter = painterResource(id = R.drawable.ic_search),
                                 contentDescription = "",
-                                tint = MaterialTheme.colorScheme.onBackground
+                                tint = MaterialTheme.colorScheme.tertiary
                             )
 
                             false -> Icon(
@@ -72,7 +72,7 @@ fun SearchField(
                                     .clickable(onClick = onSearchClear),
                                 painter = painterResource(id = R.drawable.ic_cross),
                                 contentDescription = "",
-                                tint = MaterialTheme.colorScheme.onBackground
+                                tint = MaterialTheme.colorScheme.tertiary
                             )
                         }
                     },

@@ -26,6 +26,7 @@ private val DarkColorScheme = darkColorScheme(
     onSecondary = white,
     outline = grey200,
     surfaceTint = blue,
+    tertiary = blackUniversal
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -41,6 +42,7 @@ private val LightColorScheme = lightColorScheme(
     onSecondary = white,
     outline = grey200,
     surfaceTint = blue,
+    tertiary = blackUniversal
 )
 
 val LightCustomColors = CustomColors(

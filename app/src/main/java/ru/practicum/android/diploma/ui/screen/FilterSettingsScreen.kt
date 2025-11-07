@@ -114,8 +114,8 @@ fun FilterSettingsScreen(
                 composableElement = {
                     Checkbox(
                         checked = checked.value,
-                        onCheckedChange = {
-                            value -> checked.value = value
+                        onCheckedChange = { value ->
+                            checked.value = value
                         },
                         colors = CheckboxDefaults.colors(
                             uncheckedColor = blue,

@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import ru.practicum.android.diploma.ui.theme.LocalCustomColors
 import ru.practicum.android.diploma.ui.theme.LocalTypography
 import ru.practicum.android.diploma.ui.theme.size60
 

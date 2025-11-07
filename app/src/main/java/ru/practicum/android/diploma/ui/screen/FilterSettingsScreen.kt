@@ -89,7 +89,8 @@ fun FilterSettingsScreen(
                         tint = LocalCustomColors.current.icons.defaultIconColors,
                         contentDescription = "Arrow Forward"
                     )
-                }
+                },
+                color = LocalCustomColors.current.text.secondaryTextColors.textColor
             )
             FilterItem(
                 modifier = Modifier.clickable(onClick = toFilterIndustry),
@@ -101,7 +102,8 @@ fun FilterSettingsScreen(
                         tint = LocalCustomColors.current.icons.defaultIconColors,
                         contentDescription = "Arrow Forward"
                     )
-                }
+                },
+                color = LocalCustomColors.current.text.secondaryTextColors.textColor
             )
             Spacer(modifier = Modifier.height(paddingBase))
             MoneyField("", { })
@@ -121,7 +123,8 @@ fun FilterSettingsScreen(
                             checkmarkColor = white
                         )
                     )
-                }
+                },
+                color = LocalCustomColors.current.text.primaryTextColors.textColor
             )
         }
     }

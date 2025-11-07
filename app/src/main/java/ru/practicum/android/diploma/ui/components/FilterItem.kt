@@ -3,24 +3,22 @@ package ru.practicum.android.diploma.ui.components
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import ru.practicum.android.diploma.ui.theme.LocalCustomColors
 import ru.practicum.android.diploma.ui.theme.LocalTypography
-import ru.practicum.android.diploma.ui.theme.padding16
 import ru.practicum.android.diploma.ui.theme.size60
 
 @Composable
 fun FilterItem(
+    modifier: Modifier,
     text: String,
     composableElement: @Composable () -> Unit
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(size60),
         verticalAlignment = Alignment.CenterVertically

@@ -17,6 +17,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
@@ -47,14 +49,17 @@ import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
 import ru.practicum.android.diploma.ui.theme.LocalCustomColors
 import ru.practicum.android.diploma.ui.theme.LocalTypography
 import ru.practicum.android.diploma.ui.theme.blue
+import ru.practicum.android.diploma.ui.theme.cornerRadius
 import ru.practicum.android.diploma.ui.theme.grey500
 import ru.practicum.android.diploma.ui.theme.padding0
 import ru.practicum.android.diploma.ui.theme.padding16
 import ru.practicum.android.diploma.ui.theme.paddingBase
+import ru.practicum.android.diploma.ui.theme.red
 import ru.practicum.android.diploma.ui.theme.searchFieldCorner
 import ru.practicum.android.diploma.ui.theme.size18
 import ru.practicum.android.diploma.ui.theme.size2
 import ru.practicum.android.diploma.ui.theme.size60
+import ru.practicum.android.diploma.ui.theme.size8
 import ru.practicum.android.diploma.ui.theme.white
 
 @Composable
@@ -79,6 +84,8 @@ fun FilterSettingsScreen(
                 .fillMaxSize()
                 .padding(paddingBase),
         ) {
+            // todo переделать на viewmodel вместо заглушки
+            val filtersApplied = false
             FilterItem(
                 modifier = Modifier.clickable(onClick = toFilterWorkPlace),
                 stringResource(R.string.filter_work_place_label),
@@ -126,6 +133,45 @@ fun FilterSettingsScreen(
                 },
                 color = LocalCustomColors.current.text.primaryTextColors.textColor
             )
+            if (filtersApplied) {
+                Spacer(modifier = Modifier.weight(WEIGHT_1F))
+
+                Button(
+                    modifier = Modifier
+                        .height(size60)
+                        .padding(horizontal = padding16)
+                        .fillMaxSize(),
+                    shape = RoundedCornerShape(cornerRadius),
+                    onClick = { },
+                    content = {
+                        Text(
+                            text = stringResource(R.string.filter_apply_button),
+                            style = LocalTypography.current.body16Medium
+                        )
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(size8))
+
+                Button(
+                    modifier = Modifier
+                        .height(size60)
+                        .padding(horizontal = padding16)
+                        .fillMaxSize(),
+                    shape = RoundedCornerShape(cornerRadius),
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = red,
+                        containerColor = Transparent
+                    ),
+                    onClick = { },
+                    content = {
+                        Text(
+                            text = stringResource(R.string.filter_reset_button),
+                            style = LocalTypography.current.body16Medium
+                        )
+                    }
+                )
+            }
         }
     }
 }

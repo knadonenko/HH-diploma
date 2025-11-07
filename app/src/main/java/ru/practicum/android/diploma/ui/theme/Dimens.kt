@@ -26,7 +26,9 @@ val placeholderHeight = 223.dp
 // common paddings
 val padding2 = 2.dp
 val padding4 = 4.dp
+val padding8 = 8.dp
 val padding12 = 12.dp
+val padding16 = 16.dp
 val padding64 = 64.dp
 
 // chip
@@ -37,6 +39,10 @@ val loaderItemPadding = 80.dp
 
 val size1 = 1.dp
 val size48 = 48.dp
+val size60 = 60.dp
+// это самый настоящий мэджик намбер
+// если ставить меньше - коробка филда выглядит не так
+val size70 = 70.dp
 
 // Icons/Images
 val cornerRadius = 12.dp

@@ -16,16 +16,26 @@ class WorkPlacesViewModel(private val workPlacesInteractor: WorkPlacesInteractor
     val screenState = _screenState.asStateFlow()
 
     fun getAreas() {
+        _screenState.update { WorkPlacesScreenState.Loading }
         viewModelScope.launch {
             workPlacesInteractor.getAreas().collect { response ->
                 when (response) {
-                    is WorkPlacesResponseState.Found -> {
-                        _screenState.update { WorkPlacesScreenState.Found(response.result) }
+                    is WorkPlacesResponseState.Content -> {
+                        if (response.result.isNotEmpty()) {
+                            _screenState.update { WorkPlacesScreenState.Content(response.result) }
+                        } else {
+                            _screenState.update { WorkPlacesScreenState.NotFound }
+                        }
                     }
 
-                    is WorkPlacesResponseState.BadRequest -> {}
-                    is WorkPlacesResponseState.InternalServerError -> {}
-                    is WorkPlacesResponseState.NoInternetConnection -> {}
+                    is WorkPlacesResponseState.BadRequest,
+                    is WorkPlacesResponseState.InternalServerError -> {
+                        _screenState.update { WorkPlacesScreenState.InternalServerError }
+                    }
+
+                    is WorkPlacesResponseState.NoInternetConnection -> {
+                        _screenState.update { WorkPlacesScreenState.NoInternetConnection }
+                    }
                 }
             }
         }

@@ -8,5 +8,5 @@ sealed interface WorkPlacesResponseState {
     data object NoInternetConnection : WorkPlacesResponseState
     data object InternalServerError : WorkPlacesResponseState
     data object BadRequest : WorkPlacesResponseState
-    data class Found(val result: List<FilterArea>) : WorkPlacesResponseState
+    data class Content(val result: List<FilterArea>) : WorkPlacesResponseState
 }

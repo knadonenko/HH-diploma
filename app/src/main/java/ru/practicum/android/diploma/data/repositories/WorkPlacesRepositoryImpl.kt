@@ -21,7 +21,7 @@ class WorkPlacesRepositoryImpl(
 ) :
     WorkPlacesRepository {
     override fun getAreas(): Flow<WorkPlacesResponseState> = flow {
-        val response = networkClient.doRequest(Request.AreasRequest())
+        val response = networkClient.doRequest(Request.AreasRequest)
 
         when (response.resultCode) {
             SUCCESS -> {
@@ -29,7 +29,7 @@ class WorkPlacesRepositoryImpl(
                 val areas = areasResponse.results.mapNotNull { area ->
                     converter.convertFilterArea(area)
                 }
-                emit(WorkPlacesResponseState.Found(areas))
+                emit(WorkPlacesResponseState.Content(areas))
             }
 
             NOT_FOUND, UNAUTHORIZED, BAD_REQUEST -> {

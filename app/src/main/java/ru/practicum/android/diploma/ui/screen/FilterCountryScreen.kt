@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,11 +15,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import org.koin.androidx.compose.koinViewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.presentation.workplaces.models.WorkPlacesScreenState
 import ru.practicum.android.diploma.presentation.workplaces.viewmodel.WorkPlacesViewModel
+import ru.practicum.android.diploma.ui.components.LoadingComponent
 import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
 import ru.practicum.android.diploma.ui.theme.paddingBase
 
@@ -28,6 +31,8 @@ fun FilterCountryScreen(
     onBackClick: () -> Unit,
     viewModel: WorkPlacesViewModel = koinViewModel<WorkPlacesViewModel>()
 ) {
+    val context = LocalContext.current
+
     LaunchedEffect(Unit) { viewModel.getAreas() }
 
     Scaffold(
@@ -47,7 +52,7 @@ fun FilterCountryScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             when (val state = viewModel.screenState.collectAsState().value) {
-                is WorkPlacesScreenState.Found -> {
+                is WorkPlacesScreenState.Content -> {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize(),
@@ -55,18 +60,36 @@ fun FilterCountryScreen(
                     ) {
                         items(state.data) { area ->
                             Text(text = area.name ?: "Daleko")
+
+                            area.areas?.forEach { region ->
+                                Text(
+                                    text = region.name ?: "Tuta",
+                                    modifier = Modifier.padding(start = paddingBase)
+                                )
+                            }
+                        }
+
+                        item {
+                            Button(onBackClick) {
+                                Text(stringResource(R.string.filter_choose_label))
+                            }
                         }
                     }
                 }
 
                 is WorkPlacesScreenState.Default -> {}
-                is WorkPlacesScreenState.InternalServerError -> {}
-                is WorkPlacesScreenState.Loading -> {}
-                is WorkPlacesScreenState.NoInternetConnection -> {}
-                is WorkPlacesScreenState.NotFound -> {}
-            }
-            Button(onBackClick) {
-                Text(stringResource(R.string.filter_choose_label))
+                is WorkPlacesScreenState.Loading -> LoadingComponent()
+                is WorkPlacesScreenState.NotFound -> {
+                    Toast.makeText(context, stringResource(R.string.empty_favorites), Toast.LENGTH_SHORT).show()
+                }
+
+                is WorkPlacesScreenState.NoInternetConnection -> {
+                    Toast.makeText(context, stringResource(R.string.no_internet), Toast.LENGTH_SHORT).show()
+                }
+
+                is WorkPlacesScreenState.InternalServerError -> {
+                    Toast.makeText(context, stringResource(R.string.server_error), Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

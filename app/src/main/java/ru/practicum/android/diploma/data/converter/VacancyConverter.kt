@@ -108,7 +108,7 @@ class VacancyConverter(private val gson: Gson) {
         }
     }
 
-    private fun convertFilterArea(areaDto: FilterAreaDto?): FilterArea? {
+    fun convertFilterArea(areaDto: FilterAreaDto?): FilterArea? {
         return areaDto?.let {
             FilterArea(
                 id = it.id,

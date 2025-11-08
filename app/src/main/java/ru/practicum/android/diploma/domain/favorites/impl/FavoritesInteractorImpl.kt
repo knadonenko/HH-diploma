@@ -13,7 +13,7 @@ class FavoritesInteractorImpl(private val repository: FavoritesRepository) : Fav
 
     override suspend fun getFavorites(): Flow<List<Vacancy>> = repository.getFavorites()
 
-    override suspend fun getFavoritesById(id: Int): Flow<Vacancy> = repository.getFavoritesById(id)
+    override suspend fun getFavoritesById(id: String): Flow<Vacancy?> = repository.getFavoritesById(id)
 
     override suspend fun checkIsFavorite(id: String): Boolean = repository.checkIsFavorite(id)
 }

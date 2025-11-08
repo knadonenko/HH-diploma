@@ -3,8 +3,6 @@ package ru.practicum.android.diploma.data.repositories
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.google.gson.Gson
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.domain.filtersettings.api.repository.FilterSettingsRepository
 import ru.practicum.android.diploma.domain.filtersettings.models.FilterSettings
 
@@ -12,14 +10,14 @@ class FilterSettingsRepositoryImpl(
     private val gson: Gson,
     private val sharedPrefs: SharedPreferences
 ) : FilterSettingsRepository {
-    override fun getFilterSettings(): Flow<FilterSettings?> = flow {
+    override fun getFilterSettings(): FilterSettings? {
         val jsonString = sharedPrefs.getString(FILTER_SETTINGS_KEY, null)
-        val result = jsonString?.let {
+
+        return jsonString?.let {
             runCatching {
                 gson.fromJson(it, FilterSettings::class.java)
             }.getOrNull()
         }
-        emit(result)
     }
 
     override fun saveFilterSettings(filterSettings: FilterSettings) {

@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.domain.filtersettings.impl
 
-import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.domain.filtersettings.api.interactor.FilterSettingsInteractor
 import ru.practicum.android.diploma.domain.filtersettings.api.repository.FilterSettingsRepository
 import ru.practicum.android.diploma.domain.filtersettings.models.FilterSettings
@@ -8,7 +7,7 @@ import ru.practicum.android.diploma.domain.filtersettings.models.FilterSettings
 class FilterSettingsInteractorImpl(
     private val filterStorageRepository: FilterSettingsRepository
 ) : FilterSettingsInteractor {
-    override fun getFilterSettings(): Flow<FilterSettings?> {
+    override fun getFilterSettings(): FilterSettings? {
         return filterStorageRepository.getFilterSettings()
     }
 

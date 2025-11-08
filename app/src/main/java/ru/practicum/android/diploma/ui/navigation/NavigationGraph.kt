@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.presentation.vacancydetails.viewmodel.VacancyDetailsViewModel
+import ru.practicum.android.diploma.presentation.workplaces.viewmodel.WorkPlacesViewModel
 import ru.practicum.android.diploma.ui.screen.FavouritesScreen
 import ru.practicum.android.diploma.ui.screen.FilterAreaScreen
 import ru.practicum.android.diploma.ui.screen.FilterCountryScreen
@@ -21,7 +22,10 @@ import ru.practicum.android.diploma.ui.screen.TeamScreen
 import ru.practicum.android.diploma.ui.screen.VacancyScreen
 
 @Composable
-fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
+fun NavigationGraph(
+    modifier: Modifier, navController: NavHostController,
+    sharedWorkPlacesViewModel: WorkPlacesViewModel = koinViewModel<WorkPlacesViewModel>()
+) {
     NavHost(
         modifier = Modifier,
         navController = navController,
@@ -93,12 +97,16 @@ fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
                 onBackClick = {
                     navController.popBackStack()
                 },
+                onSubmit = { area ->
+                    navController.popBackStack()
+                },
                 toFilterCountry = {
                     navController.navigate(Routes.FILTER_COUNTRY)
                 },
-                toFilterRegion = { countryId ->
-                    navController.navigate("${Routes.FILTER_AREA}/$countryId")
-                }
+                toFilterRegion = {
+                    navController.navigate(Routes.FILTER_AREA)
+                },
+                viewModel = sharedWorkPlacesViewModel
             )
         }
 
@@ -107,28 +115,18 @@ fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
                 modifier,
                 onBackClick = {
                     navController.popBackStack()
-                }
+                },
+                viewModel = sharedWorkPlacesViewModel
             )
         }
 
-        composable(
-            "${Routes.FILTER_AREA}/{$COUNTRY_ID}",
-            arguments = listOf(
-                navArgument(COUNTRY_ID) {
-                    type = NavType.StringType
-                    nullable = true
-                }
-            )
-        ) { backStackEntry ->
-            val countryIdString = backStackEntry.arguments?.getString(COUNTRY_ID)
-            val countryId: Int? = countryIdString?.toIntOrNull()
-
+        composable(Routes.FILTER_AREA) {
             FilterAreaScreen(
                 modifier,
-                countryId,
                 onBackClick = {
                     navController.popBackStack()
-                }
+                },
+                viewModel = sharedWorkPlacesViewModel
             )
         }
 

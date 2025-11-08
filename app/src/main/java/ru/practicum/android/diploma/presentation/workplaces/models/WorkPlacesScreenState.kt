@@ -7,7 +7,12 @@ import ru.practicum.android.diploma.domain.vacancydetails.models.FilterArea
 sealed class WorkPlacesScreenState {
     data object Default : WorkPlacesScreenState()
     data object Loading : WorkPlacesScreenState()
-    data class Content(val data: List<FilterArea>) : WorkPlacesScreenState()
+    data class Content(
+        val availableAreas: List<FilterArea>,
+        var chosenCountry: FilterArea? = null,
+        var chosenArea: FilterArea? = null
+    ) : WorkPlacesScreenState()
+
     data object NotFound : WorkPlacesScreenState()
     data object NoInternetConnection : WorkPlacesScreenState()
     data object InternalServerError : WorkPlacesScreenState()

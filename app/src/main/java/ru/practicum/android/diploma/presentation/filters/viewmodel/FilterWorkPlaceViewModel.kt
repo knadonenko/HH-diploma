@@ -20,12 +20,6 @@ class FilterWorkPlaceViewModel(
     private val _screenState = MutableStateFlow<WorkPlacesScreenState>(WorkPlacesScreenState.Default)
     val screenState = _screenState.asStateFlow()
 
-    private var _filterSettings: FilterSettings? = null
-
-    init {
-        _filterSettings = filterSettingsInteractor.getFilterSettings()
-    }
-
     fun loadAreas() {
         if (_screenState.value !is WorkPlacesScreenState.Content) {
             _screenState.update { WorkPlacesScreenState.Loading }
@@ -78,12 +72,13 @@ class FilterWorkPlaceViewModel(
 
     fun onSaveChoice(chosenArea: FilterArea) {
         _screenState.update { WorkPlacesScreenState.Loading }
-        _filterSettings = FilterSettings(
+        var settings = filterSettingsInteractor.getFilterSettings()
+        settings = FilterSettings(
             area = chosenArea.id,
-            industry = _filterSettings?.industry,
-            salary = _filterSettings?.salary,
-            onlyWithSalary = _filterSettings?.onlyWithSalary
+            industry = settings?.industry,
+            salary = settings?.salary,
+            onlyWithSalary = settings?.onlyWithSalary
         )
-        filterSettingsInteractor.saveFilterSettings(_filterSettings!!)
+        filterSettingsInteractor.saveFilterSettings(settings)
     }
 }

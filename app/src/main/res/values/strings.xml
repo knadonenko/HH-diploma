@@ -53,6 +53,7 @@
     <string name="enter_request">Введите запрос</string>
     <string name="no_internet">Нет интернета</string>
     <string name="bad_request">Не удалось получить список вакансий</string>
+    <string name="no_regions_error">Не удалось получить список</string>
     <string name="no_vacancies">Таких вакансий нет</string>
     <string name="server_error">Ошибка сервера</string>
 

@@ -57,7 +57,7 @@ fun FilterWorkPlaceScreen(
             val data = "Россия"
             val areaData = ""
             FilterItem(
-                modifier = Modifier.clickable(onClick = { }),
+                modifier = Modifier.clickable(onClick = toFilterCountry),
                 stringResource(R.string.filter_country_label),
                 data = data,
                 composableElement = {
@@ -80,7 +80,7 @@ fun FilterWorkPlaceScreen(
                 color = LocalCustomColors.current.text.secondaryTextColors.textColor
             )
             FilterItem(
-                modifier = Modifier.clickable(onClick = { }),
+                modifier = Modifier.clickable(onClick = { toFilterRegion(1) }),
                 stringResource(R.string.filter_area_label),
                 data = areaData,
                 composableElement = {

@@ -18,8 +18,8 @@ import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesResponseSta
 import ru.practicum.android.diploma.presentation.vacancies.models.VacanciesScreenState
 
 class VacanciesViewModel(
-    val vacanciesInteractor: VacanciesInteractor,
-    val filterSettingsInteractor: FilterSettingsInteractor
+    private val vacanciesInteractor: VacanciesInteractor,
+    private val filterSettingsInteractor: FilterSettingsInteractor
 ) : ViewModel() {
     private val _screenState = MutableStateFlow<VacanciesScreenState>(VacanciesScreenState.Default)
     val screenState = _screenState.asStateFlow()
@@ -187,7 +187,7 @@ class VacanciesViewModel(
         cancelNextPageLoad()
     }
 
-    companion object {
+    private companion object {
         const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 }

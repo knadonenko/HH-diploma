@@ -4,6 +4,8 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import ru.practicum.android.diploma.domain.favorites.api.interactor.FavoritesInteractor
 import ru.practicum.android.diploma.domain.favorites.impl.FavoritesInteractorImpl
+import ru.practicum.android.diploma.domain.filters.api.interactor.FilterInteractor
+import ru.practicum.android.diploma.domain.filters.impl.FilterInteractorImpl
 import ru.practicum.android.diploma.domain.filtersettings.api.interactor.FilterSettingsInteractor
 import ru.practicum.android.diploma.domain.filtersettings.impl.FilterSettingsInteractorImpl
 import ru.practicum.android.diploma.domain.vacanceis.api.interactor.VacanciesInteractor
@@ -39,5 +41,13 @@ val interactorModule = module {
 
     factory<WorkPlacesInteractor> {
         WorkPlacesInteractorImpl(get())
+    }
+
+    factory<FilterInteractor> {
+        FilterInteractorImpl(get())
+    }
+
+    factory<FilterSettingsInteractor> {
+        FilterSettingsInteractorImpl(get())
     }
 }

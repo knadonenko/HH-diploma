@@ -18,7 +18,7 @@ interface VacancyDao {
     suspend fun getAll(): List<VacancyEntity>
 
     @Query("SELECT * FROM favourite_vacancy_table WHERE id = :id")
-    suspend fun getById(id: Int): VacancyEntity
+    suspend fun getById(id: String): VacancyEntity?
 
     @Query("SELECT EXISTS(SELECT 1 FROM favourite_vacancy_table WHERE id = :id)")
     suspend fun isFavorite(id: String): Boolean

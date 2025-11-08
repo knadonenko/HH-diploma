@@ -4,5 +4,5 @@ import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.domain.vacancydetails.models.VacancyDetailsResponseState
 
 interface VacancyDetailsInteractor {
-    fun getVacancyDetails(vacancyId: String): Flow<VacancyDetailsResponseState>
+    fun getVacancyDetails(vacancyId: String, fromDB: Boolean): Flow<VacancyDetailsResponseState>
 }

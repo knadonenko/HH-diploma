@@ -12,10 +12,12 @@ import ru.practicum.android.diploma.domain.vacancydetails.api.interactor.Vacancy
 import ru.practicum.android.diploma.domain.vacancydetails.api.interactor.VacancyDetailsLinkManagerInteractor
 import ru.practicum.android.diploma.domain.vacancydetails.models.Vacancy
 import ru.practicum.android.diploma.domain.vacancydetails.models.VacancyDetailsResponseState
+import ru.practicum.android.diploma.presentation.vacancies.models.VacancySource
 import ru.practicum.android.diploma.presentation.vacancydetails.models.VacancyDetailsScreenState
 
 class VacancyDetailsViewModel(
     private val vacancyId: String,
+    private val vacancySource: String,
     private val vacancyDetailsInteractor: VacancyDetailsInteractor,
     private val vacancyDetailsLinkManagerInteractor: VacancyDetailsLinkManagerInteractor,
     private val favoritesInteractor: FavoritesInteractor
@@ -23,7 +25,7 @@ class VacancyDetailsViewModel(
     private var _vacancy: Vacancy? = null
     private var _isFavouriteChangeInProgress: Boolean = false
 
-    private val _favouriteState = MutableStateFlow<Boolean>(false)
+    private val _favouriteState = MutableStateFlow(false)
     val favouriteState = _favouriteState.asStateFlow()
 
     private val _screenState = MutableStateFlow<VacancyDetailsScreenState>(VacancyDetailsScreenState.Default)
@@ -34,7 +36,7 @@ class VacancyDetailsViewModel(
 
         viewModelScope.launch {
             vacancyDetailsInteractor
-                .getVacancyDetails(vacancyId)
+                .getVacancyDetails(vacancyId, vacancySource == VacancySource.FAVOURITE)
                 .cancellable()
                 .collect { responseState ->
                     handleResult(responseState)

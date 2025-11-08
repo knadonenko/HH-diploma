@@ -77,7 +77,8 @@ fun FilterWorkPlaceScreen(
 
                     Button(
                         enabled = state.chosenCountry != null,
-                        onClick = { toFilterRegion() }) {
+                        onClick = { toFilterRegion() }
+                    ) {
                         Text(stringResource(R.string.filter_area_label))
                     }
 
@@ -88,7 +89,8 @@ fun FilterWorkPlaceScreen(
                         onClick = {
                             onSubmit(state.chosenArea!!)
                             viewModel.cleanLoadedAreas()
-                        }) {
+                        }
+                    ) {
                         Text(stringResource(R.string.filter_choose_label))
                     }
                 }

@@ -24,7 +24,8 @@ import ru.practicum.android.diploma.ui.screen.VacancyScreen
 
 @Composable
 fun NavigationGraph(
-    modifier: Modifier, navController: NavHostController,
+    modifier: Modifier,
+    navController: NavHostController,
     sharedWorkPlacesViewModel: WorkPlacesViewModel = koinViewModel<WorkPlacesViewModel>()
 ) {
     NavHost(

@@ -45,21 +45,18 @@ class WorkPlacesViewModel(private val workPlacesInteractor: WorkPlacesInteractor
 
     fun chooseCountry(country: FilterArea) {
         if (_screenState.value is WorkPlacesScreenState.Content) {
+            val oldState = _screenState.value as WorkPlacesScreenState.Content
             _screenState.update {
-                val newState = _screenState.value as WorkPlacesScreenState.Content
-                newState.chosenCountry = country
-                newState.chosenArea = null
-                newState
+                WorkPlacesScreenState.Content(oldState.availableAreas, country, null)
             }
         }
     }
 
     fun chooseArea(area: FilterArea) {
         if (_screenState.value is WorkPlacesScreenState.Content) {
+            val oldState = _screenState.value as WorkPlacesScreenState.Content
             _screenState.update {
-                val newState = _screenState.value as WorkPlacesScreenState.Content
-                newState.chosenArea = area
-                newState
+                WorkPlacesScreenState.Content(oldState.availableAreas, oldState.chosenCountry, area)
             }
         }
     }

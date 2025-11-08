@@ -4,14 +4,14 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.QueryMap
-import ru.practicum.android.diploma.data.network.response.AreasResponse
+import ru.practicum.android.diploma.data.dto.FilterAreaDto
 import ru.practicum.android.diploma.data.network.response.IndustriesResponse
 import ru.practicum.android.diploma.data.network.response.VacanciesResponse
 import ru.practicum.android.diploma.data.network.response.VacancyDetailsResponse
 
 interface APIService {
     @GET("/areas")
-    suspend fun getAreas(): Response<AreasResponse>
+    suspend fun getAreas(): Response<List<FilterAreaDto>>
 
     @GET("/industries")
     suspend fun getIndustries(): Response<IndustriesResponse>

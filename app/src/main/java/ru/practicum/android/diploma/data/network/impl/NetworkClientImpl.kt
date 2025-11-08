@@ -11,6 +11,7 @@ import ru.practicum.android.diploma.data.network.consts.ResponseStates.NO_INTERN
 import ru.practicum.android.diploma.data.network.consts.ResponseStates.SUCCESS
 import ru.practicum.android.diploma.data.network.consts.ResponseStates.UNAUTHORIZED
 import ru.practicum.android.diploma.data.network.request.Request
+import ru.practicum.android.diploma.data.network.response.AreasResponse
 import ru.practicum.android.diploma.data.network.response.Response
 import ru.practicum.android.diploma.util.NetworkProvider
 import java.io.IOException
@@ -38,7 +39,10 @@ class NetworkClientImpl(
 
     private suspend fun sendRequest(dto: Request): Response {
         val response = when (dto) {
-            is Request.AreasRequest -> apiService.getAreas()
+            is Request.AreasRequest -> apiService.getAreas().castToCustomResponse { areas ->
+                AreasResponse(results = areas ?: emptyList())
+            }
+
             is Request.IndustriesRequest -> apiService.getIndustries()
             is Request.VacanciesRequest -> apiService.getVacancies(dto.options)
             is Request.VacancyDetailsRequest -> apiService.getVacancy(dto.vacancyId)
@@ -81,6 +85,18 @@ class NetworkClientImpl(
     private fun createErrorResponse(errorCode: Int): Response {
         return Response().apply {
             resultCode = errorCode
+        }
+    }
+
+    private inline fun <T, reified R : Response> retrofit2.Response<T>.castToCustomResponse(
+        mapFunction: (T?) -> R
+    ): retrofit2.Response<out Response> {
+        return if (this.isSuccessful) {
+            val customBody = mapFunction(this.body())
+            customBody.resultCode = this.code()
+            retrofit2.Response.success(customBody, this.raw())
+        } else {
+            retrofit2.Response.error(this.errorBody()!!, this.raw())
         }
     }
 }

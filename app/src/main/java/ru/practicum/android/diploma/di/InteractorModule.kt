@@ -12,6 +12,8 @@ import ru.practicum.android.diploma.domain.vacancydetails.api.interactor.Vacancy
 import ru.practicum.android.diploma.domain.vacancydetails.api.interactor.VacancyDetailsLinkManagerInteractor
 import ru.practicum.android.diploma.domain.vacancydetails.impl.VacancyDetailsInteractorImpl
 import ru.practicum.android.diploma.domain.vacancydetails.impl.VacancyDetailsLinkManagerInteractorImpl
+import ru.practicum.android.diploma.domain.workplaces.api.interactor.WorkPlacesInteractor
+import ru.practicum.android.diploma.domain.workplaces.impl.WorkPlacesInteractorImpl
 
 val interactorModule = module {
 
@@ -33,5 +35,9 @@ val interactorModule = module {
 
     factory<FavoritesInteractor> {
         FavoritesInteractorImpl(get())
+    }
+
+    factory<WorkPlacesInteractor> {
+        WorkPlacesInteractorImpl(get())
     }
 }

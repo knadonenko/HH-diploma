@@ -5,6 +5,7 @@ import org.koin.dsl.module
 import ru.practicum.android.diploma.presentation.vacancies.viewmodel.FavoritesViewModel
 import ru.practicum.android.diploma.presentation.vacancies.viewmodel.VacanciesViewModel
 import ru.practicum.android.diploma.presentation.vacancydetails.viewmodel.VacancyDetailsViewModel
+import ru.practicum.android.diploma.presentation.workplaces.viewmodel.WorkPlacesViewModel
 
 /**
  * Модуль для описания компонентов-viewmodel
@@ -21,5 +22,9 @@ val viewModelModule = module {
 
     viewModel {
         FavoritesViewModel(get())
+    }
+
+    viewModel {
+        WorkPlacesViewModel(get())
     }
 }

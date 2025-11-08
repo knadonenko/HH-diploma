@@ -103,9 +103,7 @@ fun FilterWorkPlaceScreen(
                     Toast.makeText(context, stringResource(R.string.server_error), Toast.LENGTH_SHORT).show()
                 }
 
-                is WorkPlacesScreenState.Default -> {
-
-                }
+                is WorkPlacesScreenState.Default -> {}
 
                 else -> {
                     Toast.makeText(context, stringResource(R.string.empty_favorites), Toast.LENGTH_SHORT).show()

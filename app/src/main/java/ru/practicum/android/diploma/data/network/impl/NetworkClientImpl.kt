@@ -12,6 +12,7 @@ import ru.practicum.android.diploma.data.network.consts.ResponseStates.SUCCESS
 import ru.practicum.android.diploma.data.network.consts.ResponseStates.UNAUTHORIZED
 import ru.practicum.android.diploma.data.network.request.Request
 import ru.practicum.android.diploma.data.network.response.AreasResponse
+import ru.practicum.android.diploma.data.network.response.IndustriesResponse
 import ru.practicum.android.diploma.data.network.response.Response
 import ru.practicum.android.diploma.util.NetworkProvider
 import java.io.IOException
@@ -43,7 +44,10 @@ class NetworkClientImpl(
                 AreasResponse(results = areas ?: emptyList())
             }
 
-            is Request.IndustriesRequest -> apiService.getIndustries()
+            is Request.IndustriesRequest -> apiService.getIndustries().castToCustomResponse { industries ->
+                IndustriesResponse(results = industries ?: emptyList())
+            }
+
             is Request.VacanciesRequest -> apiService.getVacancies(dto.options)
             is Request.VacancyDetailsRequest -> apiService.getVacancy(dto.vacancyId)
         }

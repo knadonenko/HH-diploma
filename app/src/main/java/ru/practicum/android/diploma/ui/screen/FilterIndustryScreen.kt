@@ -13,13 +13,19 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import okhttp3.internal.toImmutableList
+import org.koin.androidx.compose.koinViewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.domain.filters.models.FilterIndustry
 import ru.practicum.android.diploma.presentation.filters.models.FilterIndustryScreenState
+import ru.practicum.android.diploma.presentation.filters.viewmodel.FilterIndustryViewModel
 import ru.practicum.android.diploma.ui.components.IndustryItem
 import ru.practicum.android.diploma.ui.components.LoadingComponent
 import ru.practicum.android.diploma.ui.components.Placeholder
@@ -34,8 +40,11 @@ import ru.practicum.android.diploma.ui.theme.size60
 @Composable
 fun FilterIndustryScreen(
     modifier: Modifier,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    viewModel: FilterIndustryViewModel = koinViewModel()
 ) {
+    val query = viewModel.currentSearchText.collectAsStateWithLifecycle().value
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -52,45 +61,63 @@ fun FilterIndustryScreen(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // todo убрать, использовать список и состояния из вьюмоедели
-            val listOf = listOf("Индустрия 1", "Индустрия 2")
-            val query = remember { mutableStateOf("") }
-            val state = FilterIndustryScreenState.Content(listOf)
+            val state = viewModel.screenState.collectAsState().value
+            val selectedId = viewModel.selectedId.collectAsState().value
+            val isSelected = viewModel.isSelected.collectAsState().value
 
             SearchField(
-                searchQuery = query.value,
-                onQueryChange = { },
+                searchQuery = query,
+                onQueryChange = {
+                    viewModel.onSearchTextChange(it)
+                },
                 placeHolder = stringResource(R.string.filter_industry),
-                onSearchClear = { }
+                onSearchClear = { viewModel.onClearSearchText() }
             )
 
             when (state) {
                 is FilterIndustryScreenState.Loading -> LoadingComponent()
-                is FilterIndustryScreenState.Error -> Placeholder(
+
+                is FilterIndustryScreenState.NoInternetConnection -> Placeholder(
                     R.drawable.error_placeholder,
+                    stringResource(R.string.no_internet)
+                )
+
+                is FilterIndustryScreenState.NotFound -> Placeholder(
+                    R.drawable.no_vacancy_placeholder,
+                    stringResource(R.string.empty_favorites)
+                )
+
+                is FilterIndustryScreenState.Error -> Placeholder(
+                    R.drawable.server_error_placeholder,
                     stringResource(R.string.filter_industry_error)
                 )
 
                 is FilterIndustryScreenState.Content -> IndustriesList(
                     modifier = modifier.weight(1f),
-                    selectedIndex = null,
-                    industriesFound = state.industries
+                    selectedIndex = selectedId,
+                    industriesFound = state.data.toImmutableList(),
+                    onSelect = viewModel::onSelectIndustry
                 )
             }
-            // todo добавить условие отображения
-            Button(
-                modifier = Modifier
-                    .height(size60)
-                    .fillMaxSize(),
-                shape = RoundedCornerShape(cornerRadius),
-                onClick = { },
-                content = {
-                    Text(
-                        text = stringResource(R.string.filter_choose_label),
-                        style = LocalTypography.current.body16Medium
-                    )
-                }
-            )
+
+            if (isSelected) {
+                Button(
+                    modifier = Modifier
+                        .height(size60)
+                        .fillMaxSize(),
+                    shape = RoundedCornerShape(cornerRadius),
+                    onClick = {
+                        viewModel.onSaveChoice()
+                        onBackClick()
+                    },
+                    content = {
+                        Text(
+                            text = stringResource(R.string.filter_choose_label),
+                            style = LocalTypography.current.body16Medium
+                        )
+                    }
+                )
+            }
         }
     }
 }
@@ -99,10 +126,11 @@ fun FilterIndustryScreen(
 fun IndustriesList(
     modifier: Modifier,
     selectedIndex: Int?,
-    industriesFound: List<String>
+    industriesFound: List<FilterIndustry>,
+    onSelect: (id: Int) -> Unit
 ) {
     val listState = rememberLazyListState()
-    val newIndex = remember { mutableStateOf(selectedIndex) }
+    val newIndex = remember(selectedIndex) { mutableStateOf(selectedIndex) }
 
     Spacer(modifier = Modifier.height(size4))
     LazyColumn(
@@ -111,11 +139,12 @@ fun IndustriesList(
     ) {
         items(industriesFound) { industry ->
             IndustryItem(
-                id = industriesFound.indexOf(industry),
-                title = industry,
-                selected = newIndex.value == industriesFound.indexOf(industry),
+                id = industry.id,
+                title = industry.name,
+                selected = newIndex.value  == industry.id,
                 onSelect = {
-                    newIndex.value = industriesFound.indexOf(industry)
+                    onSelect(industry.id)
+                    newIndex.value = industry.id
                 }
             )
         }

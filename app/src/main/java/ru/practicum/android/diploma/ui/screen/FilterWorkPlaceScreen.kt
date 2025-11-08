@@ -18,9 +18,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.domain.vacancydetails.models.FilterArea
-import ru.practicum.android.diploma.presentation.workplaces.models.WorkPlacesScreenState
-import ru.practicum.android.diploma.presentation.workplaces.viewmodel.WorkPlacesViewModel
+import ru.practicum.android.diploma.presentation.filters.models.WorkPlacesScreenState
+import ru.practicum.android.diploma.presentation.filters.viewmodel.FilterWorkPlaceViewModel
 import ru.practicum.android.diploma.ui.components.LoadingComponent
 import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
 import ru.practicum.android.diploma.ui.theme.paddingBase
@@ -29,10 +28,9 @@ import ru.practicum.android.diploma.ui.theme.paddingBase
 fun FilterWorkPlaceScreen(
     modifier: Modifier,
     onBackClick: () -> Unit,
-    onSubmit: (area: FilterArea) -> Unit = { _ -> },
     toFilterCountry: () -> Unit,
     toFilterRegion: () -> Unit,
-    viewModel: WorkPlacesViewModel
+    viewModel: FilterWorkPlaceViewModel
 ) {
     val context = LocalContext.current
 
@@ -87,8 +85,8 @@ fun FilterWorkPlaceScreen(
                     Button(
                         enabled = state.chosenArea != null,
                         onClick = {
-                            onSubmit(state.chosenArea!!)
-                            viewModel.cleanLoadedAreas()
+                            viewModel.onSaveChoice(state.chosenArea!!)
+                            onBackClick.invoke()
                         }
                     ) {
                         Text(stringResource(R.string.filter_choose_label))
@@ -103,6 +101,10 @@ fun FilterWorkPlaceScreen(
 
                 is WorkPlacesScreenState.InternalServerError -> {
                     Toast.makeText(context, stringResource(R.string.server_error), Toast.LENGTH_SHORT).show()
+                }
+
+                is WorkPlacesScreenState.Default -> {
+
                 }
 
                 else -> {

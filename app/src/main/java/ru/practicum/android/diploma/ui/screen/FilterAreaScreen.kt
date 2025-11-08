@@ -16,8 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.presentation.workplaces.models.WorkPlacesScreenState
-import ru.practicum.android.diploma.presentation.workplaces.viewmodel.WorkPlacesViewModel
+import ru.practicum.android.diploma.presentation.filters.models.WorkPlacesScreenState
+import ru.practicum.android.diploma.presentation.filters.viewmodel.FilterWorkPlaceViewModel
 import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
 import ru.practicum.android.diploma.ui.theme.paddingBase
 
@@ -25,7 +25,7 @@ import ru.practicum.android.diploma.ui.theme.paddingBase
 fun FilterAreaScreen(
     modifier: Modifier,
     onBackClick: () -> Unit,
-    viewModel: WorkPlacesViewModel
+    viewModel: FilterWorkPlaceViewModel
 ) {
     Scaffold(
         modifier = modifier,

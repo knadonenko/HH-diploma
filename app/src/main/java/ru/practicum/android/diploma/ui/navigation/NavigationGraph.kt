@@ -9,9 +9,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
+import ru.practicum.android.diploma.presentation.filters.viewmodel.FilterWorkPlaceViewModel
 import ru.practicum.android.diploma.presentation.vacancies.models.VacancySource
 import ru.practicum.android.diploma.presentation.vacancydetails.viewmodel.VacancyDetailsViewModel
-import ru.practicum.android.diploma.presentation.workplaces.viewmodel.WorkPlacesViewModel
 import ru.practicum.android.diploma.ui.screen.FavouritesScreen
 import ru.practicum.android.diploma.ui.screen.FilterAreaScreen
 import ru.practicum.android.diploma.ui.screen.FilterCountryScreen
@@ -26,7 +26,7 @@ import ru.practicum.android.diploma.ui.screen.VacancyScreen
 fun NavigationGraph(
     modifier: Modifier,
     navController: NavHostController,
-    sharedWorkPlacesViewModel: WorkPlacesViewModel = koinViewModel<WorkPlacesViewModel>()
+    sharedWorkPlacesViewModel: FilterWorkPlaceViewModel = koinViewModel<FilterWorkPlaceViewModel>()
 ) {
     NavHost(
         modifier = Modifier,
@@ -104,9 +104,6 @@ fun NavigationGraph(
             FilterWorkPlaceScreen(
                 modifier,
                 onBackClick = {
-                    navController.popBackStack()
-                },
-                onSubmit = { area ->
                     navController.popBackStack()
                 },
                 toFilterCountry = {

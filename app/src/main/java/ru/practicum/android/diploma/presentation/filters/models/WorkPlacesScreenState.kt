@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.presentation.workplaces.models
+package ru.practicum.android.diploma.presentation.filters.models
 
 import androidx.compose.runtime.Immutable
 import ru.practicum.android.diploma.domain.vacancydetails.models.FilterArea

@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.presentation.workplaces.viewmodel
+package ru.practicum.android.diploma.presentation.filters.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,22 +6,33 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.filters.api.interactor.FilterInteractor
+import ru.practicum.android.diploma.domain.filters.models.FilterWorkPlaceResponseState
+import ru.practicum.android.diploma.domain.filtersettings.api.interactor.FilterSettingsInteractor
+import ru.practicum.android.diploma.domain.filtersettings.models.FilterSettings
 import ru.practicum.android.diploma.domain.vacancydetails.models.FilterArea
-import ru.practicum.android.diploma.domain.workplaces.api.interactor.WorkPlacesInteractor
-import ru.practicum.android.diploma.domain.workplaces.models.WorkPlacesResponseState
-import ru.practicum.android.diploma.presentation.workplaces.models.WorkPlacesScreenState
+import ru.practicum.android.diploma.presentation.filters.models.WorkPlacesScreenState
 
-class WorkPlacesViewModel(private val workPlacesInteractor: WorkPlacesInteractor) : ViewModel() {
+class FilterWorkPlaceViewModel(
+    private val filterInteractor: FilterInteractor,
+    private val filterSettingsInteractor: FilterSettingsInteractor
+) : ViewModel() {
     private val _screenState = MutableStateFlow<WorkPlacesScreenState>(WorkPlacesScreenState.Default)
     val screenState = _screenState.asStateFlow()
+
+    private var _filterSettings: FilterSettings? = null
+
+    init {
+        _filterSettings = filterSettingsInteractor.getFilterSettings()
+    }
 
     fun loadAreas() {
         if (_screenState.value !is WorkPlacesScreenState.Content) {
             _screenState.update { WorkPlacesScreenState.Loading }
             viewModelScope.launch {
-                workPlacesInteractor.getAreas().collect { response ->
+                filterInteractor.getAreas().collect { response ->
                     when (response) {
-                        is WorkPlacesResponseState.Content -> {
+                        is FilterWorkPlaceResponseState.Content -> {
                             if (response.result.isNotEmpty()) {
                                 _screenState.update { WorkPlacesScreenState.Content(response.result) }
                             } else {
@@ -29,12 +40,12 @@ class WorkPlacesViewModel(private val workPlacesInteractor: WorkPlacesInteractor
                             }
                         }
 
-                        is WorkPlacesResponseState.BadRequest,
-                        is WorkPlacesResponseState.InternalServerError -> {
+                        is FilterWorkPlaceResponseState.BadRequest,
+                        is FilterWorkPlaceResponseState.InternalServerError -> {
                             _screenState.update { WorkPlacesScreenState.InternalServerError }
                         }
 
-                        is WorkPlacesResponseState.NoInternetConnection -> {
+                        is FilterWorkPlaceResponseState.NoInternetConnection -> {
                             _screenState.update { WorkPlacesScreenState.NoInternetConnection }
                         }
                     }
@@ -63,5 +74,16 @@ class WorkPlacesViewModel(private val workPlacesInteractor: WorkPlacesInteractor
 
     fun cleanLoadedAreas() {
         _screenState.update { WorkPlacesScreenState.Default }
+    }
+
+    fun onSaveChoice(chosenArea: FilterArea) {
+        _screenState.update { WorkPlacesScreenState.Loading }
+            _filterSettings = FilterSettings(
+                area = chosenArea.id,
+                industry = _filterSettings?.industry,
+                salary = _filterSettings?.salary,
+                onlyWithSalary = _filterSettings?.onlyWithSalary
+            )
+            filterSettingsInteractor.saveFilterSettings(_filterSettings!!)
     }
 }

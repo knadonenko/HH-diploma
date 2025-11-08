@@ -68,14 +68,13 @@ class FilterIndustryViewModel(
                     _selectedId.update { _filterSettings!!.industry!! }
                 }
 
-                if (isInit){
+                if (isInit) {
                     _industries = industries
                 }
 
-                if (industries.isEmpty()){
+                if (industries.isEmpty()) {
                     FilterIndustryScreenState.NotFound
-                }
-                else{
+                } else {
                     FilterIndustryScreenState.Content(industries.toList())
                 }
             }

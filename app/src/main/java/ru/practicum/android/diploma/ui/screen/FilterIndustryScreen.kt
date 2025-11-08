@@ -141,7 +141,7 @@ fun IndustriesList(
             IndustryItem(
                 id = industry.id,
                 title = industry.name,
-                selected = newIndex.value  == industry.id,
+                selected = newIndex.value == industry.id,
                 onSelect = {
                     onSelect(industry.id)
                     newIndex.value = industry.id

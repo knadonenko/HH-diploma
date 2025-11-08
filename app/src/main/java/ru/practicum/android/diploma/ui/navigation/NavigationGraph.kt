@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
+import ru.practicum.android.diploma.presentation.vacancies.models.VacancySource
 import ru.practicum.android.diploma.presentation.vacancydetails.viewmodel.VacancyDetailsViewModel
 import ru.practicum.android.diploma.ui.screen.FavouritesScreen
 import ru.practicum.android.diploma.ui.screen.FilterAreaScreen
@@ -34,7 +35,7 @@ fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
                     navController.navigate(Routes.FILTER_SETTINGS)
                 },
                 onDetailsClick = { vacancyId ->
-                    navController.navigate("${Routes.VACANCY}/$vacancyId")
+                    navController.navigate("${Routes.VACANCY}/${VacancySource.SEARCH}/$vacancyId")
                 }
             )
         }
@@ -43,28 +44,33 @@ fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
             FavouritesScreen(
                 modifier,
                 onDetailsClick = { vacancyId ->
-                    navController.navigate("${Routes.VACANCY}/$vacancyId")
+                    navController.navigate("${Routes.VACANCY}/${VacancySource.FAVOURITE}/$vacancyId")
                 }
             )
         }
 
         composable(
-            "${Routes.VACANCY}/{$VACANCY_ID}",
+            "${Routes.VACANCY}/{$VACANCY_SOURCE}/{$VACANCY_ID}",
             arguments = listOf(
                 navArgument(VACANCY_ID) {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument(VACANCY_SOURCE) {
                     type = NavType.StringType
                     nullable = false
                 }
             )
         ) { backStackEntry ->
             val vacancyId = backStackEntry.arguments?.getString(VACANCY_ID)!!
+            val vacancySource = backStackEntry.arguments?.getString(VACANCY_SOURCE)!!
 
             VacancyScreen(
                 modifier,
                 onBackClick = {
                     navController.popBackStack()
                 },
-                viewModel = koinViewModel<VacancyDetailsViewModel>(parameters = { parametersOf(vacancyId) })
+                viewModel = koinViewModel<VacancyDetailsViewModel>(parameters = { parametersOf(vacancyId, vacancySource) })
             )
         }
 
@@ -145,3 +151,4 @@ fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
 
 private const val COUNTRY_ID = "countryId"
 private const val VACANCY_ID = "vacancyId"
+private const val VACANCY_SOURCE = "vacancySource"

@@ -38,6 +38,7 @@ val loaderItemPadding = 80.dp
 
 val size1 = 1.dp
 val size2 = 2.dp
+val size4 = 4.dp
 val size8 = 8.dp
 val size18 = 18.dp
 val size48 = 48.dp

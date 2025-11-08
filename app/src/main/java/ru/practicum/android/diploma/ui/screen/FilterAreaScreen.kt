@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.ui.components.SearchField
 import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
 import ru.practicum.android.diploma.ui.theme.paddingBase
 
@@ -39,7 +40,16 @@ fun FilterAreaScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = countryId?.toString() ?: stringResource(id = R.string.test))
+            SearchField(
+                searchQuery = "",
+                onQueryChange = {
+
+                },
+                placeHolder = stringResource(R.string.filter_area_search),
+                onSearchClear = {
+
+                }
+            )
 
             Spacer(modifier = Modifier.height(20.dp))
 

@@ -33,6 +33,7 @@
     <string name="filter_apply_button">Применить</string>
     <string name="filter_reset_button">Сбросить</string>
     <string name="filter_industry">Введите отрасль</string>
+    <string name="filter_area_search">Введите регион</string>
     <string name="filter_industry_error">Ошибка получения списка отраслей</string>
 
     <string name="from">от</string>

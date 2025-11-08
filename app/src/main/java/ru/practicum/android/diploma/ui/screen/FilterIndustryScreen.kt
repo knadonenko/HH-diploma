@@ -52,7 +52,7 @@ fun FilterIndustryScreen(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // todo убрать, использовать список из API
+            // todo убрать, использовать список и состояния из вьюмоедели
             val listOf = listOf("Индустрия 1", "Индустрия 2")
             val query = remember { mutableStateOf("") }
             val state = FilterIndustryScreenState.Content(listOf)
@@ -101,7 +101,6 @@ fun IndustriesList(
     selectedIndex: Int?,
     industriesFound: List<String>
 ) {
-
     val listState = rememberLazyListState()
     val newIndex = remember { mutableStateOf(selectedIndex) }
 

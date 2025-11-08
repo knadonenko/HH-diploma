@@ -24,7 +24,7 @@ class VacancyDetailsRepositoryImpl(
     private val favoritesRepositoryImpl: FavoritesRepository
 ) : VacancyDetailsRepository {
     override fun getVacancyDetails(vacancyId: String, fromDB: Boolean): Flow<VacancyDetailsResponseState> = flow {
-        emit(if (fromDB) getFromDB(vacancyId) else (getFromService(vacancyId)))
+        emit(if (fromDB) getFromDB(vacancyId) else getFromService(vacancyId))
     }
 
     private suspend fun getFromService(vacancyId: String): VacancyDetailsResponseState {

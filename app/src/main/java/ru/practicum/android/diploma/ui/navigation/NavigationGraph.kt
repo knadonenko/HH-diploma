@@ -70,7 +70,9 @@ fun NavigationGraph(modifier: Modifier, navController: NavHostController) {
                 onBackClick = {
                     navController.popBackStack()
                 },
-                viewModel = koinViewModel<VacancyDetailsViewModel>(parameters = { parametersOf(vacancyId, vacancySource) })
+                viewModel = koinViewModel<VacancyDetailsViewModel>(parameters = {
+                    parametersOf(vacancyId, vacancySource)
+                })
             )
         }
 

@@ -78,12 +78,12 @@ class FilterWorkPlaceViewModel(
 
     fun onSaveChoice(chosenArea: FilterArea) {
         _screenState.update { WorkPlacesScreenState.Loading }
-            _filterSettings = FilterSettings(
-                area = chosenArea.id,
-                industry = _filterSettings?.industry,
-                salary = _filterSettings?.salary,
-                onlyWithSalary = _filterSettings?.onlyWithSalary
-            )
-            filterSettingsInteractor.saveFilterSettings(_filterSettings!!)
+        _filterSettings = FilterSettings(
+            area = chosenArea.id,
+            industry = _filterSettings?.industry,
+            salary = _filterSettings?.salary,
+            onlyWithSalary = _filterSettings?.onlyWithSalary
+        )
+        filterSettingsInteractor.saveFilterSettings(_filterSettings!!)
     }
 }

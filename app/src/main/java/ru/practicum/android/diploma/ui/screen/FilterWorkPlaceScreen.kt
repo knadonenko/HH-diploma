@@ -83,12 +83,8 @@ fun FilterWorkPlaceScreen(
                     }
                 )
 
-                    if (state.chosenArea != null) {
-                        Text(state.chosenArea!!.name ?: "")
-                        Spacer(modifier = Modifier.height(20.dp))
-                    }
-
-
+                else -> {}
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ import ru.practicum.android.diploma.domain.filters.api.interactor.FilterInteract
 import ru.practicum.android.diploma.domain.filters.models.FilterWorkPlaceResponseState
 import ru.practicum.android.diploma.domain.filtersettings.api.interactor.FilterSettingsInteractor
 import ru.practicum.android.diploma.domain.filtersettings.models.FilterSettings
+import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
 import ru.practicum.android.diploma.domain.vacancydetails.models.FilterArea
 import ru.practicum.android.diploma.presentation.filters.models.WorkPlacesScreenState
 
@@ -19,6 +20,12 @@ class FilterWorkPlaceViewModel(
 ) : ViewModel() {
     private val _screenState = MutableStateFlow<WorkPlacesScreenState>(WorkPlacesScreenState.Default)
     val screenState = _screenState.asStateFlow()
+
+    private var _currentSearchText = MutableStateFlow("")
+    val currentSearchText = _currentSearchText.asStateFlow()
+
+    private var _areas = mutableListOf<FilterArea>()
+//    private var _updatedArea = mutableListOf<FilterArea>()
 
     fun loadAreas() {
         if (_screenState.value !is WorkPlacesScreenState.Content) {
@@ -94,5 +101,18 @@ class FilterWorkPlaceViewModel(
             onlyWithSalary = settings?.onlyWithSalary
         )
         filterSettingsInteractor.saveFilterSettings(settings)
+    }
+
+    fun onSearchTextChange(query: String?) {
+        if (_currentSearchText.value == query) {
+            return
+        }
+
+        _currentSearchText.update { query ?: "" }
+
+    }
+
+    fun onClearSearchText() {
+        _currentSearchText.update { "" }
     }
 }

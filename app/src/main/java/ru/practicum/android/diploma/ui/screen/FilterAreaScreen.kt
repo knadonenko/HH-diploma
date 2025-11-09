@@ -9,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.presentation.filters.models.WorkPlacesScreenState
 import ru.practicum.android.diploma.presentation.filters.viewmodel.FilterWorkPlaceViewModel
@@ -39,17 +40,19 @@ fun FilterAreaScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            val state = viewModel.screenState.collectAsState().value
+            val searchQuery = viewModel.currentSearchText.collectAsStateWithLifecycle().value
             SearchField(
-                searchQuery = "",
+                searchQuery = searchQuery,
                 onQueryChange = {
-
+                    viewModel.onSearchTextChange(it)
                 },
                 placeHolder = stringResource(R.string.filter_area_search),
                 onSearchClear = {
 
                 }
             )
-            when (val state = viewModel.screenState.collectAsState().value) {
+            when (state) {
                 is WorkPlacesScreenState.Content -> {
                     RegionsList(
                         state.availableAreas.first { it == state.chosenCountry }.areas!!,

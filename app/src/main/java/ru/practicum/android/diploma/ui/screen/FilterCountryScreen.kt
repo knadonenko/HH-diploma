@@ -31,6 +31,7 @@ import ru.practicum.android.diploma.presentation.filters.viewmodel.FilterWorkPla
 import ru.practicum.android.diploma.ui.components.LoadingComponent
 import ru.practicum.android.diploma.ui.components.Placeholder
 import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
+import ru.practicum.android.diploma.ui.theme.LocalCustomColors
 import ru.practicum.android.diploma.ui.theme.LocalTypography
 import ru.practicum.android.diploma.ui.theme.paddingBase
 import ru.practicum.android.diploma.ui.theme.size18
@@ -112,7 +113,8 @@ fun RegionsList(
                 ) {
                     Text(
                         text = area.name ?: stringResource(R.string.filter_regions_other),
-                        style = LocalTypography.current.body16Regular
+                        style = LocalTypography.current.body16Regular,
+                        color = LocalCustomColors.current.text.primaryTextColors.textColor
                     )
                 }
                 Box(
@@ -124,7 +126,8 @@ fun RegionsList(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
                         contentDescription = "Arrow",
-                        modifier = Modifier.size(size18)
+                        modifier = Modifier.size(size18),
+                        tint = LocalCustomColors.current.icons.defaultIconColors,
                     )
                 }
             }

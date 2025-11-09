@@ -259,9 +259,12 @@ fun MoneyField(
             BasicTextField(
                 value = salary,
                 onValueChange = { newText ->
-                    onChangeSalary(newText.filter { it.isDigit() }
+                    onChangeSalary(
+                        newText
+                        .filter { it.isDigit() }
                         .removePrefix("0")
-                        .ifEmpty { "" })
+                        .ifEmpty { "" }
+                    )
                 },
                 modifier = Modifier
                     .fillMaxWidth()

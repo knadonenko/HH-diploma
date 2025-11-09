@@ -40,7 +40,7 @@ class VacanciesViewModel(
     }
 
     fun searchWithNewSettings() {
-        if (_currentSearchText.value.isNotEmpty()){
+        if (_currentSearchText.value.isNotEmpty()) {
             loadFirstPage()
         }
     }

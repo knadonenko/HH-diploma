@@ -27,7 +27,6 @@ import ru.practicum.android.diploma.presentation.filters.models.WorkPlacesScreen
 import ru.practicum.android.diploma.presentation.filters.viewmodel.FilterWorkPlaceViewModel
 import ru.practicum.android.diploma.ui.components.FilterItem
 import ru.practicum.android.diploma.ui.components.LoadingComponent
-import ru.practicum.android.diploma.ui.components.Placeholder
 import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
 import ru.practicum.android.diploma.ui.theme.LocalCustomColors
 import ru.practicum.android.diploma.ui.theme.LocalTypography

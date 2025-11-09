@@ -59,7 +59,8 @@ fun FilterAreaScreen(
                         onClick = { area ->
                             viewModel.chooseArea(area)
                             onBackClick()
-                        })
+                        }
+                    )
                 }
 
                 is WorkPlacesScreenState.NotFound -> {

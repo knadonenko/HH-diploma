@@ -65,7 +65,8 @@ fun FilterCountryScreen(
                     onClick = { area ->
                         viewModel.chooseCountry(area)
                         onBackClick()
-                    })
+                    }
+                )
 
                 is WorkPlacesScreenState.InternalServerError -> Placeholder(
                     R.drawable.server_error_placeholder,

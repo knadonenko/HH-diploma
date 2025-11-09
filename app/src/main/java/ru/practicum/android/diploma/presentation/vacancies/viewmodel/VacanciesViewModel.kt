@@ -40,8 +40,9 @@ class VacanciesViewModel(
     }
 
     fun searchWithNewSettings() {
-        if (_currentSearchText.value.isNotEmpty())
-            searchDebounce()
+        if (_currentSearchText.value.isNotEmpty()){
+            loadFirstPage()
+        }
     }
 
     fun onSearchTextChange(newSearchText: String?) {

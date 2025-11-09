@@ -108,14 +108,18 @@ fun FilterSettingsScreen(
                     Icon(
                         modifier = Modifier
                             .clickable(
-                                onClick = if (isAreaSelected)
-                                    viewModel::onClearArea else toFilterWorkPlace
+                                onClick = if (isAreaSelected) {
+                                    viewModel::onClearArea
+                                } else {
+                                    toFilterWorkPlace
+                                }
                             )
                             .height(size18),
-                        imageVector = if (isAreaSelected)
+                        imageVector = if (isAreaSelected) {
                             Icons.Filled.Clear
-                        else
-                            Icons.AutoMirrored.Filled.ArrowForwardIos,
+                        } else {
+                            Icons.AutoMirrored.Filled.ArrowForwardIos
+                        },
                         tint = LocalCustomColors.current.icons.defaultIconColors,
                         contentDescription = "Arrow Forward"
                     )
@@ -129,14 +133,18 @@ fun FilterSettingsScreen(
                     Icon(
                         modifier = Modifier
                             .clickable(
-                                onClick = if (isIndustrySelected)
-                                    viewModel::onClearIndustry else toFilterIndustry
+                                onClick = if (isIndustrySelected) {
+                                    viewModel::onClearIndustry
+                                } else {
+                                    toFilterIndustry
+                                }
                             )
                             .height(size18),
-                        imageVector = if (isIndustrySelected)
+                        imageVector = if (isIndustrySelected) {
                             Icons.Filled.Clear
-                        else
-                            Icons.AutoMirrored.Filled.ArrowForwardIos,
+                        } else {
+                            Icons.AutoMirrored.Filled.ArrowForwardIos
+                        },
                         tint = LocalCustomColors.current.icons.defaultIconColors,
                         contentDescription = "Arrow Forward"
                     )

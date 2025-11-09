@@ -88,6 +88,6 @@ class FilterWorkPlaceViewModel(
         val first = area.name
         val second = area.areas?.firstOrNull { it.id == area.parentId }?.name
 
-        return second?.let { "${it}, $first" } ?: first
+        return second?.let { "$it, $first" } ?: first
     }
 }

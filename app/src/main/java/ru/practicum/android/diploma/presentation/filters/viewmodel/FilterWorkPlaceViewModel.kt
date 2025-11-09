@@ -10,7 +10,6 @@ import ru.practicum.android.diploma.domain.filters.api.interactor.FilterInteract
 import ru.practicum.android.diploma.domain.filters.models.FilterWorkPlaceResponseState
 import ru.practicum.android.diploma.domain.filtersettings.api.interactor.FilterSettingsInteractor
 import ru.practicum.android.diploma.domain.filtersettings.models.FilterSettings
-import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
 import ru.practicum.android.diploma.domain.vacancydetails.models.FilterArea
 import ru.practicum.android.diploma.presentation.filters.models.WorkPlacesScreenState
 
@@ -23,9 +22,6 @@ class FilterWorkPlaceViewModel(
 
     private var _currentSearchText = MutableStateFlow("")
     val currentSearchText = _currentSearchText.asStateFlow()
-
-    private var _areas = mutableListOf<FilterArea>()
-//    private var _updatedArea = mutableListOf<FilterArea>()
 
     fun loadAreas() {
         if (_screenState.value !is WorkPlacesScreenState.Content) {

@@ -49,7 +49,7 @@ fun FilterAreaScreen(
                 },
                 placeHolder = stringResource(R.string.filter_area_search),
                 onSearchClear = {
-
+                    viewModel.onClearSearchText()
                 }
             )
             when (state) {
@@ -61,6 +61,7 @@ fun FilterAreaScreen(
                             onBackClick()
                         })
                 }
+
                 is WorkPlacesScreenState.NotFound -> {
                     R.drawable.no_vacancy_placeholder
                     stringResource(R.string.filter_no_region)

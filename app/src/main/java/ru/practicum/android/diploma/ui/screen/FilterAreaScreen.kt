@@ -24,6 +24,7 @@ fun FilterAreaScreen(
     onBackClick: () -> Unit,
     viewModel: FilterWorkPlaceViewModel
 ) {
+    viewModel.loadFilteredAreas()
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -42,6 +43,7 @@ fun FilterAreaScreen(
         ) {
             val state = viewModel.screenState.collectAsState().value
             val searchQuery = viewModel.currentSearchText.collectAsStateWithLifecycle().value
+            val items = viewModel.filteredItems
             SearchField(
                 searchQuery = searchQuery,
                 onQueryChange = {
@@ -55,7 +57,7 @@ fun FilterAreaScreen(
             when (state) {
                 is WorkPlacesScreenState.Content -> {
                     RegionsList(
-                        state.availableAreas.first { it == state.chosenCountry }.areas!!,
+                        list = items,
                         onClick = { area ->
                             viewModel.chooseArea(area)
                             onBackClick()

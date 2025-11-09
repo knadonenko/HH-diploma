@@ -67,6 +67,16 @@ fun FilterWorkPlaceScreen(
         ) {
             var state = viewModel.screenState.collectAsState().value
             when (state) {
+                is WorkPlacesScreenState.Loading -> LoadingComponent()
+                is WorkPlacesScreenState.Default -> Content(
+                    countryData = "",
+                    regionData = "",
+                    toFilterCountry = toFilterCountry,
+                    toFilterRegion = toFilterRegion,
+                    clearCountry = { },
+                    clearRegion = { viewModel.clearRegion() },
+                    onApplyClick = { }
+                )
                 is WorkPlacesScreenState.Content -> Content(
                     countryData = state.chosenCountry?.name ?: "",
                     regionData = state.chosenArea?.name ?: "",
@@ -80,6 +90,7 @@ fun FilterWorkPlaceScreen(
                     },
                     onApplyClick = { area ->
                         viewModel.onSaveChoice(area)
+                        onBackClick.invoke()
                     }
                 )
 

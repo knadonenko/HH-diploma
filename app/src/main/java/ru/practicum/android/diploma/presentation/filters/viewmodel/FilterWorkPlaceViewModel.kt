@@ -74,7 +74,7 @@ class FilterWorkPlaceViewModel(
             var oldCountry = oldState.chosenCountry
             if (oldCountry == null) {
                 val parentId = area.parentId
-                oldCountry = oldState.availableAreas.firstOrNull() {
+                oldCountry = oldState.availableAreas.firstOrNull {
                     it.id == parentId
                 }
             }

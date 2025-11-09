@@ -77,6 +77,7 @@ fun FilterWorkPlaceScreen(
                     clearRegion = { viewModel.clearRegion() },
                     onApplyClick = { }
                 )
+
                 is WorkPlacesScreenState.Content -> Content(
                     countryData = state.chosenCountry?.name ?: "",
                     regionData = state.chosenArea?.name ?: "",

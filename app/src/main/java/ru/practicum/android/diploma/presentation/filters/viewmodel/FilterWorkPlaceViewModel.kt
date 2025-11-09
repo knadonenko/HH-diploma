@@ -75,10 +75,19 @@ class FilterWorkPlaceViewModel(
         var settings = filterSettingsInteractor.getFilterSettings()
         settings = FilterSettings(
             area = chosenArea.id,
+            areaName = getAreaName(chosenArea),
             industry = settings?.industry,
+            industryName = settings?.industryName,
             salary = settings?.salary,
             onlyWithSalary = settings?.onlyWithSalary
         )
         filterSettingsInteractor.saveFilterSettings(settings)
+    }
+
+    private fun getAreaName(area: FilterArea): String? {
+        val first = area.name
+        val second = area.areas?.firstOrNull { it.id == area.parentId }?.name
+
+        return second?.let { "$it, $first" } ?: first
     }
 }

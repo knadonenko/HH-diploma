@@ -22,6 +22,8 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import org.koin.androidx.compose.koinViewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
@@ -34,6 +36,7 @@ import ru.practicum.android.diploma.ui.components.SearchField
 import ru.practicum.android.diploma.ui.components.VacancyItem
 import ru.practicum.android.diploma.ui.components.VacancyLoadingItem
 import ru.practicum.android.diploma.ui.components.topbars.MainTopBar
+import ru.practicum.android.diploma.ui.navigation.FILTER_APPLY
 import ru.practicum.android.diploma.ui.theme.floatingChipContentPadding
 import ru.practicum.android.diploma.ui.theme.floatingChipPadding
 import ru.practicum.android.diploma.ui.theme.loaderItemPadding
@@ -42,12 +45,27 @@ import ru.practicum.android.diploma.ui.theme.paddingBase
 
 @Composable
 fun MainScreen(
+    navController: NavController,
     modifier: Modifier,
     onFilterClick: () -> Unit,
     onDetailsClick: (String) -> Unit,
     viewModel: VacanciesViewModel = koinViewModel<VacanciesViewModel>()
 ) {
+    val backStackEntry = navController.currentBackStackEntryAsState()
+
+    LaunchedEffect(backStackEntry.value) {
+        viewModel.loadFilterSettings()
+
+        backStackEntry.value?.savedStateHandle?.get<Boolean>(FILTER_APPLY)?.let { isApply ->
+            if (isApply) {
+                viewModel.searchWithNewSettings()
+                backStackEntry.value?.savedStateHandle?.remove<Boolean>(FILTER_APPLY)
+            }
+        }
+    }
+
     val query = viewModel.currentSearchText.collectAsStateWithLifecycle().value
+
     Scaffold(
         modifier = Modifier,
         topBar = {

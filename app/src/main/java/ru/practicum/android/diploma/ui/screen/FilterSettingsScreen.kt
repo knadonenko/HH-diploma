@@ -17,6 +17,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
@@ -27,6 +28,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,7 +45,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.presentation.filters.viewmodel.FilterSettingsViewModel
 import ru.practicum.android.diploma.ui.components.FilterItem
 import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
 import ru.practicum.android.diploma.ui.theme.LocalCustomColors
@@ -65,17 +70,19 @@ import ru.practicum.android.diploma.ui.theme.white
 @Composable
 fun FilterSettingsScreen(
     modifier: Modifier,
-    onBackClick: () -> Unit,
+    onBackClick: (Boolean) -> Unit,
     toFilterWorkPlace: () -> Unit,
-    toFilterIndustry: () -> Unit
+    toFilterIndustry: () -> Unit,
+    viewModel: FilterSettingsViewModel = koinViewModel()
 ) {
+    LaunchedEffect(Unit) { viewModel.loadFilterSettings() }
+
     Scaffold(
         modifier = modifier,
         topBar = {
             FilterTopBar(
-                stringResource(id = R.string.top_bar_label_filter_settings),
-                onBackClick
-            )
+                stringResource(id = R.string.top_bar_label_filter_settings)
+            ) { onBackClick(false) }
         }
     ) { padding ->
         Column(
@@ -84,15 +91,31 @@ fun FilterSettingsScreen(
                 .fillMaxSize()
                 .padding(paddingBase),
         ) {
-            // todo переделать на viewmodel вместо заглушки
-            val filtersApplied = false
+            val areaName = viewModel.areaName.collectAsStateWithLifecycle().value
+            val industryName = viewModel.industryName.collectAsStateWithLifecycle().value
+            val salary = viewModel.salary.collectAsStateWithLifecycle().value
+            val onlyWithSalary = viewModel.onlyWithSalary.collectAsStateWithLifecycle().value
+            val hasSettings = viewModel.hasSettings.collectAsStateWithLifecycle().value
+            val hasSettingsChange = viewModel.hasSettingsChange.collectAsStateWithLifecycle().value
+
+            val isAreaSelected = !areaName.isNullOrEmpty()
+            val isIndustrySelected = !industryName.isNullOrEmpty()
+
             FilterItem(
                 modifier = Modifier.clickable(onClick = toFilterWorkPlace),
                 stringResource(R.string.filter_work_place_label),
                 composableElement = {
                     Icon(
-                        modifier = Modifier.height(size18),
-                        imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                        modifier = Modifier
+                            .clickable(
+                                onClick = if (isAreaSelected)
+                                    viewModel::onClearArea else toFilterWorkPlace
+                            )
+                            .height(size18),
+                        imageVector = if (isAreaSelected)
+                            Icons.Filled.Clear
+                        else
+                            Icons.AutoMirrored.Filled.ArrowForwardIos,
                         tint = LocalCustomColors.current.icons.defaultIconColors,
                         contentDescription = "Arrow Forward"
                     )
@@ -104,8 +127,16 @@ fun FilterSettingsScreen(
                 stringResource(R.string.filter_industry_label),
                 composableElement = {
                     Icon(
-                        modifier = Modifier.height(size18),
-                        imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                        modifier = Modifier
+                            .clickable(
+                                onClick = if (isIndustrySelected)
+                                    viewModel::onClearIndustry else toFilterIndustry
+                            )
+                            .height(size18),
+                        imageVector = if (isIndustrySelected)
+                            Icons.Filled.Clear
+                        else
+                            Icons.AutoMirrored.Filled.ArrowForwardIos,
                         tint = LocalCustomColors.current.icons.defaultIconColors,
                         contentDescription = "Arrow Forward"
                     )
@@ -113,16 +144,19 @@ fun FilterSettingsScreen(
                 color = LocalCustomColors.current.text.secondaryTextColors.textColor
             )
             Spacer(modifier = Modifier.height(paddingBase))
-            MoneyField("", { })
-            val checked = remember { mutableStateOf(false) }
+            MoneyField(
+                salary ?: "",
+                viewModel::onChangeSalary
+            ) { viewModel.onChangeSalary(null) }
+            val checked = onlyWithSalary
             FilterItem(
                 modifier = Modifier.padding(top = padding16),
                 stringResource(R.string.filter_without_salary),
                 composableElement = {
                     Checkbox(
-                        checked = checked.value,
+                        checked = checked,
                         onCheckedChange = { value ->
-                            checked.value = value
+                            viewModel.onChangeOnlyWithSalary(value)
                         },
                         colors = CheckboxDefaults.colors(
                             uncheckedColor = blue,
@@ -133,16 +167,17 @@ fun FilterSettingsScreen(
                 },
                 color = LocalCustomColors.current.text.primaryTextColors.textColor
             )
-            if (filtersApplied) {
-                Spacer(modifier = Modifier.weight(WEIGHT_1F))
 
+            Spacer(modifier = Modifier.weight(WEIGHT_1F))
+
+            if (hasSettingsChange) {
                 Button(
                     modifier = Modifier
                         .height(size60)
                         .padding(horizontal = padding16)
                         .fillMaxSize(),
                     shape = RoundedCornerShape(cornerRadius),
-                    onClick = { },
+                    onClick = { onBackClick(true) },
                     content = {
                         Text(
                             text = stringResource(R.string.filter_apply_button),
@@ -150,9 +185,13 @@ fun FilterSettingsScreen(
                         )
                     }
                 )
+            } else {
+                Spacer(modifier = Modifier.height(size60))
+            }
 
-                Spacer(modifier = Modifier.height(size8))
+            Spacer(modifier = Modifier.height(size8))
 
+            if (hasSettings) {
                 Button(
                     modifier = Modifier
                         .height(size60)
@@ -163,7 +202,7 @@ fun FilterSettingsScreen(
                         contentColor = red,
                         containerColor = Transparent
                     ),
-                    onClick = { },
+                    onClick = viewModel::onClearAll,
                     content = {
                         Text(
                             text = stringResource(R.string.filter_reset_button),
@@ -181,11 +220,10 @@ private const val WEIGHT_1F = 1F
 @Composable
 fun MoneyField(
     salary: String,
+    onChangeSalary: (String) -> Unit,
     onSalaryClear: () -> Unit
 ) {
     var isFocused by remember { mutableStateOf(false) }
-    // todo переделать как viewmodel будет готов
-    val text = remember { mutableStateOf("") }
 
     Row(
         modifier = Modifier
@@ -211,8 +249,12 @@ fun MoneyField(
                 overflow = TextOverflow.Ellipsis,
             )
             BasicTextField(
-                value = text.value,
-                onValueChange = { newText -> text.value = newText },
+                value = salary,
+                onValueChange = { newText ->
+                    onChangeSalary(newText.filter { it.isDigit() }
+                        .removePrefix("0")
+                        .ifEmpty { "" })
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .onFocusChanged { isFocused = it.isFocused },
@@ -224,7 +266,7 @@ fun MoneyField(
                 ),
                 decorationBox = { innerTextField ->
                     TextFieldDefaults.DecorationBox(
-                        value = text.value,
+                        value = salary,
                         innerTextField = innerTextField,
                         singleLine = true,
                         enabled = true,
@@ -249,7 +291,7 @@ fun MoneyField(
                 }
             )
         }
-        if (!text.value.isEmpty()) {
+        if (!salary.isEmpty()) {
             Icon(
                 modifier = Modifier
                     .padding(end = 20.dp)

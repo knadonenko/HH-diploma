@@ -58,12 +58,12 @@ fun FilterWorkPlaceScreen(
             when (val state = viewModel.screenState.collectAsState().value) {
                 is WorkPlacesScreenState.Content -> {
                     if (state.chosenCountry != null) {
-                        Text(state.chosenCountry!!.name ?: "")
+                        Text(state.chosenCountry.name ?: "")
                         Spacer(modifier = Modifier.height(20.dp))
                     }
 
                     if (state.chosenArea != null) {
-                        Text(state.chosenArea!!.name ?: "")
+                        Text(state.chosenArea.name ?: "")
                         Spacer(modifier = Modifier.height(20.dp))
                     }
 

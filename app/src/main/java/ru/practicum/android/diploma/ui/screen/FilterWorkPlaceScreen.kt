@@ -22,9 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.domain.vacancydetails.models.FilterArea
 import ru.practicum.android.diploma.presentation.filters.models.WorkPlacesScreenState
 import ru.practicum.android.diploma.presentation.filters.viewmodel.FilterWorkPlaceViewModel
 import ru.practicum.android.diploma.ui.components.FilterItem
+import ru.practicum.android.diploma.ui.components.LoadingComponent
 import ru.practicum.android.diploma.ui.components.Placeholder
 import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
 import ru.practicum.android.diploma.ui.theme.LocalCustomColors
@@ -76,14 +78,14 @@ fun FilterWorkPlaceScreen(
                     },
                     clearRegion = {
                         viewModel.clearRegion()
+                    },
+                    onApplyClick = { area ->
+                        viewModel.onSaveChoice(area)
                     }
                 )
 
                 else -> {
-                    Placeholder(
-                        R.drawable.location_error_placeholder,
-                        stringResource(R.string.no_regions_error)
-                    )
+                    LoadingComponent()
                 }
             }
 
@@ -100,72 +102,75 @@ fun Content(
     toFilterRegion: () -> Unit,
     clearCountry: () -> Unit,
     clearRegion: () -> Unit,
+    onApplyClick: (FilterArea) -> Unit
 ) {
-    Spacer(modifier = Modifier.height(size8))
-    FilterItem(
-        modifier = Modifier.clickable(onClick = toFilterCountry),
-        stringResource(R.string.filter_country_label),
-        data = countryData,
-        composableElement = {
-            if (countryData.isEmpty()) {
-                Icon(
-                    modifier = Modifier.height(size18),
-                    imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
-                    tint = LocalCustomColors.current.icons.defaultIconColors,
-                    contentDescription = "Arrow Forward"
-                )
-            } else {
-                Icon(
-                    modifier = Modifier
-                        .size(size18)
-                        .clickable { clearCountry() },
-                    imageVector = Icons.Default.Clear,
-                    tint = LocalCustomColors.current.icons.defaultIconColors,
-                    contentDescription = "Clear"
-                )
-            }
-        },
-        color = LocalCustomColors.current.text.secondaryTextColors.textColor
-    )
-    FilterItem(
-        modifier = Modifier.clickable(onClick = toFilterRegion),
-        stringResource(R.string.filter_area_label),
-        data = regionData,
-        composableElement = {
-            if (regionData.isEmpty()) {
-                Icon(
-                    modifier = Modifier.height(size18),
-                    imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
-                    tint = LocalCustomColors.current.icons.defaultIconColors,
-                    contentDescription = "Arrow Forward"
-                )
-            } else {
-                Icon(
-                    modifier = Modifier
-                        .size(size18)
-                        .clickable { clearRegion() },
-                    imageVector = Icons.Default.Clear,
-                    tint = LocalCustomColors.current.icons.defaultIconColors,
-                    contentDescription = "Clear"
-                )
-            }
-        },
-        color = LocalCustomColors.current.text.secondaryTextColors.textColor
-    )
-    Spacer(modifier = Modifier.height(size8))
-    if (!countryData.isEmpty() || !regionData.isEmpty()) {
-        Button(
-            modifier = Modifier
-                .height(size60)
-                .fillMaxSize(),
-            shape = RoundedCornerShape(cornerRadius),
-            onClick = { },
-            content = {
-                Text(
-                    text = stringResource(R.string.filter_choose_label),
-                    style = LocalTypography.current.body16Medium
-                )
-            }
+    Column {
+        Spacer(modifier = Modifier.height(size8))
+        FilterItem(
+            modifier = Modifier.clickable(onClick = toFilterCountry),
+            stringResource(R.string.filter_country_label),
+            data = countryData,
+            composableElement = {
+                if (countryData.isEmpty()) {
+                    Icon(
+                        modifier = Modifier.height(size18),
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                        tint = LocalCustomColors.current.icons.defaultIconColors,
+                        contentDescription = "Arrow Forward"
+                    )
+                } else {
+                    Icon(
+                        modifier = Modifier
+                            .size(size18)
+                            .clickable { clearCountry() },
+                        imageVector = Icons.Default.Clear,
+                        tint = LocalCustomColors.current.icons.defaultIconColors,
+                        contentDescription = "Clear"
+                    )
+                }
+            },
+            color = LocalCustomColors.current.text.secondaryTextColors.textColor
         )
+        FilterItem(
+            modifier = Modifier.clickable(onClick = toFilterRegion),
+            stringResource(R.string.filter_area_label),
+            data = regionData,
+            composableElement = {
+                if (regionData.isEmpty()) {
+                    Icon(
+                        modifier = Modifier.height(size18),
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                        tint = LocalCustomColors.current.icons.defaultIconColors,
+                        contentDescription = "Arrow Forward"
+                    )
+                } else {
+                    Icon(
+                        modifier = Modifier
+                            .size(size18)
+                            .clickable { clearRegion() },
+                        imageVector = Icons.Default.Clear,
+                        tint = LocalCustomColors.current.icons.defaultIconColors,
+                        contentDescription = "Clear"
+                    )
+                }
+            },
+            color = LocalCustomColors.current.text.secondaryTextColors.textColor
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        if (!countryData.isEmpty() || !regionData.isEmpty()) {
+            Button(
+                modifier = Modifier
+                    .height(size60)
+                    .fillMaxSize(),
+                shape = RoundedCornerShape(cornerRadius),
+                onClick = { onApplyClick },
+                content = {
+                    Text(
+                        text = stringResource(R.string.filter_choose_label),
+                        style = LocalTypography.current.body16Medium
+                    )
+                }
+            )
+        }
     }
 }

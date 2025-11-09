@@ -11,9 +11,11 @@ import ru.practicum.android.diploma.data.network.consts.ResponseStates.NO_INTERN
 import ru.practicum.android.diploma.data.network.consts.ResponseStates.SUCCESS
 import ru.practicum.android.diploma.data.network.consts.ResponseStates.UNAUTHORIZED
 import ru.practicum.android.diploma.data.network.request.Request
+import ru.practicum.android.diploma.data.network.response.AreasResponse
 import ru.practicum.android.diploma.data.network.response.IndustriesResponse
 import ru.practicum.android.diploma.domain.filters.api.repository.FilterRepository
 import ru.practicum.android.diploma.domain.filters.models.FilterIndustryResponseState
+import ru.practicum.android.diploma.domain.filters.models.FilterWorkPlaceResponseState
 
 class FilterRepositoryImpl(
     private val networkClient: NetworkClient,
@@ -43,6 +45,32 @@ class FilterRepositoryImpl(
 
             NO_INTERNET_CONNECTION -> {
                 emit(FilterIndustryResponseState.NoInternetConnection)
+            }
+        }
+    }
+
+    override fun getAreas(): Flow<FilterWorkPlaceResponseState> = flow {
+        val response = networkClient.doRequest(Request.AreasRequest)
+
+        when (response.resultCode) {
+            SUCCESS -> {
+                val areasResponse = response as AreasResponse
+                val areas = areasResponse.results.mapNotNull { area ->
+                    filterConverter.map(area)
+                }
+                emit(FilterWorkPlaceResponseState.Content(areas))
+            }
+
+            NOT_FOUND, UNAUTHORIZED, BAD_REQUEST -> {
+                emit(FilterWorkPlaceResponseState.BadRequest)
+            }
+
+            INTERNAL_SERVER_ERROR -> {
+                emit(FilterWorkPlaceResponseState.InternalServerError)
+            }
+
+            NO_INTERNET_CONNECTION -> {
+                emit(FilterWorkPlaceResponseState.NoInternetConnection)
             }
         }
     }

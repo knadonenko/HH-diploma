@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.ui.screen
 
-import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,17 +11,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import org.koin.androidx.compose.koinViewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.presentation.workplaces.models.WorkPlacesScreenState
-import ru.practicum.android.diploma.presentation.workplaces.viewmodel.WorkPlacesViewModel
-import ru.practicum.android.diploma.ui.components.LoadingComponent
+import ru.practicum.android.diploma.presentation.filters.models.WorkPlacesScreenState
+import ru.practicum.android.diploma.presentation.filters.viewmodel.FilterWorkPlaceViewModel
 import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
 import ru.practicum.android.diploma.ui.theme.paddingBase
 
@@ -29,12 +25,8 @@ import ru.practicum.android.diploma.ui.theme.paddingBase
 fun FilterCountryScreen(
     modifier: Modifier,
     onBackClick: () -> Unit,
-    viewModel: WorkPlacesViewModel = koinViewModel<WorkPlacesViewModel>()
+    viewModel: FilterWorkPlaceViewModel
 ) {
-    val context = LocalContext.current
-
-    LaunchedEffect(Unit) { viewModel.getAreas() }
-
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -58,15 +50,11 @@ fun FilterCountryScreen(
                             .fillMaxSize(),
                         verticalArrangement = Arrangement.Top
                     ) {
-                        items(state.data) { area ->
-                            Text(text = area.name ?: "Daleko")
-
-                            area.areas?.forEach { region ->
-                                Text(
-                                    text = region.name ?: "Tuta",
-                                    modifier = Modifier.padding(start = paddingBase)
-                                )
-                            }
+                        items(state.availableAreas) { area ->
+                            Text(
+                                modifier = Modifier.clickable(onClick = { viewModel.chooseCountry(area) }),
+                                text = area.name ?: "Daleko"
+                            )
                         }
 
                         item {
@@ -77,19 +65,7 @@ fun FilterCountryScreen(
                     }
                 }
 
-                is WorkPlacesScreenState.Default -> {}
-                is WorkPlacesScreenState.Loading -> LoadingComponent()
-                is WorkPlacesScreenState.NotFound -> {
-                    Toast.makeText(context, stringResource(R.string.empty_favorites), Toast.LENGTH_SHORT).show()
-                }
-
-                is WorkPlacesScreenState.NoInternetConnection -> {
-                    Toast.makeText(context, stringResource(R.string.no_internet), Toast.LENGTH_SHORT).show()
-                }
-
-                is WorkPlacesScreenState.InternalServerError -> {
-                    Toast.makeText(context, stringResource(R.string.server_error), Toast.LENGTH_SHORT).show()
-                }
+                else -> onBackClick.invoke()
             }
         }
     }

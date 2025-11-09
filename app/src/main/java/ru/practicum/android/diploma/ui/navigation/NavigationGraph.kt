@@ -35,6 +35,7 @@ fun NavigationGraph(
     ) {
         composable(Routes.MAIN) {
             MainScreen(
+                navController,
                 modifier,
                 onFilterClick = {
                     navController.navigate(Routes.FILTER_SETTINGS)
@@ -88,7 +89,8 @@ fun NavigationGraph(
         composable(Routes.FILTER_SETTINGS) {
             FilterSettingsScreen(
                 modifier,
-                onBackClick = {
+                onBackClick = { isApply ->
+                    navController.previousBackStackEntry?.savedStateHandle?.set(FILTER_APPLY, isApply)
                     navController.popBackStack()
                 },
                 toFilterWorkPlace = {
@@ -147,6 +149,6 @@ fun NavigationGraph(
     }
 }
 
-private const val COUNTRY_ID = "countryId"
 private const val VACANCY_ID = "vacancyId"
 private const val VACANCY_SOURCE = "vacancySource"
+const val FILTER_APPLY = "filterApply"

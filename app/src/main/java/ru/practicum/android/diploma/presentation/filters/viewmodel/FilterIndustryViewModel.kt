@@ -64,7 +64,6 @@ class FilterIndustryViewModel(
         _screenState.update {
             industries?.let {
                 _filterSettings?.industry?.apply {
-                    _isSelected.update { true }
                     _selectedId.update { _filterSettings!!.industry!! }
                 }
 
@@ -130,7 +129,9 @@ class FilterIndustryViewModel(
     fun onSaveChoice() {
         _filterSettings = FilterSettings(
             area = _filterSettings?.area,
+            areaName = _filterSettings?.areaName,
             industry = _selectedId.value,
+            industryName = _industries.first { it.id == _selectedId.value }.name,
             salary = _filterSettings?.salary,
             onlyWithSalary = _filterSettings?.onlyWithSalary
         )

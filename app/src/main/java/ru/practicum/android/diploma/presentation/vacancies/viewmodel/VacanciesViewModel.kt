@@ -35,6 +35,16 @@ class VacanciesViewModel(
     private var _vacancies = mutableListOf<VacanciesInfo>()
     private var _totalCount: Int = 0
 
+    fun loadFilterSettings() {
+        _filterSettings = filterSettingsInteractor.getFilterSettings()
+    }
+
+    fun searchWithNewSettings() {
+        if (_currentSearchText.value.isNotEmpty()) {
+            loadFirstPage()
+        }
+    }
+
     fun onSearchTextChange(newSearchText: String?) {
         if (_currentSearchText.value == newSearchText) {
             return

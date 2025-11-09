@@ -70,6 +70,20 @@ class FilterWorkPlaceViewModel(
         _screenState.update { WorkPlacesScreenState.Default }
     }
 
+    fun clearRegion() {
+        val oldState = _screenState.value as WorkPlacesScreenState.Content
+        _screenState.update {
+            WorkPlacesScreenState.Content(oldState.availableAreas, oldState.chosenCountry, null)
+        }
+    }
+
+    fun clearCountry() {
+        val oldState = _screenState.value as WorkPlacesScreenState.Content
+        _screenState.update {
+            WorkPlacesScreenState.Content(oldState.availableAreas, null, oldState.chosenArea)
+        }
+    }
+
     fun onSaveChoice(chosenArea: FilterArea) {
         _screenState.update { WorkPlacesScreenState.Loading }
         var settings = filterSettingsInteractor.getFilterSettings()

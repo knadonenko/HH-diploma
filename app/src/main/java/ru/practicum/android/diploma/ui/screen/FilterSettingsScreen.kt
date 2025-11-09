@@ -261,9 +261,9 @@ fun MoneyField(
                 onValueChange = { newText ->
                     onChangeSalary(
                         newText
-                        .filter { it.isDigit() }
-                        .removePrefix("0")
-                        .ifEmpty { "" }
+                            .filter { it.isDigit() }
+                            .removePrefix("0")
+                            .ifEmpty { "" }
                     )
                 },
                 modifier = Modifier

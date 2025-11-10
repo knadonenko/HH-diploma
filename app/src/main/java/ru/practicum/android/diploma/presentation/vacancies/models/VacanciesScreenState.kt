@@ -11,10 +11,9 @@ sealed class VacanciesScreenState {
         val data: List<VacanciesInfo>,
         val isLastPage: Boolean,
         val totalCount: Int,
-        val isNextPageLoading: Boolean
-    ) :
-        VacanciesScreenState()
-
+        val isNextPageLoading: Boolean,
+        val toast: Int?
+    ) : VacanciesScreenState()
     data object NotFound : VacanciesScreenState()
     data object NoInternetConnection : VacanciesScreenState()
     data object InternalServerError : VacanciesScreenState()

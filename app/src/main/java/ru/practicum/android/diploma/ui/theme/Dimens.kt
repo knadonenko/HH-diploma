@@ -43,6 +43,7 @@ val size8 = 8.dp
 val size18 = 18.dp
 val size48 = 48.dp
 val size60 = 60.dp
+val size70 = 70.dp
 
 // Icons/Images
 val cornerRadius = 12.dp

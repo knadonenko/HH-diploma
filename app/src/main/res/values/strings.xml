@@ -50,6 +50,8 @@
     <string name="email_subtitle">Электронная почта</string>
     <string name="skill_prefix">·</string>
     <string name="details_error">Вакансия не найдена или удалена</string>
+    <string name="toast_no_internet">Нет интернет-соединения</string>
+    <string name="toast_error">Произошла ошибка загрузки, попробуйте ещё раз</string>
 
     <!--SearchLabels-->
     <string name="enter_request">Введите запрос</string>

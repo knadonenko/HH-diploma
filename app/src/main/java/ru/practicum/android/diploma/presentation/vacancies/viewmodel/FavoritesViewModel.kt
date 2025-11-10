@@ -28,7 +28,7 @@ class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor) :
                             employerLogo = vacancy.employer?.logo,
                             salaryFrom = vacancy.salary?.from,
                             salaryTo = vacancy.salary?.to,
-                            salaryCurrencySymbol = vacancy.salary?.currency
+                            salaryCurrencySymbol = vacancy.salary?.currencySymbol
                         )
                     }
                     _screenState.update { FavoritesScreenState.Content(data) }

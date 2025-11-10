@@ -65,11 +65,12 @@ fun MainScreen(
     }
 
     val query = viewModel.currentSearchText.collectAsStateWithLifecycle().value
+    val settingsApplied = viewModel.hasSettings.collectAsStateWithLifecycle().value
 
     Scaffold(
         modifier = Modifier,
         topBar = {
-            MainTopBar(onFilterClick)
+            MainTopBar(onFilterClick, settingsApplied)
         }
     ) { padding ->
         Column(

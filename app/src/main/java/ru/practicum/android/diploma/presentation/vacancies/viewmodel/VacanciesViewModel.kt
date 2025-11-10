@@ -29,14 +29,17 @@ class VacanciesViewModel(
     private var _filterSettings: FilterSettings? = null
     private var _currentSearchText = MutableStateFlow("")
     val currentSearchText = _currentSearchText.asStateFlow()
+    private val _hasSettings = MutableStateFlow(false)
 
     private var _searchJob: Job? = null
     private var _loadNextPageJob: Job? = null
     private var _vacancies = mutableListOf<VacanciesInfo>()
     private var _totalCount: Int = 0
+    val hasSettings = _hasSettings.asStateFlow()
 
     fun loadFilterSettings() {
         _filterSettings = filterSettingsInteractor.getFilterSettings()
+        _hasSettings.value = _filterSettings != null
     }
 
     fun searchWithNewSettings() {

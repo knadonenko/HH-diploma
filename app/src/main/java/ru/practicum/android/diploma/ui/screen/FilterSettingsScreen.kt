@@ -55,7 +55,6 @@ import ru.practicum.android.diploma.ui.theme.LocalCustomColors
 import ru.practicum.android.diploma.ui.theme.LocalTypography
 import ru.practicum.android.diploma.ui.theme.blue
 import ru.practicum.android.diploma.ui.theme.cornerRadius
-import ru.practicum.android.diploma.ui.theme.grey500
 import ru.practicum.android.diploma.ui.theme.padding0
 import ru.practicum.android.diploma.ui.theme.padding16
 import ru.practicum.android.diploma.ui.theme.paddingBase
@@ -252,7 +251,7 @@ fun MoneyField(
                 color = if (isFocused) {
                     blue
                 } else {
-                    grey500
+                    MaterialTheme.colorScheme.onSurfaceVariant
                 },
                 overflow = TextOverflow.Ellipsis,
             )

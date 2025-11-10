@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.presentation.filters.viewmodel
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +21,14 @@ class FilterWorkPlaceViewModel(
     private val _screenState = MutableStateFlow<WorkPlacesScreenState>(WorkPlacesScreenState.Default)
     val screenState = _screenState.asStateFlow()
 
+    private var _currentSearchText = MutableStateFlow("")
+    val currentSearchText = _currentSearchText.asStateFlow()
+
+    var areas = mutableListOf<FilterArea>()
+    private val _allAreaItems = mutableStateOf<List<FilterArea>>(emptyList())
+    private var _filteredAreas = mutableStateOf<List<FilterArea>>(emptyList())
+    val filteredItems: List<FilterArea> get() = _filteredAreas.value
+
     fun loadAreas() {
         if (_screenState.value !is WorkPlacesScreenState.Content) {
             _screenState.update { WorkPlacesScreenState.Loading }
@@ -29,6 +38,8 @@ class FilterWorkPlaceViewModel(
                         is FilterWorkPlaceResponseState.Content -> {
                             if (response.result.isNotEmpty()) {
                                 _screenState.update { WorkPlacesScreenState.Content(response.result) }
+                                val state = _screenState.value as WorkPlacesScreenState.Content
+                                areas = state.availableAreas.toMutableList()
                             } else {
                                 _screenState.update { WorkPlacesScreenState.NotFound }
                             }
@@ -60,14 +71,35 @@ class FilterWorkPlaceViewModel(
     fun chooseArea(area: FilterArea) {
         if (_screenState.value is WorkPlacesScreenState.Content) {
             val oldState = _screenState.value as WorkPlacesScreenState.Content
+            var oldCountry = oldState.chosenCountry
+            if (oldCountry == null) {
+                val parentId = area.parentId
+                oldCountry = oldState.availableAreas.firstOrNull {
+                    it.id == parentId
+                }
+            }
             _screenState.update {
-                WorkPlacesScreenState.Content(oldState.availableAreas, oldState.chosenCountry, area)
+                WorkPlacesScreenState.Content(oldState.availableAreas, oldCountry, area)
             }
         }
     }
 
     fun cleanLoadedAreas() {
         _screenState.update { WorkPlacesScreenState.Default }
+    }
+
+    fun clearRegion() {
+        val oldState = _screenState.value as WorkPlacesScreenState.Content
+        _screenState.update {
+            WorkPlacesScreenState.Content(oldState.availableAreas, oldState.chosenCountry, null)
+        }
+    }
+
+    fun clearCountry() {
+        val oldState = _screenState.value as WorkPlacesScreenState.Content
+        _screenState.update {
+            WorkPlacesScreenState.Content(oldState.availableAreas, null, oldState.chosenArea)
+        }
     }
 
     fun onSaveChoice(chosenArea: FilterArea) {
@@ -89,5 +121,36 @@ class FilterWorkPlaceViewModel(
         val second = area.areas?.firstOrNull { it.id == area.parentId }?.name
 
         return second?.let { "$it, $first" } ?: first
+    }
+
+    fun onSearchTextChange(query: String) {
+        if (_currentSearchText.value == query) {
+            return
+        }
+
+        if (_currentSearchText.value.isEmpty()) {
+            loadFilteredAreas()
+        }
+
+        _currentSearchText.update { query }
+
+        _filteredAreas.value = _allAreaItems.value.filter { area ->
+            area.name!!.contains(query, ignoreCase = true)
+        }
+    }
+
+    fun onClearSearchText() {
+        _currentSearchText.update { "" }
+        loadFilteredAreas()
+    }
+
+    fun loadFilteredAreas() {
+        val state = _screenState.value as WorkPlacesScreenState.Content
+        _allAreaItems.value = if (state.chosenCountry == null) {
+            state.availableAreas.flatMap { it.areas ?: emptyList() }.toMutableList()
+        } else {
+            state.availableAreas.first { it == state.chosenCountry }.areas!!.toMutableList()
+        }
+        _filteredAreas.value = _allAreaItems.value
     }
 }

@@ -15,11 +15,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import okhttp3.internal.immutableListOf
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.components.topbars.CommonTopBar
 import ru.practicum.android.diploma.ui.theme.LocalTypography
@@ -39,7 +41,7 @@ fun TeamScreen(modifier: Modifier) {
 
         val typography = LocalTypography.current
         val uriHandler = LocalUriHandler.current
-        val team = listOf(
+        val team = immutableListOf(
             Teammate(
                 stringResource(R.string.team_konstantin),
                 stringResource(R.string.team_konstantin_link),
@@ -112,6 +114,7 @@ fun TeamScreen(modifier: Modifier) {
     }
 }
 
+@Immutable
 data class Teammate(
     val name: String,
     val link: String,

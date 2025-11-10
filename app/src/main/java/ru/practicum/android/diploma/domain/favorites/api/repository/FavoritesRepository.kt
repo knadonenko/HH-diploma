@@ -9,9 +9,9 @@ interface FavoritesRepository {
 
     suspend fun deleteFromFavorites(vacancy: Vacancy)
 
-    suspend fun getFavorites(): Flow<List<Vacancy>>
+    fun getFavorites(): Flow<List<Vacancy>>
 
-    suspend fun getFavoritesById(id: String): Flow<Vacancy?>
+    fun getFavoritesById(id: String): Flow<Vacancy?>
 
     suspend fun checkIsFavorite(id: String): Boolean
 

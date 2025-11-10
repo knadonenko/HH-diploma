@@ -152,8 +152,10 @@ class VacanciesViewModel(
         }
     }
 
-    private fun updateFoundState(isNextPageLoading: Boolean = false,
-                                 toast: Int? = null) {
+    private fun updateFoundState(
+        isNextPageLoading: Boolean = false,
+        toast: Int? = null
+    ) {
         _screenState.update {
             VacanciesScreenState.Found(
                 data = _vacancies.toList(),

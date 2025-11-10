@@ -109,7 +109,7 @@ fun MainContent(viewModel: VacanciesViewModel, onDetailsClick: (String) -> Unit)
 
         is VacanciesScreenState.Found -> {
             LaunchedEffect(state.toast) {
-                if(state.toast != null) {
+                if (state.toast != null) {
                     Toast.makeText(context, state.toast, Toast.LENGTH_SHORT).show()
                     viewModel.dismissToast()
                 }

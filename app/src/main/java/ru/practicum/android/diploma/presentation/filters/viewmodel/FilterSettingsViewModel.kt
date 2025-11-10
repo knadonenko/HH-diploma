@@ -70,7 +70,7 @@ class FilterSettingsViewModel(
 
     private fun hasSettings(): Boolean {
         return !_areaName.value.isNullOrEmpty() || !_industryName.value.isNullOrEmpty()
-            || _salary.value != null || _onlyWithSalary.value
+            || !_salary.value.isNullOrEmpty() || _onlyWithSalary.value
     }
 
     private fun hasSettingsChange(): Boolean {

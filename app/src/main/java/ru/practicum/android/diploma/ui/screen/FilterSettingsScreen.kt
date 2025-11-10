@@ -102,7 +102,8 @@ fun FilterSettingsScreen(
 
             FilterItem(
                 modifier = Modifier.clickable(onClick = toFilterWorkPlace),
-                stringResource(R.string.filter_work_place_label),
+                text = stringResource(R.string.filter_work_place_label),
+                data = areaName ?: "",
                 composableElement = {
                     Icon(
                         modifier = Modifier
@@ -127,7 +128,8 @@ fun FilterSettingsScreen(
             )
             FilterItem(
                 modifier = Modifier.clickable(onClick = toFilterIndustry),
-                stringResource(R.string.filter_industry_label),
+                text = stringResource(R.string.filter_industry_label),
+                data = industryName ?: "",
                 composableElement = {
                     Icon(
                         modifier = Modifier

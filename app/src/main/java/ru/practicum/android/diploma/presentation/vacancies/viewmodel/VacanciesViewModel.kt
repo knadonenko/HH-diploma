@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.filtersettings.api.interactor.FilterSettingsInteractor
 import ru.practicum.android.diploma.domain.filtersettings.models.FilterSettings
 import ru.practicum.android.diploma.domain.vacanceis.api.interactor.VacanciesInteractor
@@ -29,14 +30,17 @@ class VacanciesViewModel(
     private var _filterSettings: FilterSettings? = null
     private var _currentSearchText = MutableStateFlow("")
     val currentSearchText = _currentSearchText.asStateFlow()
+    private val _hasSettings = MutableStateFlow(false)
 
     private var _searchJob: Job? = null
     private var _loadNextPageJob: Job? = null
     private var _vacancies = mutableListOf<VacanciesInfo>()
     private var _totalCount: Int = 0
+    val hasSettings = _hasSettings.asStateFlow()
 
     fun loadFilterSettings() {
         _filterSettings = filterSettingsInteractor.getFilterSettings()
+        _hasSettings.value = _filterSettings != null
     }
 
     fun searchWithNewSettings() {
@@ -92,19 +96,8 @@ class VacanciesViewModel(
         if (_isLastPage || _loadNextPageJob?.isActive == true) {
             return
         }
-
         _currentPage++
-
-        val currentData = _vacancies.toList()
-        _screenState.update {
-            VacanciesScreenState.Found(
-                data = currentData,
-                isLastPage = _isLastPage,
-                totalCount = _totalCount,
-                isNextPageLoading = true
-            )
-        }
-
+        updateFoundState(isNextPageLoading = true, toast = null)
         _loadNextPageJob = viewModelScope.launch {
             vacanciesInteractor
                 .searchVacancies(_currentSearchText.value, _currentPage, _filterSettings)
@@ -115,6 +108,10 @@ class VacanciesViewModel(
         }
     }
 
+    fun dismissToast() {
+        updateFoundState(toast = null)
+    }
+
     private fun handleSearchResult(responseState: VacanciesResponseState, isFirstPage: Boolean) {
         when (responseState) {
             is VacanciesResponseState.BadRequest,
@@ -123,7 +120,7 @@ class VacanciesViewModel(
                     _screenState.update { VacanciesScreenState.InternalServerError }
                 } else {
                     _currentPage--
-                    updateFoundState()
+                    updateFoundState(toast = R.string.toast_error)
                 }
             }
 
@@ -132,7 +129,7 @@ class VacanciesViewModel(
                     _screenState.update { VacanciesScreenState.NoInternetConnection }
                 } else {
                     _currentPage--
-                    updateFoundState()
+                    updateFoundState(toast = R.string.toast_no_internet)
                 }
             }
 
@@ -158,13 +155,17 @@ class VacanciesViewModel(
         }
     }
 
-    private fun updateFoundState() {
+    private fun updateFoundState(
+        isNextPageLoading: Boolean = false,
+        toast: Int? = null
+    ) {
         _screenState.update {
             VacanciesScreenState.Found(
                 data = _vacancies.toList(),
                 isLastPage = _isLastPage,
                 totalCount = _totalCount,
-                isNextPageLoading = false
+                isNextPageLoading = isNextPageLoading,
+                toast = toast
             )
         }
     }

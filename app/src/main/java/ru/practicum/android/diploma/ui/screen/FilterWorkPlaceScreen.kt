@@ -22,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.domain.vacancydetails.models.FilterArea
 import ru.practicum.android.diploma.presentation.filters.models.WorkPlacesScreenState
 import ru.practicum.android.diploma.presentation.filters.viewmodel.FilterWorkPlaceViewModel
 import ru.practicum.android.diploma.ui.components.FilterItem
@@ -89,9 +88,9 @@ fun FilterWorkPlaceScreen(
                     clearRegion = {
                         viewModel.clearRegion()
                     },
-                    onApplyClick = { area ->
-                        viewModel.onSaveChoice(area)
-                        onBackClick.invoke()
+                    onApplyClick = {
+                        viewModel.onSaveChoice(state.chosenArea!!)
+                        onBackClick()
                     }
                 )
 
@@ -109,7 +108,7 @@ fun Content(
     toFilterRegion: () -> Unit,
     clearCountry: () -> Unit,
     clearRegion: () -> Unit,
-    onApplyClick: (FilterArea) -> Unit
+    onApplyClick: () -> Unit
 ) {
     Column {
         Spacer(modifier = Modifier.height(size8))
@@ -170,7 +169,7 @@ fun Content(
                     .height(size60)
                     .fillMaxSize(),
                 shape = RoundedCornerShape(cornerRadius),
-                onClick = { onApplyClick },
+                onClick = onApplyClick,
                 content = {
                     Text(
                         text = stringResource(R.string.filter_choose_label),

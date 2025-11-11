@@ -39,6 +39,7 @@ fun SearchField(
             modifier = Modifier.fillMaxWidth(),
             textStyle = LocalTypography.current.body16Medium,
             cursorBrush = SolidColor(blue),
+            singleLine = true,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(
                 onDone = {}

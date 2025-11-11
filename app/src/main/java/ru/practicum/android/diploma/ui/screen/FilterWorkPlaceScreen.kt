@@ -89,7 +89,7 @@ fun FilterWorkPlaceScreen(
                         viewModel.clearRegion()
                     },
                     onApplyClick = {
-                        viewModel.onSaveChoice(state.chosenArea!!)
+                        viewModel.onSaveChoice()
                         onBackClick()
                     }
                 )

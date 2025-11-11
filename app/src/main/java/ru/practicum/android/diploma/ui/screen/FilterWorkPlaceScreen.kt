@@ -43,7 +43,6 @@ fun FilterWorkPlaceScreen(
     toFilterRegion: () -> Unit,
     viewModel: FilterWorkPlaceViewModel
 ) {
-
     LaunchedEffect(Unit) { viewModel.loadAreas() }
 
     Scaffold(

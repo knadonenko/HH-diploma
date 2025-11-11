@@ -149,4 +149,3 @@ class FilterIndustryViewModel(
         const val SEARCH_DEBOUNCE_DELAY = 500L
     }
 }
-

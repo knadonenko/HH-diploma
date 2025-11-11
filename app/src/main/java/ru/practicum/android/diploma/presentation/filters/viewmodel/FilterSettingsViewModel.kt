@@ -118,7 +118,9 @@ class FilterSettingsViewModel(
     private fun saveSettings() {
         if (!hasSettings()) {
             filterSettingsInteractor.clearFilterSettings()
+            _hasSettings.update { hasSettings() }
             _hasSettingsChange.update { hasSettingsChange() }
+
             return
         }
 
@@ -139,6 +141,7 @@ class FilterSettingsViewModel(
             )
         )
 
+        _hasSettings.update { hasSettings() }
         _hasSettingsChange.update { hasSettingsChange() }
     }
 

@@ -106,7 +106,11 @@ class FilterWorkPlaceViewModel(
         _screenState.update { WorkPlacesScreenState.Loading }
         settings = FilterSettings(
             area = area?.id ?: country?.id,
-            areaName = area?.let { "${country!!.name}, ${it.name ?: ""}" } ?: country?.let { "${it.name}" },
+            areaName = when {
+                area != null && country != null -> "${country.name}, ${area.name}"
+                country != null -> country.name
+                else -> ""
+            },
             industry = settings?.industry,
             industryName = settings?.industryName,
             salary = settings?.salary,

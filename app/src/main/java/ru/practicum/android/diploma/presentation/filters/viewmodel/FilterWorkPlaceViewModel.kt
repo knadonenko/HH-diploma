@@ -24,7 +24,6 @@ class FilterWorkPlaceViewModel(
     private var _currentSearchText = MutableStateFlow("")
     val currentSearchText = _currentSearchText.asStateFlow()
 
-    var areas = mutableListOf<FilterArea>()
     private val _allAreaItems = mutableStateOf<List<FilterArea>>(emptyList())
     private var _filteredAreas = mutableStateOf<List<FilterArea>>(emptyList())
     val filteredItems: List<FilterArea> get() = _filteredAreas.value
@@ -38,8 +37,6 @@ class FilterWorkPlaceViewModel(
                         is FilterWorkPlaceResponseState.Content -> {
                             if (response.result.isNotEmpty()) {
                                 _screenState.update { WorkPlacesScreenState.Content(response.result) }
-                                val state = _screenState.value as WorkPlacesScreenState.Content
-                                areas = state.availableAreas.toMutableList()
                             } else {
                                 _screenState.update { WorkPlacesScreenState.NotFound }
                             }
@@ -73,9 +70,8 @@ class FilterWorkPlaceViewModel(
             val oldState = _screenState.value as WorkPlacesScreenState.Content
             var oldCountry = oldState.chosenCountry
             if (oldCountry == null) {
-                val parentId = area.parentId
                 oldCountry = oldState.availableAreas.firstOrNull {
-                    it.id == parentId
+                    it.id == area.parentId
                 }
             }
             _screenState.update {
@@ -102,25 +98,21 @@ class FilterWorkPlaceViewModel(
         }
     }
 
-    fun onSaveChoice(chosenArea: FilterArea) {
-        _screenState.update { WorkPlacesScreenState.Loading }
+    fun onSaveChoice() {
         var settings = filterSettingsInteractor.getFilterSettings()
+        val state = _screenState.value as WorkPlacesScreenState.Content
+        val country = state.chosenCountry
+        val area = state.chosenArea
+        _screenState.update { WorkPlacesScreenState.Loading }
         settings = FilterSettings(
-            area = chosenArea.id,
-            areaName = getAreaName(chosenArea),
+            area = area?.id ?: country?.id,
+            areaName = area?.let { "${country!!.name}, ${it.name ?: ""}" } ?: country?.let { "${it.name}" },
             industry = settings?.industry,
             industryName = settings?.industryName,
             salary = settings?.salary,
             onlyWithSalary = settings?.onlyWithSalary
         )
         filterSettingsInteractor.saveFilterSettings(settings)
-    }
-
-    private fun getAreaName(area: FilterArea): String? {
-        val first = area.name
-        val second = area.areas?.firstOrNull { it.id == area.parentId }?.name
-
-        return second?.let { "$it, $first" } ?: first
     }
 
     fun onSearchTextChange(query: String) {

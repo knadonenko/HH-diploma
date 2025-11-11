@@ -162,7 +162,7 @@ private fun VacancyHeader(vacancy: Vacancy) {
     SalaryText(
         from = vacancy.salary?.from,
         to = vacancy.salary?.to,
-        symbol = vacancy.salary?.currency,
+        symbol = vacancy.salary?.currencySymbol,
         style = Typography.body22Medium
     )
     Spacer(modifier = Modifier.padding(top = paddingBase))
@@ -376,7 +376,7 @@ private fun VacancyBodyPreview() {
         id = "mock",
         name = "Переворчиватель пингвинов",
         address = Address("Москва", "Большая Грузинская", "д.1с99", "Большая Грузинская, д.1с99, Москва"),
-        salary = Salary(1000, 100_000, "$"),
+        salary = Salary(1000, 100_000, "USD", "$"),
         employer = Employer("mock", "Московский зоопарк", null),
         contacts = Contacts(
             "mock",

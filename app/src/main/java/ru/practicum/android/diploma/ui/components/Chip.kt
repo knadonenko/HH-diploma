@@ -19,11 +19,13 @@ import ru.practicum.android.diploma.ui.theme.padding12
 import ru.practicum.android.diploma.ui.theme.padding4
 import ru.practicum.android.diploma.ui.theme.white
 
-@Preview
 @Composable
-fun Chip(text: String = "chip text") {
+fun Chip(
+    text: String,
+    modifier: Modifier = Modifier
+) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .height(chipHeight)
             .background(blue, RoundedCornerShape(cornerRadius))
             .zIndex(1f),
@@ -36,4 +38,10 @@ fun Chip(text: String = "chip text") {
             style = LocalTypography.current.body16Regular
         )
     }
+}
+
+@Preview
+@Composable
+private fun ChipPreview() {
+    Chip("chip text")
 }

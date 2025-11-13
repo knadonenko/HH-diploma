@@ -12,6 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.AppDatabase
+import ru.practicum.android.diploma.data.converter.FilterConverter
 import ru.practicum.android.diploma.data.converter.VacancyConverter
 import ru.practicum.android.diploma.data.dao.VacancyDao
 import ru.practicum.android.diploma.data.network.api.APIService
@@ -72,6 +73,10 @@ val dataModule = module {
 
     single<VacancyConverter> {
         VacancyConverter(get())
+    }
+
+    single<FilterConverter> {
+        FilterConverter()
     }
 
     single {

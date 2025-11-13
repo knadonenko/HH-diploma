@@ -27,6 +27,16 @@
     <string name="filter_choose_label">Выбрать</string>
     <string name="filter_apply_label">Применить</string>
     <string name="filter_reset_label">Сбросить</string>
+    <string name="filter_without_salary">Не показывать без зарплаты</string>
+    <string name="filter_expected_salary">Ожидаемая зарплата</string>
+    <string name="filter_placeholder">"Введите сумму"</string>
+    <string name="filter_apply_button">Применить</string>
+    <string name="filter_reset_button">Сбросить</string>
+    <string name="filter_industry">Введите отрасль</string>
+    <string name="filter_area_search">Введите регион</string>
+    <string name="filter_industry_error">Ошибка получения списка отраслей</string>
+    <string name="filter_regions_other">Другие регионы</string>
+    <string name="filter_no_region">Такого региона нет</string>
 
     <string name="from">от</string>
     <string name="to">до</string>
@@ -40,11 +50,14 @@
     <string name="email_subtitle">Электронная почта</string>
     <string name="skill_prefix">·</string>
     <string name="details_error">Вакансия не найдена или удалена</string>
+    <string name="toast_no_internet">Нет интернет-соединения</string>
+    <string name="toast_error">Произошла ошибка загрузки, попробуйте ещё раз</string>
 
     <!--SearchLabels-->
     <string name="enter_request">Введите запрос</string>
     <string name="no_internet">Нет интернета</string>
     <string name="bad_request">Не удалось получить список вакансий</string>
+    <string name="no_regions_error">Не удалось получить список</string>
     <string name="no_vacancies">Таких вакансий нет</string>
     <string name="server_error">Ошибка сервера</string>
 

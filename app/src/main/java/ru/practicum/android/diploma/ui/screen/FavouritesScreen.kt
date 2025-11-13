@@ -18,6 +18,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
 import ru.practicum.android.diploma.presentation.vacancies.models.FavoritesScreenState
 import ru.practicum.android.diploma.presentation.vacancies.viewmodel.FavoritesViewModel
+import ru.practicum.android.diploma.ui.components.LoadingComponent
 import ru.practicum.android.diploma.ui.components.Placeholder
 import ru.practicum.android.diploma.ui.components.VacancyItem
 import ru.practicum.android.diploma.ui.components.topbars.CommonTopBar
@@ -57,13 +58,14 @@ fun MainContent(viewModel: FavoritesViewModel, onDetailsClick: (String) -> Unit)
             stringResource(R.string.empty_favorites)
         )
 
+        is FavoritesScreenState.Loading -> LoadingComponent()
+
         is FavoritesScreenState.Error -> Placeholder(
             R.drawable.no_vacancy_placeholder,
             stringResource(R.string.bad_request)
         )
 
         is FavoritesScreenState.Content -> FavoritesList(state.data, onItemClick = onDetailsClick)
-
     }
 }
 

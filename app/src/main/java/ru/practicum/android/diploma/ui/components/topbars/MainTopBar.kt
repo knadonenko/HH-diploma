@@ -5,10 +5,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -18,7 +14,8 @@ import ru.practicum.android.diploma.ui.theme.paddingActionEnd
 
 @Composable
 fun MainTopBar(
-    onFilterIconClick: () -> Unit
+    onFilterIconClick: () -> Unit,
+    filterApplied: Boolean
 ) {
     CommonTopBar(
         title = stringResource(id = R.string.top_bar_label_main),
@@ -26,6 +23,7 @@ fun MainTopBar(
             ToggleActionIcon(
                 checkedIconId = R.drawable.ic_filter_on,
                 uncheckedIconId = R.drawable.ic_filter_off,
+                filterApplied = filterApplied,
                 onClick = onFilterIconClick
             )
         }
@@ -36,12 +34,11 @@ fun MainTopBar(
 fun ToggleActionIcon(
     checkedIconId: Int,
     uncheckedIconId: Int,
+    filterApplied: Boolean,
     onClick: () -> Unit
 ) {
-    var isChecked by remember { mutableStateOf(false) }
-
     IconButton(onClick = onClick, modifier = Modifier.padding(end = paddingActionEnd)) {
-        if (isChecked) {
+        if (filterApplied) {
             Icon(
                 painter = painterResource(id = checkedIconId),
                 contentDescription = stringResource(R.string.top_bar_filter_settings_description),

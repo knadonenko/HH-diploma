@@ -2,27 +2,29 @@ package ru.practicum.android.diploma.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.presentation.filters.models.WorkPlacesScreenState
+import ru.practicum.android.diploma.presentation.filters.viewmodel.FilterWorkPlaceViewModel
+import ru.practicum.android.diploma.ui.components.Placeholder
+import ru.practicum.android.diploma.ui.components.SearchField
 import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
 import ru.practicum.android.diploma.ui.theme.paddingBase
 
 @Composable
 fun FilterAreaScreen(
     modifier: Modifier,
-    countryId: Int? = null,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    viewModel: FilterWorkPlaceViewModel
 ) {
+    viewModel.loadFilteredAreas()
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -39,12 +41,39 @@ fun FilterAreaScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = countryId?.toString() ?: stringResource(id = R.string.test))
+            val state = viewModel.screenState.collectAsState().value
+            val searchQuery = viewModel.currentSearchText.collectAsStateWithLifecycle().value
+            val items = viewModel.filteredItems
+            SearchField(
+                searchQuery = searchQuery,
+                onQueryChange = {
+                    viewModel.onSearchTextChange(it)
+                },
+                placeHolder = stringResource(R.string.filter_area_search),
+                onSearchClear = {
+                    viewModel.onClearSearchText()
+                }
+            )
+            when (state) {
+                is WorkPlacesScreenState.Content -> {
+                    RegionsList(
+                        list = items,
+                        onClick = { area ->
+                            viewModel.chooseArea(area)
+                            onBackClick()
+                        }
+                    )
+                }
 
-            Spacer(modifier = Modifier.height(20.dp))
+                is WorkPlacesScreenState.NotFound -> {
+                    R.drawable.no_vacancy_placeholder
+                    stringResource(R.string.filter_no_region)
+                }
 
-            Button(onBackClick) {
-                Text(stringResource(R.string.filter_choose_label))
+                else -> Placeholder(
+                    R.drawable.location_error_placeholder,
+                    stringResource(R.string.no_regions_error)
+                )
             }
         }
     }

@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import ru.practicum.android.diploma.ui.theme.LocalCustomColors
 import ru.practicum.android.diploma.ui.theme.LocalTypography
 import ru.practicum.android.diploma.ui.theme.padding64
 import ru.practicum.android.diploma.ui.theme.paddingBase
@@ -33,7 +34,8 @@ fun Placeholder(@DrawableRes imageResId: Int, text: String? = null) {
                     modifier = Modifier.padding(horizontal = padding64, vertical = paddingBase),
                     textAlign = TextAlign.Center,
                     text = text,
-                    style = LocalTypography.current.body22Medium
+                    style = LocalTypography.current.body22Medium,
+                    color = LocalCustomColors.current.text.primaryTextColors.textColor
                 )
             }
         }

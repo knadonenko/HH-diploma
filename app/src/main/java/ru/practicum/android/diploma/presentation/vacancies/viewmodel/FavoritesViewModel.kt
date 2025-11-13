@@ -15,6 +15,7 @@ class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor) :
     val screenState = _screenState.asStateFlow()
 
     fun getFavorites() {
+        _screenState.update { FavoritesScreenState.Loading }
         viewModelScope.launch {
             favoritesInteractor.getFavorites().collect { result ->
                 if (result.isNotEmpty()) {
@@ -27,10 +28,12 @@ class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor) :
                             employerLogo = vacancy.employer?.logo,
                             salaryFrom = vacancy.salary?.from,
                             salaryTo = vacancy.salary?.to,
-                            salaryCurrencySymbol = vacancy.salary?.currency
+                            salaryCurrencySymbol = vacancy.salary?.currencySymbol
                         )
                     }
                     _screenState.update { FavoritesScreenState.Content(data) }
+                } else {
+                    _screenState.update { FavoritesScreenState.Default }
                 }
             }
         }

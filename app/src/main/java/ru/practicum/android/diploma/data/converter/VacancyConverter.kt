@@ -66,7 +66,8 @@ class VacancyConverter(private val gson: Gson) {
             Salary(
                 from = it.from,
                 to = it.to,
-                currency = it.currency
+                currency = it.currency,
+                currencySymbol = it.currency?.let { currency -> convert(currency) }
             )
         }
     }
@@ -108,7 +109,7 @@ class VacancyConverter(private val gson: Gson) {
         }
     }
 
-    private fun convertFilterArea(areaDto: FilterAreaDto?): FilterArea? {
+    fun convertFilterArea(areaDto: FilterAreaDto?): FilterArea? {
         return areaDto?.let {
             FilterArea(
                 id = it.id,

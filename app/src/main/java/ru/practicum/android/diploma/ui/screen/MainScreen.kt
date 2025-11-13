@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,10 +19,13 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import org.koin.androidx.compose.koinViewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
@@ -34,24 +38,42 @@ import ru.practicum.android.diploma.ui.components.SearchField
 import ru.practicum.android.diploma.ui.components.VacancyItem
 import ru.practicum.android.diploma.ui.components.VacancyLoadingItem
 import ru.practicum.android.diploma.ui.components.topbars.MainTopBar
+import ru.practicum.android.diploma.ui.navigation.FILTER_APPLY
 import ru.practicum.android.diploma.ui.theme.floatingChipContentPadding
 import ru.practicum.android.diploma.ui.theme.floatingChipPadding
 import ru.practicum.android.diploma.ui.theme.loaderItemPadding
 import ru.practicum.android.diploma.ui.theme.padding12
 import ru.practicum.android.diploma.ui.theme.paddingBase
+import ru.practicum.android.diploma.ui.theme.size70
 
 @Composable
 fun MainScreen(
+    navController: NavController,
     modifier: Modifier,
     onFilterClick: () -> Unit,
     onDetailsClick: (String) -> Unit,
     viewModel: VacanciesViewModel = koinViewModel<VacanciesViewModel>()
 ) {
+    val backStackEntry = navController.currentBackStackEntryAsState()
+
+    LaunchedEffect(backStackEntry.value) {
+        viewModel.loadFilterSettings()
+
+        backStackEntry.value?.savedStateHandle?.get<Boolean>(FILTER_APPLY)?.let { isApply ->
+            if (isApply) {
+                viewModel.searchWithNewSettings()
+                backStackEntry.value?.savedStateHandle?.remove<Boolean>(FILTER_APPLY)
+            }
+        }
+    }
+
     val query = viewModel.currentSearchText.collectAsStateWithLifecycle().value
+    val settingsApplied = viewModel.hasSettings.collectAsStateWithLifecycle().value
+
     Scaffold(
         modifier = Modifier,
         topBar = {
-            MainTopBar(onFilterClick)
+            MainTopBar(onFilterClick, settingsApplied)
         }
     ) { padding ->
         Column(
@@ -76,9 +98,8 @@ fun MainScreen(
 
 @Composable
 fun MainContent(viewModel: VacanciesViewModel, onDetailsClick: (String) -> Unit) {
-    val state = viewModel.screenState.collectAsState().value
-
-    when (state) {
+    val context = LocalContext.current
+    when (val state = viewModel.screenState.collectAsState().value) {
         is VacanciesScreenState.Default -> Placeholder(R.drawable.main_placeholder)
         is VacanciesScreenState.Loading -> LoadingComponent()
 
@@ -87,7 +108,17 @@ fun MainContent(viewModel: VacanciesViewModel, onDetailsClick: (String) -> Unit)
             stringResource(R.string.no_internet)
         )
 
-        is VacanciesScreenState.NotFound -> {
+        is VacanciesScreenState.Found -> {
+            LaunchedEffect(state.toast) {
+                if (state.toast != null) {
+                    Toast.makeText(context, state.toast, Toast.LENGTH_SHORT).show()
+                    viewModel.dismissToast()
+                }
+            }
+            MainScreenContent(viewModel, state, onDetailsClick)
+        }
+
+        else -> {
             Spacer(modifier = Modifier.padding(top = padding12))
             Chip(stringResource(R.string.no_vacancies))
             Placeholder(
@@ -95,10 +126,6 @@ fun MainContent(viewModel: VacanciesViewModel, onDetailsClick: (String) -> Unit)
                 stringResource(R.string.bad_request)
             )
         }
-
-        is VacanciesScreenState.Found -> MainScreenContent(viewModel, state, onDetailsClick)
-
-        is VacanciesScreenState.InternalServerError -> {}
     }
 }
 
@@ -172,9 +199,11 @@ fun VacanciesList(
                 onClick = onItemClick
             )
         }
-        if (isNextPageLoading) {
-            item {
+        item {
+            if (isNextPageLoading) {
                 VacancyLoadingItem()
+            } else {
+                Spacer(modifier = Modifier.padding(top = size70))
             }
         }
     }

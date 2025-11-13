@@ -63,7 +63,7 @@ class FilterSettingsViewModel(
             }
         }
 
-        if (_isInit){
+        if (_isInit) {
             _isInit = false
         }
 

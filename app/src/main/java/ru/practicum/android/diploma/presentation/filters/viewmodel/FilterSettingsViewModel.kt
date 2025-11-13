@@ -58,11 +58,13 @@ class FilterSettingsViewModel(
                 _previousIndustryName = settings.industryName
                 _previousSalary = settings.salary ?: ""
                 _previousOnlyWithSalary = settings.onlyWithSalary ?: false
-
-                _isInit = false
             } else {
                 _hasSettingsChange.update { hasSettingsChange() }
             }
+        }
+
+        if (_isInit) {
+            _isInit = false
         }
 
         _hasSettings.update { hasSettings() }

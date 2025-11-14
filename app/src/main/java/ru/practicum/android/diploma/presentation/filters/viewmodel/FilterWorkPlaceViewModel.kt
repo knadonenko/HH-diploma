@@ -141,12 +141,14 @@ class FilterWorkPlaceViewModel(
     }
 
     fun loadFilteredAreas() {
-        val state = _screenState.value as WorkPlacesScreenState.Content
-        _allAreaItems.value = if (state.chosenCountry == null) {
-            state.availableAreas.flatMap { it.areas ?: emptyList() }.toMutableList()
-        } else {
-            state.availableAreas.first { it == state.chosenCountry }.areas!!.toMutableList()
+        if (_screenState.value is WorkPlacesScreenState.Content) {
+            val state = _screenState.value as WorkPlacesScreenState.Content
+            _allAreaItems.value = if (state.chosenCountry == null) {
+                state.availableAreas.flatMap { it.areas ?: emptyList() }.toMutableList()
+            } else {
+                state.availableAreas.first { it == state.chosenCountry }.areas!!.toMutableList()
+            }
+            _filteredAreas.value = _allAreaItems.value
         }
-        _filteredAreas.value = _allAreaItems.value
     }
 }

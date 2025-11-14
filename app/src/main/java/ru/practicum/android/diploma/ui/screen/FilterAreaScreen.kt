@@ -65,10 +65,10 @@ fun FilterAreaScreen(
                     )
                 }
 
-                is WorkPlacesScreenState.NotFound -> {
-                    R.drawable.no_vacancy_placeholder
+                is WorkPlacesScreenState.NotFound -> Placeholder(
+                    R.drawable.no_vacancy_placeholder,
                     stringResource(R.string.filter_no_region)
-                }
+                )
 
                 else -> Placeholder(
                     R.drawable.location_error_placeholder,

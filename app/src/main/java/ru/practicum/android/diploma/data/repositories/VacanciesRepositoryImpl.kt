@@ -55,9 +55,9 @@ class VacanciesRepositoryImpl(
         return HashMap<String, String>().apply {
             put(KEY_TEXT, text)
             put(KEY_PAGE, page.toString())
-            settings?.area?.let { put(KEY_AREA, it.toString()) }
+            settings?.generalArea?.let { put(KEY_AREA, it.toString()) }
             settings?.industry?.let { put(KEY_INDUSTRY, it.toString()) }
-            settings?.salary?.let { put(KEY_SALARY, it.toString()) }
+            settings?.salary?.let { put(KEY_SALARY, it) }
             settings?.onlyWithSalary?.let { put(KEY_ONLY_WITH_SALARY, it.toString()) }
         }
     }

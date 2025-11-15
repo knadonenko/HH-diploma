@@ -2,9 +2,11 @@ package ru.practicum.android.diploma.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,6 +15,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.presentation.filters.models.WorkPlacesScreenState
 import ru.practicum.android.diploma.presentation.filters.viewmodel.FilterWorkPlaceViewModel
+import ru.practicum.android.diploma.ui.components.LoadingComponent
 import ru.practicum.android.diploma.ui.components.Placeholder
 import ru.practicum.android.diploma.ui.components.SearchField
 import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
@@ -24,7 +27,8 @@ fun FilterAreaScreen(
     onBackClick: () -> Unit,
     viewModel: FilterWorkPlaceViewModel
 ) {
-    viewModel.loadFilteredAreas()
+    LaunchedEffect(Unit) { viewModel.loadAreasAndCountries() }
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -35,8 +39,9 @@ fun FilterAreaScreen(
         }
     ) { padding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .padding(padding)
+                .fillMaxSize()
                 .padding(horizontal = paddingBase),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -55,6 +60,12 @@ fun FilterAreaScreen(
                 }
             )
             when (state) {
+                is WorkPlacesScreenState.InternalServerError -> Placeholder(
+                    R.drawable.server_error_placeholder,
+                    stringResource(R.string.server_error)
+                )
+
+                is WorkPlacesScreenState.Loading -> LoadingComponent()
                 is WorkPlacesScreenState.Content -> {
                     RegionsList(
                         list = items,
@@ -65,15 +76,12 @@ fun FilterAreaScreen(
                     )
                 }
 
-                is WorkPlacesScreenState.NotFound -> {
-                    R.drawable.no_vacancy_placeholder
-                    stringResource(R.string.filter_no_region)
-                }
-
-                else -> Placeholder(
+                is WorkPlacesScreenState.NotFound -> Placeholder(
                     R.drawable.location_error_placeholder,
                     stringResource(R.string.no_regions_error)
                 )
+
+                else -> {}
             }
         }
     }

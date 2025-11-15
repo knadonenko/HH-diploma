@@ -49,15 +49,46 @@ class FilterRepositoryImpl(
         }
     }
 
+    override fun getCountries(): Flow<FilterWorkPlaceResponseState> = flow {
+        val response = networkClient.doRequest(Request.AreasRequest)
+
+        when (response.resultCode) {
+            SUCCESS -> {
+                val areasResponse = response as AreasResponse
+                val areas = areasResponse.results.filter { area ->
+                    area.parentId == null
+                }.mapNotNull { area ->
+                    filterConverter.map(area)
+                }
+
+                emit(FilterWorkPlaceResponseState.Content(areas))
+            }
+
+            NOT_FOUND, UNAUTHORIZED, BAD_REQUEST -> {
+                emit(FilterWorkPlaceResponseState.BadRequest)
+            }
+
+            INTERNAL_SERVER_ERROR -> {
+                emit(FilterWorkPlaceResponseState.InternalServerError)
+            }
+
+            NO_INTERNET_CONNECTION -> {
+                emit(FilterWorkPlaceResponseState.NoInternetConnection)
+            }
+        }
+    }
+
     override fun getAreas(): Flow<FilterWorkPlaceResponseState> = flow {
         val response = networkClient.doRequest(Request.AreasRequest)
 
         when (response.resultCode) {
             SUCCESS -> {
                 val areasResponse = response as AreasResponse
+
                 val areas = areasResponse.results.mapNotNull { area ->
                     filterConverter.map(area)
                 }
+
                 emit(FilterWorkPlaceResponseState.Content(areas))
             }
 

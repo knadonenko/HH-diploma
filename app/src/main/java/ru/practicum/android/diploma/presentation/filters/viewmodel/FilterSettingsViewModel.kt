@@ -48,13 +48,13 @@ class FilterSettingsViewModel(
         _hasSettings.update { false }
 
         _filterSettings?.also { settings ->
-            _areaName.update { settings.areaName }
+            _areaName.update { settings.generalAreaName }
             _industryName.update { settings.industryName }
             _salary.update { settings.salary ?: "" }
             _onlyWithSalary.update { settings.onlyWithSalary ?: false }
 
             if (_isInit) {
-                _previousAreaName = settings.areaName
+                _previousAreaName = settings.generalAreaName
                 _previousIndustryName = settings.industryName
                 _previousSalary = settings.salary ?: ""
                 _previousOnlyWithSalary = settings.onlyWithSalary ?: false
@@ -128,6 +128,8 @@ class FilterSettingsViewModel(
 
         val area = _filterSettings?.area?.takeIf { !_areaName.value.isNullOrEmpty() }
         val areaName = _filterSettings?.areaName?.takeIf { !_areaName.value.isNullOrEmpty() }
+        val countryName = _filterSettings?.countryName?.takeIf { !_areaName.value.isNullOrEmpty() }
+        val generalAreaName = _filterSettings?.generalAreaName?.takeIf { !_areaName.value.isNullOrEmpty() }
 
         val industry = _filterSettings?.industry?.takeIf { !_industryName.value.isNullOrEmpty() }
         val industryName = _filterSettings?.industryName?.takeIf { !_industryName.value.isNullOrEmpty() }
@@ -136,6 +138,8 @@ class FilterSettingsViewModel(
             FilterSettings(
                 area,
                 areaName,
+                countryName,
+                generalAreaName,
                 industry,
                 industryName,
                 _salary.value,

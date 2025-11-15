@@ -11,7 +11,11 @@ class FilterInteractorImpl(private val filterRepository: FilterRepository) : Fil
         return filterRepository.getIndustries()
     }
 
-    override fun getAreas(): Flow<FilterWorkPlaceResponseState> {
-        return filterRepository.getAreas()
+    override fun getCountries(): Flow<FilterWorkPlaceResponseState> {
+        return filterRepository.getCountries()
+    }
+
+    override fun getAreas(countryId: Int?): Flow<FilterWorkPlaceResponseState> {
+        return filterRepository.getAreas(countryId)
     }
 }

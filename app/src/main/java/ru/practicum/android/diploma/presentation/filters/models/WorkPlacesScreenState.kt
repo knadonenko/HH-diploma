@@ -8,10 +8,14 @@ sealed interface WorkPlacesScreenState {
     data object Default : WorkPlacesScreenState
     data object Loading : WorkPlacesScreenState
     data class Content(
-        val availableAreas: List<FilterArea>,
+        val areas: List<FilterArea>,
+        val countries: List<FilterArea>,
         val chosenCountry: FilterArea? = null,
-        val chosenArea: FilterArea? = null
+        val chosenCountryName: String? = null,
+        val chosenArea: FilterArea? = null,
+        val chosenAreaName: String? = null
     ) : WorkPlacesScreenState
+
     data object NotFound : WorkPlacesScreenState
     data object NoInternetConnection : WorkPlacesScreenState
     data object InternalServerError : WorkPlacesScreenState

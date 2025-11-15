@@ -11,9 +11,7 @@ sealed interface WorkPlacesScreenState {
         val areas: List<FilterArea>,
         val countries: List<FilterArea>,
         val chosenCountry: FilterArea? = null,
-        val chosenCountryName: String? = null,
-        val chosenArea: FilterArea? = null,
-        val chosenAreaName: String? = null
+        val chosenArea: FilterArea? = null
     ) : WorkPlacesScreenState
 
     data object NotFound : WorkPlacesScreenState

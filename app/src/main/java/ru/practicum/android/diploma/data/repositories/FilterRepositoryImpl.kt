@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.data.repositories
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.practicum.android.diploma.data.converter.FilterConverter
-import ru.practicum.android.diploma.data.dto.FilterAreaDto
 import ru.practicum.android.diploma.data.network.api.NetworkClient
 import ru.practicum.android.diploma.data.network.consts.ResponseStates.BAD_REQUEST
 import ru.practicum.android.diploma.data.network.consts.ResponseStates.INTERNAL_SERVER_ERROR
@@ -17,7 +16,6 @@ import ru.practicum.android.diploma.data.network.response.IndustriesResponse
 import ru.practicum.android.diploma.domain.filters.api.repository.FilterRepository
 import ru.practicum.android.diploma.domain.filters.models.FilterIndustryResponseState
 import ru.practicum.android.diploma.domain.filters.models.FilterWorkPlaceResponseState
-import ru.practicum.android.diploma.domain.vacancydetails.models.FilterArea
 
 class FilterRepositoryImpl(
     private val networkClient: NetworkClient,
@@ -80,15 +78,18 @@ class FilterRepositoryImpl(
         }
     }
 
-    override fun getAreas(countryId: Int?): Flow<FilterWorkPlaceResponseState> = flow {
+    override fun getAreas(): Flow<FilterWorkPlaceResponseState> = flow {
         val response = networkClient.doRequest(Request.AreasRequest)
 
         when (response.resultCode) {
             SUCCESS -> {
                 val areasResponse = response as AreasResponse
-                val filteredAreas = filterAreas(areasResponse.results, countryId)
 
-                emit(FilterWorkPlaceResponseState.Content(filteredAreas))
+                val areas = areasResponse.results.mapNotNull { area ->
+                    filterConverter.map(area)
+                }
+
+                emit(FilterWorkPlaceResponseState.Content(areas))
             }
 
             NOT_FOUND, UNAUTHORIZED, BAD_REQUEST -> {
@@ -102,30 +103,6 @@ class FilterRepositoryImpl(
             NO_INTERNET_CONNECTION -> {
                 emit(FilterWorkPlaceResponseState.NoInternetConnection)
             }
-        }
-    }
-
-    private fun filterAreas(areas: List<FilterAreaDto>, countryId: Int?): List<FilterArea> {
-        val filteredAreas = mutableListOf<FilterAreaDto>()
-
-        if (countryId == null) {
-            areas.forEach { area ->
-                if (area.areas != null) {
-                    filteredAreas.addAll(area.areas)
-                }
-            }
-        } else {
-            areas.firstOrNull() { area ->
-                area.id == countryId
-            }?.also { area ->
-                if (area.areas != null) {
-                    filteredAreas.addAll(area.areas)
-                }
-            }
-        }
-
-        return filteredAreas.mapNotNull { area ->
-            filterConverter.map(area)
         }
     }
 }

@@ -9,5 +9,5 @@ interface FilterRepository {
 
     fun getCountries(): Flow<FilterWorkPlaceResponseState>
 
-    fun getAreas(countryId: Int?): Flow<FilterWorkPlaceResponseState>
+    fun getAreas(): Flow<FilterWorkPlaceResponseState>
 }

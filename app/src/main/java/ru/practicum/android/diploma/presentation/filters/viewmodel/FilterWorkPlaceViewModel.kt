@@ -43,11 +43,27 @@ class FilterWorkPlaceViewModel(
         if (_isInit) {
             _filterSettings = filterSettingsInteractor.getFilterSettings()
 
-            _filterSettings?.also {
-                _previousAreaId = it.area
+            _filterSettings?.also { fs ->
+                _previousAreaId = fs.generalArea
+                val chosenCountry = fs.country?.let {
+                    FilterArea(
+                        id = fs.country,
+                        name = fs.countryName,
+                        parentId = null,
+                        areas = listOf()
+                    )
+                }
+                val chosenArea = fs.area?.let {
+                    FilterArea(
+                        id = fs.area,
+                        name = fs.areaName,
+                        parentId = fs.country,
+                        areas = listOf()
+                    )
+                }
                 _oldScreenStateContent = _oldScreenStateContent.copy(
-                    chosenAreaName = it.areaName,
-                    chosenCountryName = it.countryName
+                    chosenArea = chosenArea,
+                    chosenCountry = chosenCountry
                 )
             }
 
@@ -93,7 +109,9 @@ class FilterWorkPlaceViewModel(
     fun loadAreasAndCountries() {
         _screenState.update { WorkPlacesScreenState.Loading }
 
-        if (_oldScreenStateContent.countries.isEmpty() && _oldScreenStateContent.chosenCountryName.isNullOrEmpty()) {
+        if (_oldScreenStateContent.countries.isEmpty()
+            && _oldScreenStateContent.chosenCountry == null
+        ) {
             loadCountries(true)
         } else {
             loadAreas()
@@ -102,10 +120,10 @@ class FilterWorkPlaceViewModel(
 
     private fun loadAreas() {
         viewModelScope.launch {
-            filterInteractor.getAreas(_oldScreenStateContent.chosenCountry?.id).collect { response ->
+            filterInteractor.getAreas().collect { response ->
                 when (response) {
                     is FilterWorkPlaceResponseState.Content -> {
-                        _oldScreenStateContent = _oldScreenStateContent.copy(areas = response.result)
+                        handleAreas(areas = response.result)
                         _filteredAreas.value = _oldScreenStateContent.areas
 
                         if (response.result.isNotEmpty()) {
@@ -128,16 +146,42 @@ class FilterWorkPlaceViewModel(
         }
     }
 
+    private fun handleAreas(areas: List<FilterArea>) {
+        if (_oldScreenStateContent.countries.isEmpty()) {
+            _oldScreenStateContent = _oldScreenStateContent.copy(areas.filter { area ->
+                area.parentId == null
+            })
+        }
+
+        val filteredAreas = mutableListOf<FilterArea>()
+
+        if (_oldScreenStateContent.chosenCountry?.id == null) {
+            areas.forEach { area ->
+                if (area.areas != null) {
+                    filteredAreas.addAll(area.areas)
+                }
+            }
+        } else {
+            areas.firstOrNull() { area ->
+                area.id == _oldScreenStateContent.chosenCountry!!.id
+            }?.also { area ->
+                if (area.areas != null) {
+                    filteredAreas.addAll(area.areas)
+                }
+            }
+        }
+
+        _oldScreenStateContent = _oldScreenStateContent.copy(filteredAreas)
+    }
+
     fun chooseCountry(country: FilterArea) {
         _oldScreenStateContent = _oldScreenStateContent.copy(
-            chosenCountry = country,
-            chosenCountryName = country.name
+            chosenCountry = country
         )
 
         if (_oldScreenStateContent.chosenCountry?.id != _oldScreenStateContent.chosenArea?.id) {
             _oldScreenStateContent = _oldScreenStateContent.copy(
-                chosenArea = null,
-                chosenAreaName = null
+                chosenArea = null
             )
         }
 
@@ -160,9 +204,7 @@ class FilterWorkPlaceViewModel(
 
         _oldScreenStateContent = _oldScreenStateContent.copy(
             chosenArea = area,
-            chosenAreaName = area.name,
-            chosenCountry = oldCountry,
-            chosenCountryName = oldCountry?.name,
+            chosenCountry = oldCountry
         )
 
         _screenState.update {
@@ -181,8 +223,7 @@ class FilterWorkPlaceViewModel(
 
     fun clearRegion() {
         _oldScreenStateContent = _oldScreenStateContent.copy(
-            chosenArea = null,
-            chosenAreaName = null,
+            chosenArea = null
         )
 
         _screenState.update {
@@ -196,8 +237,8 @@ class FilterWorkPlaceViewModel(
 
     fun clearCountry() {
         _oldScreenStateContent = _oldScreenStateContent.copy(
-            chosenCountry = null,
-            chosenCountryName = null,
+            chosenArea = null,
+            chosenCountry = null
         )
 
         _screenState.update {
@@ -215,7 +256,7 @@ class FilterWorkPlaceViewModel(
         val area = _oldScreenStateContent.chosenArea
         _screenState.update { WorkPlacesScreenState.Loading }
         settings = FilterSettings(
-            area = area?.id ?: country?.id,
+            generalArea = area?.id ?: country?.id,
             areaName = area?.name,
             countryName = country?.name,
             generalAreaName = when {

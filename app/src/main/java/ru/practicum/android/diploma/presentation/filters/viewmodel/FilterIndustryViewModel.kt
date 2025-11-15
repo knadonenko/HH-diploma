@@ -129,6 +129,10 @@ class FilterIndustryViewModel(
     fun onSaveChoice() {
         _filterSettings = FilterSettings(
             area = _filterSettings?.area,
+            areaName = _filterSettings?.areaName,
+            country = _filterSettings?.country,
+            countryName = _filterSettings?.countryName,
+            generalArea = _filterSettings?.generalArea,
             generalAreaName = _filterSettings?.generalAreaName,
             industry = _selectedId.value,
             industryName = _industries.first { it.id == _selectedId.value }.name,

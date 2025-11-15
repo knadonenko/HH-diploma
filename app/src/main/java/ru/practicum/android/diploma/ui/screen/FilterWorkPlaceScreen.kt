@@ -80,8 +80,8 @@ fun FilterWorkPlaceScreen(
                 )
 
                 is WorkPlacesScreenState.Content -> Content(
-                    countryData = state.chosenCountryName ?: "",
-                    regionData = state.chosenAreaName ?: "",
+                    countryData = state.chosenCountry?.name ?: "",
+                    regionData = state.chosenArea?.name ?: "",
                     hasSettingChange = hasSettingChange,
                     toFilterCountry = toFilterCountry,
                     toFilterRegion = toFilterRegion,

@@ -93,7 +93,13 @@ class FilterSettingsViewModel(
     }
 
     fun onChangeSalary(salary: String?) {
-        _salary.update { salary }
+        _salary.update {
+            if (salary == "") {
+                null
+            } else {
+                salary
+            }
+        }
 
         _debounceJob = viewModelScope.launch {
             delay(DEBOUNCE_DELAY)
@@ -128,7 +134,9 @@ class FilterSettingsViewModel(
 
         val area = _filterSettings?.area?.takeIf { !_areaName.value.isNullOrEmpty() }
         val areaName = _filterSettings?.areaName?.takeIf { !_areaName.value.isNullOrEmpty() }
+        val country = _filterSettings?.country?.takeIf { !_areaName.value.isNullOrEmpty() }
         val countryName = _filterSettings?.countryName?.takeIf { !_areaName.value.isNullOrEmpty() }
+        val generalArea = _filterSettings?.generalArea?.takeIf { !_areaName.value.isNullOrEmpty() }
         val generalAreaName = _filterSettings?.generalAreaName?.takeIf { !_areaName.value.isNullOrEmpty() }
 
         val industry = _filterSettings?.industry?.takeIf { !_industryName.value.isNullOrEmpty() }
@@ -138,7 +146,9 @@ class FilterSettingsViewModel(
             FilterSettings(
                 area,
                 areaName,
+                country,
                 countryName,
+                generalArea,
                 generalAreaName,
                 industry,
                 industryName,

@@ -257,7 +257,9 @@ class FilterWorkPlaceViewModel(
         _screenState.update { WorkPlacesScreenState.Loading }
         settings = FilterSettings(
             generalArea = area?.id ?: country?.id,
+            area = area?.id,
             areaName = area?.name,
+            country = country?.id,
             countryName = country?.name,
             generalAreaName = when {
                 area != null && country != null -> "${country.name}, ${area.name}"
@@ -293,6 +295,12 @@ class FilterWorkPlaceViewModel(
 
         _filteredAreas.value = _oldScreenStateContent.areas.filter { area ->
             area.name!!.contains(query, ignoreCase = true)
+        }
+
+        if (_filteredAreas.value.isEmpty()) {
+            _screenState.update { WorkPlacesScreenState.NotFound }
+        } else {
+            _screenState.update { _oldScreenStateContent }
         }
     }
 

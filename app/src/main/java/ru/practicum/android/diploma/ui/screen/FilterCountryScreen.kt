@@ -58,8 +58,7 @@ fun FilterCountryScreen(
         Column(
             modifier = Modifier
                 .padding(padding)
-                .fillMaxSize()
-                .padding(horizontal = paddingBase),
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val state = viewModel.screenState.collectAsState().value
@@ -109,7 +108,8 @@ fun RegionsList(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(size60)
-                    .clickable(onClick = { onClick(area) }),
+                    .clickable(onClick = { onClick(area) })
+                    .padding(horizontal = paddingBase),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(

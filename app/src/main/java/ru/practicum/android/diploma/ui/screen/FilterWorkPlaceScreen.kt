@@ -58,9 +58,7 @@ fun FilterWorkPlaceScreen(
         }
     ) { padding ->
         Column(
-            modifier = Modifier
-                .padding(padding)
-                .padding(horizontal = paddingBase),
+            modifier = Modifier.padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val state = viewModel.screenState.collectAsStateWithLifecycle().value
@@ -171,7 +169,8 @@ fun Content(
             Button(
                 modifier = Modifier
                     .height(size60)
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .padding(horizontal = paddingBase),
                 shape = RoundedCornerShape(cornerRadius),
                 onClick = onApplyClick,
                 content = {

@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.ui.theme.LocalTypography
 import ru.practicum.android.diploma.ui.theme.blue
+import ru.practicum.android.diploma.ui.theme.paddingBase
 import ru.practicum.android.diploma.ui.theme.searchFieldCorner
 
 @Composable
@@ -36,7 +38,9 @@ fun SearchField(
         BasicTextField(
             value = searchQuery,
             onValueChange = onQueryChange,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = paddingBase),
             textStyle = LocalTypography.current.body16Medium,
             cursorBrush = SolidColor(blue),
             singleLine = true,

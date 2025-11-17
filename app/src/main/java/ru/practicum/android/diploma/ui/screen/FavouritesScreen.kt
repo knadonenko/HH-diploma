@@ -22,7 +22,6 @@ import ru.practicum.android.diploma.ui.components.LoadingComponent
 import ru.practicum.android.diploma.ui.components.Placeholder
 import ru.practicum.android.diploma.ui.components.VacancyItem
 import ru.practicum.android.diploma.ui.components.topbars.CommonTopBar
-import ru.practicum.android.diploma.ui.theme.paddingBase
 
 @Composable
 fun FavouritesScreen(
@@ -39,9 +38,7 @@ fun FavouritesScreen(
         }
     ) { padding ->
         Column(
-            modifier = modifier
-                .padding(padding)
-                .padding(horizontal = paddingBase),
+            modifier = modifier.padding(padding),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

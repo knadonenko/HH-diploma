@@ -43,7 +43,6 @@ import ru.practicum.android.diploma.ui.theme.floatingChipContentPadding
 import ru.practicum.android.diploma.ui.theme.floatingChipPadding
 import ru.practicum.android.diploma.ui.theme.loaderItemPadding
 import ru.practicum.android.diploma.ui.theme.padding12
-import ru.practicum.android.diploma.ui.theme.paddingBase
 import ru.practicum.android.diploma.ui.theme.size70
 
 @Composable
@@ -79,7 +78,6 @@ fun MainScreen(
         Column(
             modifier = modifier
                 .padding(padding)
-                .padding(horizontal = paddingBase)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

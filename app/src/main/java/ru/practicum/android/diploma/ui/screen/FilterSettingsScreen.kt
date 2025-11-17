@@ -87,8 +87,7 @@ fun FilterSettingsScreen(
         Column(
             modifier = modifier
                 .padding(padding)
-                .fillMaxSize()
-                .padding(paddingBase),
+                .fillMaxSize(),
         ) {
             val areaName = viewModel.areaName.collectAsStateWithLifecycle().value
             val industryName = viewModel.industryName.collectAsStateWithLifecycle().value
@@ -238,6 +237,7 @@ fun MoneyField(
         modifier = Modifier
             .fillMaxWidth()
             .height(size60)
+            .padding(horizontal = paddingBase)
             .background(
                 color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = RoundedCornerShape(searchFieldCorner)

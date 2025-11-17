@@ -19,7 +19,6 @@ import ru.practicum.android.diploma.ui.components.LoadingComponent
 import ru.practicum.android.diploma.ui.components.Placeholder
 import ru.practicum.android.diploma.ui.components.SearchField
 import ru.practicum.android.diploma.ui.components.topbars.FilterTopBar
-import ru.practicum.android.diploma.ui.theme.paddingBase
 
 @Composable
 fun FilterAreaScreen(
@@ -41,8 +40,7 @@ fun FilterAreaScreen(
         Column(
             modifier = Modifier
                 .padding(padding)
-                .fillMaxSize()
-                .padding(horizontal = paddingBase),
+                .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

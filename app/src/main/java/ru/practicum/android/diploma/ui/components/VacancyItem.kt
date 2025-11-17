@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import ru.practicum.android.diploma.domain.vacanceis.models.VacanciesInfo
 import ru.practicum.android.diploma.ui.theme.LocalCustomColors
 import ru.practicum.android.diploma.ui.theme.Typography
+import ru.practicum.android.diploma.ui.theme.paddingBase
 import ru.practicum.android.diploma.ui.theme.paddingHalfBase
 
 @Composable
@@ -20,6 +21,7 @@ fun VacancyItem(vacancy: VacanciesInfo, onClick: (String) -> Unit) {
             .clickable(onClick = { onClick(vacancy.id) })
             .fillMaxSize()
             .padding(vertical = paddingHalfBase)
+            .padding(horizontal = paddingBase)
     ) {
         VacancyLogo(logo = vacancy.employerLogo)
         Column(

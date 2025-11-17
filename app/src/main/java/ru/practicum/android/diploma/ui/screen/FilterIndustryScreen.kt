@@ -57,7 +57,6 @@ fun FilterIndustryScreen(
         Column(
             modifier = modifier
                 .padding(padding)
-                .padding(horizontal = paddingBase)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -104,7 +103,8 @@ fun FilterIndustryScreen(
                 Button(
                     modifier = Modifier
                         .height(size60)
-                        .fillMaxSize(),
+                        .fillMaxSize()
+                        .padding(horizontal = paddingBase),
                     shape = RoundedCornerShape(cornerRadius),
                     onClick = {
                         viewModel.onSaveChoice()

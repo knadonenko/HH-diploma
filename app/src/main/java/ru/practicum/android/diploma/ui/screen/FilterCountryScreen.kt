@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,6 +44,8 @@ fun FilterCountryScreen(
     onBackClick: () -> Unit,
     viewModel: FilterWorkPlaceViewModel
 ) {
+    LaunchedEffect(Unit) { viewModel.loadCountries() }
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -53,15 +56,16 @@ fun FilterCountryScreen(
         }
     ) { padding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .padding(padding)
+                .fillMaxSize()
                 .padding(horizontal = paddingBase),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val state = viewModel.screenState.collectAsState().value
             when (state) {
                 is WorkPlacesScreenState.Content -> RegionsList(
-                    state.availableAreas,
+                    state.countries,
                     onClick = { area ->
                         viewModel.chooseCountry(area)
                         onBackClick()
@@ -84,7 +88,7 @@ fun FilterCountryScreen(
                     stringResource(R.string.no_regions_error)
                 )
 
-                else -> onBackClick.invoke()
+                else -> {}
             }
         }
     }
@@ -122,7 +126,7 @@ fun RegionsList(
                     modifier = Modifier
                         .fillMaxHeight()
                         .width(size60),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.CenterEnd
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,

@@ -7,5 +7,7 @@ import ru.practicum.android.diploma.domain.filters.models.FilterWorkPlaceRespons
 interface FilterInteractor {
     fun getIndustries(): Flow<FilterIndustryResponseState>
 
+    fun getCountries(): Flow<FilterWorkPlaceResponseState>
+
     fun getAreas(): Flow<FilterWorkPlaceResponseState>
 }

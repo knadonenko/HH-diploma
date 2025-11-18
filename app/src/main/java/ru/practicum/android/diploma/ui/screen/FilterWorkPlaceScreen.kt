@@ -17,10 +17,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.presentation.filters.models.WorkPlacesScreenState
 import ru.practicum.android.diploma.presentation.filters.viewmodel.FilterWorkPlaceViewModel
@@ -43,7 +43,7 @@ fun FilterWorkPlaceScreen(
     toFilterRegion: () -> Unit,
     viewModel: FilterWorkPlaceViewModel
 ) {
-    LaunchedEffect(Unit) { viewModel.loadAreas() }
+    LaunchedEffect(Unit) { viewModel.loadFilterSettings() }
 
     Scaffold(
         modifier = modifier,
@@ -58,17 +58,18 @@ fun FilterWorkPlaceScreen(
         }
     ) { padding ->
         Column(
-            modifier = modifier
-                .padding(padding)
-                .padding(horizontal = paddingBase),
+            modifier = Modifier.padding(padding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            var state = viewModel.screenState.collectAsState().value
+            val state = viewModel.screenState.collectAsStateWithLifecycle().value
+            val hasSettingChange = viewModel.hasSettingsChange.collectAsStateWithLifecycle().value
+
             when (state) {
                 is WorkPlacesScreenState.Loading -> LoadingComponent()
                 is WorkPlacesScreenState.Default -> Content(
                     countryData = "",
                     regionData = "",
+                    hasSettingChange = hasSettingChange,
                     toFilterCountry = toFilterCountry,
                     toFilterRegion = toFilterRegion,
                     clearCountry = { },
@@ -79,6 +80,7 @@ fun FilterWorkPlaceScreen(
                 is WorkPlacesScreenState.Content -> Content(
                     countryData = state.chosenCountry?.name ?: "",
                     regionData = state.chosenArea?.name ?: "",
+                    hasSettingChange = hasSettingChange,
                     toFilterCountry = toFilterCountry,
                     toFilterRegion = toFilterRegion,
                     clearCountry = {
@@ -103,6 +105,7 @@ fun FilterWorkPlaceScreen(
 fun Content(
     countryData: String = "",
     regionData: String = "",
+    hasSettingChange: Boolean,
     toFilterCountry: () -> Unit,
     toFilterRegion: () -> Unit,
     clearCountry: () -> Unit,
@@ -162,11 +165,12 @@ fun Content(
             color = LocalCustomColors.current.text.secondaryTextColors.textColor
         )
         Spacer(modifier = Modifier.weight(1f))
-        if (!countryData.isEmpty() || !regionData.isEmpty()) {
+        if (hasSettingChange) {
             Button(
                 modifier = Modifier
                     .height(size60)
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .padding(horizontal = paddingBase),
                 shape = RoundedCornerShape(cornerRadius),
                 onClick = onApplyClick,
                 content = {

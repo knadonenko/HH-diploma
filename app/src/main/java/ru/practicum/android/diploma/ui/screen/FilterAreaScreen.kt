@@ -74,6 +74,11 @@ fun FilterAreaScreen(
                     )
                 }
 
+                is WorkPlacesScreenState.NoInternetConnection -> Placeholder(
+                    R.drawable.error_placeholder,
+                    stringResource(R.string.no_internet)
+                )
+
                 is WorkPlacesScreenState.NotFound -> Placeholder(
                     R.drawable.location_error_placeholder,
                     stringResource(R.string.no_regions_error)
